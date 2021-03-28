@@ -33,3 +33,6 @@ build/
 .vscode/
 /package-lock.json
 /node_modules/
+
+### Gradle ###
+.gradle/

@@ -30,17 +30,17 @@ public class BookController {
         return service.saveBooks(books);
     }
 
-    @GetMapping("books")
+    @GetMapping("/books")
     public List<Book> findAllBooks() {
         return service.getBooks();
     }
 
-    @GetMapping("book/{isbn}")
+    @GetMapping("/book/{isbn}")
     public Book findBookByIsbn(@PathVariable long isbn) {
         return service.getBookByISBN(isbn);
     }
 
-    @GetMapping("books/{name}")
+    @GetMapping("/books/{name}")
     public List<Book> findBookByName(@PathVariable String name) {
         return service.getBookByName(name);
     }
