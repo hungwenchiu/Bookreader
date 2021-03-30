@@ -1,11 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import Book from './Book'
+import SignUp from './Component/SignUp'
+import SignIn from './Component/SignIn'
 
 function App() {
   return (
     <div className="App">
-      <Book />
+      <SignUp />
+      <SignIn />
     </div>
   );
 }
