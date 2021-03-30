@@ -21,4 +21,9 @@ public class UserService {
         return repository.findById(name).orElse(null);
     }
 
+    public boolean authenticateUser(User user) {
+        User currentUser = repository.findById((user.getName())).orElse(null);
+        return null != currentUser && user.getPassword().equals(currentUser.getPassword());
+    }
+
 }

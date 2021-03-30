@@ -1,6 +1,5 @@
 package edu.cmu.sda.bookreader.controller;
 
-import edu.cmu.sda.bookreader.entity.Book;
 import edu.cmu.sda.bookreader.entity.User;
 import edu.cmu.sda.bookreader.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,11 @@ public class UserController {
     @PostMapping("/user")
     public User addUser(@RequestBody User user) {
         return service.saveUser(user);
+    }
+
+    @PostMapping("/login")
+    public boolean authenticateUser(@RequestBody User user) {
+        return service.authenticateUser(user);
     }
 
     @GetMapping("/user/{name}")

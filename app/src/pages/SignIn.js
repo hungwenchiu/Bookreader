@@ -1,15 +1,19 @@
+// Code source reference https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Copyright from './Copyright'
+import Copyright from '../components/Copyright'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,7 +35,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+function login () {
+
+    // post to /api/login with username, password
+    // if name and password match, return login: successful
+    // else return login: failed
+    // Source for api request: https://jasonwatmore.com/post/2020/02/01/react-fetch-http-post-request-examples
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: 'React POST Request Example' })
+    };
+    fetch('/api/login', requestOptions)
+        .then((response) => {
+                if (response) {
+                    console.log("LoggedIn");
+                }  else {
+                    console.log("Error logging in");
+                }
+            };
+        );
+    // console.log("login function");
+}
+
+export default function SignIn() {
   const classes = useStyles();
 
   return (
@@ -42,7 +69,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign In
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -65,29 +92,29 @@ export default function SignUp() {
             label="Password"
             type="password"
             id="password"
-            autoComplete="new-password"
+            autoComplete="current-password"
           />
-          <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="repassword"
-              label="Re-Password"
-              type="password"
-              id="repassword"
-              autoComplete="new-password"
-            />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={login()}
           >
-            Sign Up
+            Sign In
           </Button>
-
+          <Grid container>
+            <Grid item>
+              <Link href="./SignUp" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
         </form>
       </div>
       <Box mt={8}>
