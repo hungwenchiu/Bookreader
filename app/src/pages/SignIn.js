@@ -35,27 +35,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function login () {
+async function login (username, password) {
 
     // post to /api/login with username, password
     // if name and password match, return login: successful
     // else return login: failed
     // Source for api request: https://jasonwatmore.com/post/2020/02/01/react-fetch-http-post-request-examples
+
+    // const username = document.getElementById('username');
+    // const password = document.getElementById('password');
+    const user = {name: username, password: password};
+    console.log('USER CREATED '+user.username + "  "+ user.password);
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: 'React POST Request Example' })
+        body: JSON.stringify({ name: "Shreya", password: "password" })
     };
-    fetch('/api/login', requestOptions)
-        .then((response) => {
-                if (response) {
-                    console.log("LoggedIn");
-                }  else {
-                    console.log("Error logging in");
-                }
-            };
-        );
-    // console.log("login function");
+    const response = await fetch('/api/login', requestOptions);
+    const data = await response.json();
+    console.log(data);
+    console.log("END OF FUNCTION");
 }
 
 export default function SignIn() {
@@ -104,7 +103,9 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={login()}
+            onClick={() => {
+                login(document.getElementById('username').value, document.getElementById('password').value)
+            }}
           >
             Sign In
           </Button>
