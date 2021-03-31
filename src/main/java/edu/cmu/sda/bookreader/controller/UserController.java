@@ -8,8 +8,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 @Scope(value = "session")
 @Component(value = "userController")
 public class UserController {
@@ -23,8 +26,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public boolean authenticateUser(@RequestBody User user) {
-        return service.authenticateUser(user);
+    public Map<String, String> authenticateUser(@RequestBody User user) {
+        Map<String, String> map = new HashMap<>();
+        map.put("loginStatus", String.valueOf(service.authenticateUser(user)));
+        return map;
     }
 
     @GetMapping("/user/{name}")

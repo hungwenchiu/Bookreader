@@ -1,5 +1,5 @@
 // Code source reference https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -35,31 +35,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function login (username, password) {
-
-    // post to /api/login with username, password
-    // if name and password match, return login: successful
-    // else return login: failed
-    // Source for api request: https://jasonwatmore.com/post/2020/02/01/react-fetch-http-post-request-examples
-
-    // const username = document.getElementById('username');
-    // const password = document.getElementById('password');
-    const user = {name: username, password: password};
-    console.log('USER CREATED '+user.username + "  "+ user.password);
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: "Shreya", password: "password" })
-    };
-    const response = await fetch('/api/login', requestOptions);
-    const data = await response.json();
-    console.log(data);
-    console.log("END OF FUNCTION");
-}
-
 export default function SignIn() {
   const classes = useStyles();
 
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignIn = (e) => {
+      e.preventDefault();
+
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, password: password })
+      };
+      fetch('/api/login', requestOptions)
+          .then(response => {
+              return response.json()
+          })
+          .then(data => {
+              console.log(data)
+          });
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -70,7 +67,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign In
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSignIn}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -81,6 +78,7 @@ export default function SignIn() {
             name="username"
             autoComplete="username"
             autoFocus
+            onChange={e => setName(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -92,6 +90,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={e => setPassword(e.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -103,9 +102,6 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => {
-                login(document.getElementById('username').value, document.getElementById('password').value)
-            }}
           >
             Sign In
           </Button>
