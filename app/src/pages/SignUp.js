@@ -1,5 +1,5 @@
 // Code source reference https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -34,6 +34,29 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles();
 
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [repassword, setRePassword] = useState("");
+
+  const handleSignUp = (e) => {
+        e.preventDefault();
+        if (password != repassword) {
+            console.log("Passwords entered do not match");
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, password: password })
+        };
+        fetch('/api/user', requestOptions)
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                console.log(data)
+            });
+    }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -44,7 +67,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate  onSubmit={handleSignUp}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -55,6 +78,7 @@ export default function SignUp() {
             name="username"
             autoComplete="username"
             autoFocus
+            onChange={e => setName(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -66,6 +90,7 @@ export default function SignUp() {
             type="password"
             id="password"
             autoComplete="new-password"
+            onChange={e => setPassword(e.target.value)}
           />
           <TextField
               variant="outlined"
@@ -77,6 +102,7 @@ export default function SignUp() {
               type="password"
               id="repassword"
               autoComplete="new-password"
+              onChange={e => setRePassword(e.target.value)}
             />
           <Button
             type="submit"

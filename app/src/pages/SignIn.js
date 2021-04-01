@@ -67,7 +67,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign In
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSignIn}>
+        <form className={classes.form} onSubmit={handleSignIn}>
           <TextField
             variant="outlined"
             margin="normal"
