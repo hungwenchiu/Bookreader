@@ -31,8 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
-/package-lock.json
-/node_modules/
+/app/package-lock.json
+/app/node_modules/
 
 ### Gradle ###
 .gradle/
