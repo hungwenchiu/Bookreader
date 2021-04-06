@@ -1,11 +1,12 @@
 /* eslint-disable no-use-before-define */
+/*reference https://www.youtube.com/watch?v=LGcgChoD_qY*/
 import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 
 export default function FreeSoloCreateOption() {
-  const [book, setBook] = useState("123");
+  const [book, setBook] = useState("");
   const [result, setResult] = useState([]);
   const [apiKey, setApiKey] = useState("AIzaSyAu1E-pEKMYEw14bjqcdQDsEybKHIaZfaY");
   const maxResult = 10;
