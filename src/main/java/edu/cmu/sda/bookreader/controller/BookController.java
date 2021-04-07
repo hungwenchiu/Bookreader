@@ -41,8 +41,8 @@ public class BookController {
     }
 
     @GetMapping("/books/{name}")
-    public List<Book> findBookByName(@PathVariable String name) {
-        return service.getBookByName(name);
+    public List<Book> findBookByTitle(@PathVariable String name) {
+        return service.getBookByTitle(name);
     }
 
     @PutMapping("/book")

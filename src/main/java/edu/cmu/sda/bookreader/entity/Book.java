@@ -15,8 +15,10 @@ import javax.persistence.Table;
 @Table
 public class Book {
     @Id
-    private long isbn;
-    private String name;
+    private long googleBookID;
+    private String title;
     private String author;
+    private long totalPage;
+    private String kind;
 
 }

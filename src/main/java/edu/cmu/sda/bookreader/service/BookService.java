@@ -32,8 +32,8 @@ public class BookService {
         return repository.findById(isbn).orElse(null);
     }
 
-    public List<Book> getBookByName(String name) {
-        return repository.findByName(name);
+    public List<Book> getBookByTitle(String name) {
+        return repository.findByTitle(name);
     }
 
     public String deleteBook(long isbn) {
@@ -42,8 +42,8 @@ public class BookService {
     }
 
     public Book updateBook(Book book) {
-        Book existingBook = repository.findById(book.getIsbn()).orElse(null);
-        existingBook.setName(book.getName());
+        Book existingBook = repository.findById(book.getGoogleBookID()).orElse(null);
+        existingBook.setTitle(book.getTitle());
         existingBook.setAuthor(book.getAuthor());
         return repository.save(existingBook);
     }

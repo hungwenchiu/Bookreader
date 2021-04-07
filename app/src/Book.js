@@ -29,7 +29,7 @@ function Book() {
         <div className="Book">
             All Books:
             {
-                response && response.length > 0 && response.map((item) => <p>name: {item.name}; author: {item.author}; isbn: {item.isbn}</p>)
+                response && response.length > 0 && response.map((item) => <p>name: {item.title}; author: {item.author}; isbn: {item.googleBookID}</p>)
             }
         </div>
     );
