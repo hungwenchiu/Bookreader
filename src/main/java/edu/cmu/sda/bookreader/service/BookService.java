@@ -28,8 +28,8 @@ public class BookService {
         return repository.findAll();
     }
 
-    public Book getBookByISBN(long isbn) {
-        return repository.findById(isbn).orElse(null);
+    public Book getBookByGoogleBookID(long googleBookID) {
+        return repository.findById(googleBookID).orElse(null);
     }
 
     public List<Book> getBookByTitle(String name) {

@@ -36,8 +36,8 @@ public class BookController {
     }
 
     @GetMapping("/book/{isbn}")
-    public Book findBookByIsbn(@PathVariable long isbn) {
-        return service.getBookByISBN(isbn);
+    public Book findBookByGoogleBookID(@PathVariable long isbn) {
+        return service.getBookByGoogleBookID(isbn);
     }
 
     @GetMapping("/books/{name}")
