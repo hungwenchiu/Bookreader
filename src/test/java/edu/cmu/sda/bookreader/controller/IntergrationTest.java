@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringRunner.class)
@@ -47,7 +48,7 @@ public class IntergrationTest {
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
         ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/api/books",
                 HttpMethod.GET, entity, String.class);
-        assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody());
     }
 
@@ -62,7 +63,7 @@ public class IntergrationTest {
     }
 
     @Test
-    public void testCreateEmployee() {
+    public void testCreateBook() {
         Book book = new Book();
         book.setAuthor("me");
         book.setTitle("Book Title");

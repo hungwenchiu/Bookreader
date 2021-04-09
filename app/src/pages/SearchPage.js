@@ -24,12 +24,16 @@ export default function FreeSoloCreateOption() {
   function handleAddBook(book, event) {
       event.preventDefault();
       console.log(book.volumeInfo.title);
+      let firstAuthor = "";
+      if (book.volumeInfo.authors) {
+          firstAuthor = book.volumeInfo.authors[0]
+      }
 
       const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
-          author: book.volumeInfo.authors[0], totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind})
+          author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind})
       };
       fetch('/api/book', requestOptions)
           .then(response => {
