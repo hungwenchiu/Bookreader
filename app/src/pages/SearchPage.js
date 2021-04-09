@@ -28,7 +28,7 @@ export default function FreeSoloCreateOption() {
       const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ googleBookID: parseInt(book.id), title: book.volumeInfo.title,
+          body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
           author: book.volumeInfo.authors[0], totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind})
       };
       fetch('/api/book', requestOptions)

@@ -3,8 +3,10 @@ package edu.cmu.sda.bookreader.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -15,10 +17,15 @@ import javax.persistence.Table;
 @Table
 public class Book {
     @Id
-    private long googleBookID;
+    @GeneratedValue
+    private long id;
+    @NonNull
+    private String googleBookId;
+    @NonNull
     private String title;
     private String author;
-    private long totalPage;
+    @NonNull
+    private int totalPage;
     private String kind;
 
 }

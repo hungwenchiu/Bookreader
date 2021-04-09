@@ -28,23 +28,33 @@ public class BookService {
         return repository.findAll();
     }
 
-    public Book getBookByGoogleBookID(long googleBookID) {
-        return repository.findById(googleBookID).orElse(null);
+    public Book getBookByGoogleBookId (String googleBookID) {
+        return repository.findByGoogleBookId(googleBookID);
     }
 
     public List<Book> getBookByTitle(String name) {
         return repository.findByTitle(name);
     }
 
-    public String deleteBook(long isbn) {
-        repository.deleteById(isbn);
-        return "book removed - " + isbn;
+    public String deleteBook(long id) {
+        repository.deleteById(id);
+        return "book removed - " + id;
     }
 
+    /**
+     * update book with given book object
+     * @param book
+     * @return null if the given book's id doesn't exist, else return the updated book
+     */
     public Book updateBook(Book book) {
-        Book existingBook = repository.findById(book.getGoogleBookID()).orElse(null);
+        Book existingBook = repository.findById(book.getId()).orElse(null);
+        if (null == existingBook) {
+            return null;
+        }
         existingBook.setTitle(book.getTitle());
         existingBook.setAuthor(book.getAuthor());
+        existingBook.setKind(book.getKind());
+        existingBook.setTotalPage(book.getTotalPage());
         return repository.save(existingBook);
     }
 
