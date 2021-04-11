@@ -21,6 +21,29 @@ export default function FreeSoloCreateOption() {
         });
   }
 
+  function handleAddBook(book, event) {
+      event.preventDefault();
+      console.log(book.volumeInfo.title);
+      let firstAuthor = "";
+      if (book.volumeInfo.authors) {
+          firstAuthor = book.volumeInfo.authors[0]
+      }
+
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
+          author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind})
+      };
+      fetch('/api/book', requestOptions)
+          .then(response => {
+              return response.json()
+          })
+          .then(data => {
+              console.log(data)
+          });
+  }
+
   return (
       <div>
           <form onSubmit={handleSearch}>
@@ -41,7 +64,12 @@ export default function FreeSoloCreateOption() {
           </form>
 
         {result.map(book => (
+            <li>
+            <a href={book.volumeInfo.previewLink}>
               <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.title}/>
+            </a>
+            <button onClick={(e) => handleAddBook(book, e)}>Add Book</button>
+            </li>
           ))}
       </div>
   );

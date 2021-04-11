@@ -40,7 +40,7 @@ export default function SignUp() {
 
   const handleSignUp = (e) => {
         e.preventDefault();
-        if (password != repassword) {
+        if (password !== repassword) {
             console.log("Passwords entered do not match");
         }
         const requestOptions = {
