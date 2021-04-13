@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import Layout from '../components/Layout'
 
 export default function FreeSoloCreateOption() {
   const [book, setBook] = useState("");
@@ -45,6 +46,7 @@ export default function FreeSoloCreateOption() {
   }
 
   return (
+    <Layout>
       <div>
           <form onSubmit={handleSearch}>
           <div style={{ width: 300 }}>
@@ -72,5 +74,6 @@ export default function FreeSoloCreateOption() {
             </li>
           ))}
       </div>
+    </Layout>
   );
 }
