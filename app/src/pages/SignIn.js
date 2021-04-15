@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Copyright from '../components/Copyright'
+import logo from '../components/logo.png'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -61,9 +62,7 @@ export default function SignIn() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+          <img src={logo} width="100" className={classes.logo}/>
         <Typography component="h1" variant="h5">
           Sign In
         </Typography>
