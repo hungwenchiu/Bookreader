@@ -1,26 +1,30 @@
 package edu.cmu.sda.bookreader.entity;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class RecommendedBookshelf extends Bookshelf {
+@Table(name = "recommendedBookshelf")
+public class RecommendedBookshelf extends AbstractBookshelf {
     @ManyToMany
-    private Set<User> recommendersID;
-
-    public RecommendedBookshelf(long id, String bookshelfType, User bookshelfUserID, Set<Book> books, Set<User> recommendersID) {
-        super(id, bookshelfType, bookshelfUserID, books);
-        this.recommendersID = recommendersID;
-    }
+    @JoinTable(
+            name = "recommendedBookshelf_recommenders",
+            joinColumns = @JoinColumn(name = "abstractbookshelf_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_name")
+    )
+    private Set<User> recommenders;
 
     public RecommendedBookshelf() {
         super();
     }
 
-    public void setRecommendersID(Set<User> recommendersID) {
-        this.recommendersID = recommendersID;
+    public Set<User> getRecommenders() {
+        return recommenders;
     }
 
-    public Set<User> getRecommendersID() {
-        return recommendersID;
+    public void setRecommenders(Set<User> recommenders) {
+        this.recommenders = recommenders;
     }
 }
