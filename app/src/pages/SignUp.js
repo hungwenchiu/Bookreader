@@ -78,8 +78,6 @@ export default function SignUp() {
         setPassword(password);
     }
     const updateRepassword = (repassword) => {
-        console.log("password: " + password);
-        console.log("repassword: " + repassword);
         if (password != repassword) {
             setRepasswordError("Re-Password doesn't match password ");
             return;
