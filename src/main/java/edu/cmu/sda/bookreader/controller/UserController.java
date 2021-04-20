@@ -2,9 +2,11 @@ package edu.cmu.sda.bookreader.controller;
 
 import edu.cmu.sda.bookreader.entity.User;
 import edu.cmu.sda.bookreader.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import java.util.Map;
 @RequestMapping("/api")
 @Scope(value = "session")
 @Component(value = "userController")
+@Slf4j
 public class UserController {
     @Qualifier("userService")
     @Autowired
@@ -33,8 +36,12 @@ public class UserController {
     }
 
     @GetMapping("/user/{name}")
-    public User findUserByName(@PathVariable String name) {
-        return service.getUserByName(name);
+    public ResponseEntity<User> findUserByName(@PathVariable String name) {
+        User user = service.getUserByName(name);
+        if (null == user) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(user);
     }
 
 
