@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Toolbar, AppBar, IconButton, Typography, Link } from '@material-ui/core';
+import {Button, Toolbar, AppBar, Typography, Link, InputBase} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 // import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
 import logo from './logo.png'
+import SearchBar from './SearchBar.js'
 
 const StyleSheet = makeStyles((theme) => ({
   root: {
@@ -22,11 +23,12 @@ const StyleSheet = makeStyles((theme) => ({
   },
   buttons: {
     textTransform: "none"
-  },
+  }
 }))
 
 const Layout = ({ children }) => {
   const classes = StyleSheet()
+  
   return(
     <div>
       <AppBar position="fixed" className={classes.appBar}>
@@ -40,8 +42,9 @@ const Layout = ({ children }) => {
               <Link href="/friends" color="inherit" underline="none">Friends</Link>
               <Link href="/searchPage" color="inherit" underline="none">Search</Link>
             </Typography>
-          </div>
 
+          </div>
+          <SearchBar />
 
           <Button color="inherit" className={classes.buttons}>Sign Out</Button>
         </Toolbar>
@@ -53,7 +56,7 @@ const Layout = ({ children }) => {
     </div>
   )
 }
-  
+
 
 Layout.porpTypes = {
   children: PropTypes.node.isRequired,
