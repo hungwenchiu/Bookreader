@@ -1,8 +1,7 @@
 /* eslint-disable no-use-before-define */
 /*reference https://www.youtube.com/watch?v=LGcgChoD_qY*/
 import React, {useState, useEffect} from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import Layout from '../components/Layout'
 import GridList from '@material-ui/core/GridList';
@@ -12,8 +11,20 @@ import {
     useLocation
 } from "react-router-dom";
 
+const StyleSheet = makeStyles((theme) => ({
+  root: {
+    marginLeft: '4%',
+    marginRight: '4%',
+    marginTop: '2%'
+  },
+  gridList: {
+    
+  },
+}))
 
 export default function SearchResult() {
+  const classes = StyleSheet()
+
   const [result, setResult] = useState([]);
   const apiKey = "AIzaSyAu1E-pEKMYEw14bjqcdQDsEybKHIaZfaY";
   const maxResult = 10;
@@ -54,15 +65,19 @@ export default function SearchResult() {
 
   return (
     <Layout>
-      <div>
-        {result.map(book => (
-            <li>
-            <a href={book.volumeInfo.previewLink}>
-              <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.title}/>
-            </a>
-            <button onClick={(e) => handleAddBook(book, e)}>Add Book</button>
-            </li>
-          ))}
+      <div className={classes.root}>
+
+        <GridList cellHeight='auto' cols='7' spacing='20' className={classes.gridList}>
+        {result.map((book) => (
+          <GridListTile key={book.volumeInfo.imageLinks.thumbnail}>
+            <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
+            <GridListTileBar
+              title={book.volumeInfo.title}
+              subtitle={<span>author: {book.volumeInfo.authors[0]}</span>}
+            />
+          </GridListTile>
+        ))}
+        </GridList>
       </div>
     </Layout>
   );
