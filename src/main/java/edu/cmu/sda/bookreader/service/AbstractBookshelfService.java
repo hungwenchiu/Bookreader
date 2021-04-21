@@ -8,6 +8,7 @@ import edu.cmu.sda.bookreader.repository.BookshelfRepository;
 import edu.cmu.sda.bookreader.repository.RecommendedBookshelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Scope(value = "session")
 @Component(value = "abstractBookService")
 public class AbstractBookshelfService {
     @Autowired
@@ -49,7 +49,6 @@ public class AbstractBookshelfService {
     public List<AbstractBookshelf> getAllAbstractBookshelf() {
         List<AbstractBookshelf> all = new ArrayList<>();
 
-        // bookshelfRepository.findAll().forEach(all::add);
         for (Object bookshelf: bookshelfRepository.findAll()) {
             all.add((AbstractBookshelf) bookshelf);
         }
@@ -74,7 +73,9 @@ public class AbstractBookshelfService {
     It is working as our factory method
      */
     public void addBookshelf(AbstractBookshelf abstractBookshelf) {
+        System.out.println(" Insde add bookshelf");
         if (abstractBookshelf instanceof Bookshelf) {
+            System.out.println("reached abstract bookshelf");
             bookshelfRepository.save((Bookshelf) abstractBookshelf);;
         } else {
             recommendedBookshelfRepository.save((RecommendedBookshelf) abstractBookshelf);
@@ -83,7 +84,6 @@ public class AbstractBookshelfService {
 
     public void recommendBookshelf(Bookshelf bookshelf) {
         bookshelfRepository.save(bookshelf);
-
     }
 
 
