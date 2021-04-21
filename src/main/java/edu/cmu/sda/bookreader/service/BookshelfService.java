@@ -1,7 +1,9 @@
 package edu.cmu.sda.bookreader.service;
 
 import edu.cmu.sda.bookreader.entity.Book;
-import edu.cmu.sda.bookreader.repository.BookRepository;
+import edu.cmu.sda.bookreader.entity.Bookshelf;
+import edu.cmu.sda.bookreader.repository.BookshelfRepository;
+import edu.cmu.sda.bookreader.repository.RecommendedBookshelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,21 +13,18 @@ import java.util.List;
 
 @Service
 @Scope(value = "session")
-@Component(value = "bookshelfService")
-public class BookService {
-    @Autowired
-    private BookRepository repository;
+@Component(value = "bookService")
+public class BookshelfService {
+    private BookshelfFactory bookshelfFactory;
 
-    public Book saveBook(Book book) {
-        return repository.save(book);
-    }
-
-    public List<Book> saveBooks(List<Book> books) {
-        return repository.saveAll(books);
+    public Bookshelf saveBookshelf(Bookshelf bookshelf) {
+        bookshelfFactory = new BookshelfFactory();
+        return bookshelfFactory.getBookshelfRepository(bookshelf.getBookshelfType()).save(bookshelf);
     }
 
     public List<Book> getBooks() {
-        return repository.findAll();
+        bookshelfFactory = new BookshelfFactory();
+        return bookshelfFactory.getBookshelfRepository().findAll();
     }
 
     public Book getBookByGoogleBookId (String googleBookID) {
@@ -57,5 +56,4 @@ public class BookService {
         existingBook.setTotalPage(book.getTotalPage());
         return repository.save(existingBook);
     }
-
 }
