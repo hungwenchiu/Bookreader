@@ -24,8 +24,8 @@ public class BookshelfController {
     private AbstractBookshelfService bookshelfService;
 
     @RequestMapping(value = "/bookshelf", method = RequestMethod.POST)
-    public void addBookshelf(@RequestBody AbstractBookshelf bookshelf) {
-        bookshelfService.addBookshelf(bookshelf);
+    public AbstractBookshelf addBookshelf(@RequestBody AbstractBookshelf bookshelf) {
+        return bookshelfService.addBookshelf(bookshelf);
     }
 
     @RequestMapping(value="/bookshelf", method = RequestMethod.GET)
@@ -39,12 +39,12 @@ public class BookshelfController {
     }
 
 
-    @RequestMapping("/{id}")
+    @RequestMapping("/bookshelf/{id}")
     public AbstractBookshelf getAnyBookshelf(@PathVariable("id") int id) {
         return bookshelfService.getBookshelf(id);
     }
 
-    @RequestMapping("/all")
+    @RequestMapping("/bookshelf/all")
     public List<AbstractBookshelf> getAll() {
         return bookshelfService.getAllAbstractBookshelf();
     }

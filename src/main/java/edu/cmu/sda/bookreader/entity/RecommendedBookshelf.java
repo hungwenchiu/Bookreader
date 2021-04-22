@@ -1,4 +1,5 @@
 package edu.cmu.sda.bookreader.entity;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.Setter;
 

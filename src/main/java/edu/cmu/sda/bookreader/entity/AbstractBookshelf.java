@@ -10,7 +10,9 @@ import java.util.Set;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,    //Use PROPERTY if you want to include type as an attribute
-        property = "type")                              //useful for the factory method
+        property = "type",
+        defaultImpl = Bookshelf.class,
+        visible = true)                              //useful for the factory method
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Bookshelf.class, name = "regular"),
         @JsonSubTypes.Type(value = RecommendedBookshelf.class, name = "recommended")
@@ -26,7 +28,7 @@ public class AbstractBookshelf {
 
     public String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "abstractbookshelf_user",
             joinColumns = @JoinColumn(name = "abstractbookshelf_id"),
@@ -40,7 +42,13 @@ public class AbstractBookshelf {
             joinColumns = @JoinColumn(name = "abstractbookshelf_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
-    public Set<Book> books = new HashSet<>();
+    private Set<Book> books = new HashSet<>();
+
+    private String type;
+
+    public void setType(String type) { this.type = type; }
+
+    public String getType() { return type; }
 
     public AbstractBookshelf() {
     }

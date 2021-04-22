@@ -58,28 +58,23 @@ public class AbstractBookshelfService {
     }
 
 
-    public AbstractBookshelf getBookshelf(int id) {
+    public AbstractBookshelf getBookshelf(long id) {
         Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(id));
 
         if (bookshelf.isPresent()) {
             return bookshelf.get();
         }
-
         return null;
-
     }
 
     /*
     It is working as our factory method
      */
-    public void addBookshelf(AbstractBookshelf abstractBookshelf) {
-        System.out.println(" Insde add bookshelf");
+    public AbstractBookshelf addBookshelf(AbstractBookshelf abstractBookshelf) {
         if (abstractBookshelf instanceof Bookshelf) {
-            System.out.println("reached abstract bookshelf");
-            bookshelfRepository.save((Bookshelf) abstractBookshelf);;
-        } else {
-            recommendedBookshelfRepository.save((RecommendedBookshelf) abstractBookshelf);
+            return (AbstractBookshelf) bookshelfRepository.save((Bookshelf) abstractBookshelf);
         }
+        return recommendedBookshelfRepository.save((RecommendedBookshelf) abstractBookshelf);
     }
 
     public void recommendBookshelf(Bookshelf bookshelf) {
