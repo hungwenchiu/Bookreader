@@ -73,7 +73,6 @@ export default function BookPage() {
 
   return(
     <Layout>
-      <h1>{book.volumeInfo?.title}</h1>
       <div className={classes.container}>
         <Grid container spacing={3} >
           <Grid item xs={3}>

@@ -70,7 +70,9 @@ export default function SearchResult() {
         <GridList cellHeight='auto' cols='7' spacing='20' className={classes.gridList}>
         {result.map((book) => (
           <GridListTile key={book.volumeInfo.imageLinks.thumbnail}>
-            <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
+              <a href={"/book/"+book.id}>
+                <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
+              </a>
             <GridListTileBar
               title={book.volumeInfo.title}
               subtitle={<span>author: {book.volumeInfo.authors[0]}</span>}
