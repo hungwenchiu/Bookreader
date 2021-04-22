@@ -6,9 +6,10 @@ import SearchPage from './pages/SearchPage'
 import HomePage from './pages/HomePage'
 import FriendsPage from './pages/FriendsPage'
 import BookShelvesPage from './pages/BookShelvesPage'
-
+import PersonalTimeline from "./pages/PersonalTimeline";
 
 import './App.css';
+
 
 function App() {
   return (
@@ -19,8 +20,7 @@ function App() {
       <Route exact path="/home" component={HomePage} />
       <Route exact path="/friends" component={FriendsPage} />
       <Route exact path="/bookshelves" component={BookShelvesPage} />
-
-
+      <Route exact path="/personalTimeline" component={PersonalTimeline} />
     </Switch>
   );
 }
