@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 // import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
 import logo from './logo.png'
+import TimelineMenu from './TimeLine.js'
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 const StyleSheet = makeStyles((theme) => ({
   root: {
@@ -39,10 +41,11 @@ const Layout = ({ children }) => {
               <Link href="/bookshelves" color="inherit" underline="none">BookShelves</Link>
               <Link href="/friends" color="inherit" underline="none">Friends</Link>
               <Link href="/searchPage" color="inherit" underline="none">Search</Link>
+
             </Typography>
           </div>
 
-
+          <TimelineMenu/> {/* For timeline*/}
           <Button color="inherit" className={classes.buttons}>Sign Out</Button>
         </Toolbar>
       </AppBar>
