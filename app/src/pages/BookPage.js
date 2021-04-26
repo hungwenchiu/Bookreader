@@ -18,7 +18,7 @@ import parse from 'html-react-parser'
 
 const options = ['Add to Favorate', 'Add to Want to Read', 'Add to Reading', 'Add to Read'];
 
-const StyleSheet = makeStyles((theme) => ({
+const StyleSheet = makeStyles({
   container: {
     marginLeft: '15%',
     marginRight: '15%',
@@ -27,7 +27,7 @@ const StyleSheet = makeStyles((theme) => ({
   buttonGroup: {
     marginTop: '30px'
   },
-}))
+})
 
 export default function BookPage() {
   const classes = StyleSheet()
