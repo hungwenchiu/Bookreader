@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
-@Scope(value = "session")
 @Component(value = "userService")
 public class UserService {
 
@@ -18,11 +17,11 @@ public class UserService {
         return repository.save(user);
     }
     public User getUserByName(String name) {
-        return repository.findById(name).orElse(null);
+        return repository.findByName(name).orElse(null);
     }
 
     public boolean authenticateUser(User user) {
-        User currentUser = repository.findById((user.getName())).orElse(null);
+        User currentUser = repository.findByName((user.getName())).orElse(null);
         return null != currentUser && user.getPassword().equals(currentUser.getPassword());
     }
 

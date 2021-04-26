@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Toolbar, AppBar, IconButton, Typography, Link } from '@material-ui/core';
+import {Button, Toolbar, AppBar, Typography, Link, InputBase} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-// import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
+import SearchBar from './SearchBar.js'
+import {useHistory} from "react-router-dom";
 import logo from './logo.png'
 import TimelineMenu from './TimeLine.js'
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
@@ -24,11 +25,16 @@ const StyleSheet = makeStyles((theme) => ({
   },
   buttons: {
     textTransform: "none"
-  },
+  }
 }))
 
 const Layout = ({ children }) => {
-  const classes = StyleSheet()
+  let history = useHistory();
+  const classes = StyleSheet();
+  const logout = () => {
+    sessionStorage.removeItem('currentUser');
+    history.push('/');
+  }
   return(
     <div>
       <AppBar position="fixed" className={classes.appBar}>
@@ -37,16 +43,15 @@ const Layout = ({ children }) => {
 
           <div className={classes.navs}>
             <Typography className={classes.root}>
-              <Link href="/home" color="inherit" underline="none">Recommendations</Link>
+              <Link href="/home" color="inherit" underline="none">Recommendation</Link>
               <Link href="/bookshelves" color="inherit" underline="none">BookShelves</Link>
               <Link href="/friends" color="inherit" underline="none">Friends</Link>
               <Link href="/searchPage" color="inherit" underline="none">Search</Link>
-
             </Typography>
           </div>
 
           <TimelineMenu/> {/* For timeline*/}
-          <Button color="inherit" className={classes.buttons}>Sign Out</Button>
+          <Button onClick={logout} color="inherit" className={classes.buttons}>Sign Out</Button>
         </Toolbar>
       </AppBar>
       <Toolbar />

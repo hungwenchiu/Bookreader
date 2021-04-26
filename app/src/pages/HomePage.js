@@ -3,7 +3,10 @@ import Layout from '../components/Layout'
 
 const HomePage = () => (
   <Layout>
-    <div></div>
+    <div>
+        // For reference to get user, needs to be removed
+        current user is : {sessionStorage.getItem("currentUser")}
+    </div>
   </Layout>
 )
 

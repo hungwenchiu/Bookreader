@@ -17,6 +17,7 @@ export default function PersonalTimeline(){
         axios.get(`/api/personalTimeline?name=${name}`)
             .then(res =>{
                 setIsLoaded(true);
+                console.log(res.data);
                 setData(res.data);
             })
             .catch( error => {
@@ -44,7 +45,7 @@ export default function PersonalTimeline(){
                             <RecipeReviewCard username={timeline_event.name}
                                               bookname={timeline_event.bookName}
                                               action={"User Action: " + timeline_event.action}
-                                              comment={timeline_event.comment}
+                                              comment={timeline_event.review}
                                               rate={timeline_event.rate}
                                               progress={timeline_event.progress}
                                               time={timeline_event.time}

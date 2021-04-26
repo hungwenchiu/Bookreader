@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Scope(value = "session")
-@Component(value = "bookshelfService")
+@Component(value = "bookService")
 public class BookService {
     @Autowired
     private BookRepository repository;
