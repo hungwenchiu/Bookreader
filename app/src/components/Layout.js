@@ -1,10 +1,10 @@
 import React from 'react';
 import {Button, Toolbar, AppBar, Typography, Link, InputBase} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-// import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
-import logo from './logo.png'
+import logo from '../assets/logo.png'
 import SearchBar from './SearchBar.js'
+import {useHistory} from "react-router-dom";
 
 const StyleSheet = makeStyles((theme) => ({
   root: {
@@ -28,7 +28,12 @@ const StyleSheet = makeStyles((theme) => ({
 
 export default function Layout (props) { 
   const { children } = props
+  let history = useHistory();
   const classes = StyleSheet()
+  const logout = () => {
+    sessionStorage.removeItem('currentUser');
+    history.push('/');
+  }
   
   return(
     <div>
@@ -47,7 +52,7 @@ export default function Layout (props) {
           </div>
           <SearchBar />
 
-          <Button color="inherit" className={classes.buttons}>Sign Out</Button>
+          <Button onClick={logout} color="inherit" className={classes.buttons}>Sign Out</Button>
         </Toolbar>
       </AppBar>
       <Toolbar />
