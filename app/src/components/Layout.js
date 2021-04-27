@@ -26,7 +26,8 @@ const StyleSheet = makeStyles((theme) => ({
   }
 }))
 
-const Layout = ({ children }) => {
+export default function Layout (props) { 
+  const { children } = props
   let history = useHistory();
   const classes = StyleSheet()
   const logout = () => {
@@ -62,9 +63,6 @@ const Layout = ({ children }) => {
   )
 }
 
-
-Layout.porpTypes = {
+Layout.propTypes = {
   children: PropTypes.node.isRequired,
 }
-
-export default Layout;
