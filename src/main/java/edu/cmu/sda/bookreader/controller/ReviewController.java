@@ -1,7 +1,5 @@
 package edu.cmu.sda.bookreader.controller;
 
-import edu.cmu.sda.bookreader.entity.Book;
-import edu.cmu.sda.bookreader.service.BookService;
 import edu.cmu.sda.bookreader.entity.Review;
 import edu.cmu.sda.bookreader.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,43 +25,38 @@ public class ReviewController {
     private ReviewService service;
 
     @PostMapping("/review")
-    public Book addReview(@RequestBody Review review) {
+    public Review addReview(@RequestBody Review review) {
         return service.saveReview(review);
     }
 
     @GetMapping("/review/{googleBookId}")
-    public ResponseEntity<Book> findBookByGoogleBookID(@PathVariable String googleBookId) {
-        Book book = service.getBookByGoogleBookId(googleBookId);
+    public ResponseEntity<List<Review>> findReviewsByGoogleBookID(@PathVariable String googleBookId) {
+        List<Review> reviews = service.getReviewsByGoogleBookId(googleBookId);
 
-        if (null == book) {
-            log.error("Book with google book id " + googleBookId + " does not exist.");
+        if (reviews == null || reviews.isEmpty()) {
+            log.error("No reviews are available with google book id " + googleBookId);
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(book);
+        return ResponseEntity.ok(reviews);
     }
     @GetMapping("/review/{userId}")
-    public ResponseEntity<Book> findBookByGoogleBookID(@PathVariable String googleBookId) {
-        Book book = service.getBookByGoogleBookId(googleBookId);
+    public ResponseEntity<List<Review>> findReviewsByUserID(@PathVariable long userId) {
+        List<Review> reviews = service.getReviewsByUserId(userId);
 
-        if (null == book) {
-            log.error("Book with google book id " + googleBookId + " does not exist.");
+        if (reviews == null || reviews.isEmpty()) {
+            log.error("No reviews are available with user id " + userId);
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(book);
+        return ResponseEntity.ok(reviews);
     }
-    /**
-     * update book with the given book object
-     * @param book
-     * @return updated book object, return null if the given book's id doesn't exist
-     */
 
     /**
-     * delete book by id
+     * delete review by id
      * @param id
      * @return
      */
-    @DeleteMapping("/book/{id}")
-    public String deleteBook(@RequestBody long id) {
-        return service.deleteBook(id);
+    @DeleteMapping("/review/{id}")
+    public String deleteReview(@PathVariable long id) {
+        return service.deleteReview(id);
     }
 }
