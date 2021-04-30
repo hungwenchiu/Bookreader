@@ -2,11 +2,10 @@ import React from 'react';
 import {Button, Toolbar, AppBar, Typography, Link, InputBase} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import logo from '../assets/logo.png'
 import SearchBar from './SearchBar.js'
 import {useHistory} from "react-router-dom";
-import logo from './logo.png'
-import TimelineMenu from './TimeLine.js'
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import TimelineMenu from "./TimeLine.js";
 
 const StyleSheet = makeStyles((theme) => ({
   root: {
@@ -28,13 +27,15 @@ const StyleSheet = makeStyles((theme) => ({
   }
 }))
 
-const Layout = ({ children }) => {
+export default function Layout (props) { 
+  const { children } = props
   let history = useHistory();
-  const classes = StyleSheet();
+  const classes = StyleSheet()
   const logout = () => {
     sessionStorage.removeItem('currentUser');
     history.push('/');
   }
+  
   return(
     <div>
       <AppBar position="fixed" className={classes.appBar}>
@@ -48,9 +49,10 @@ const Layout = ({ children }) => {
               <Link href="/friends" color="inherit" underline="none">Friends</Link>
               <Link href="/searchPage" color="inherit" underline="none">Search</Link>
             </Typography>
-          </div>
 
-          <TimelineMenu/> {/* For timeline*/}
+          </div>
+          <SearchBar />
+          <TimelineMenu />
           <Button onClick={logout} color="inherit" className={classes.buttons}>Sign Out</Button>
         </Toolbar>
       </AppBar>
@@ -61,10 +63,7 @@ const Layout = ({ children }) => {
     </div>
   )
 }
-  
 
-Layout.porpTypes = {
+Layout.propTypes = {
   children: PropTypes.node.isRequired,
 }
-
-export default Layout;
