@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api")
 @Scope(value = "session")
-@Component(value = "bookController")
+@Component(value = "reviewController")
 @Slf4j
 public class ReviewController {
 

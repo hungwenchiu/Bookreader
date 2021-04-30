@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @Scope(value = "session")
-@Component(value = "bookService")
+@Component(value = "reviewService")
 public class ReviewService {
     @Autowired
     private ReviewRepository repository;
