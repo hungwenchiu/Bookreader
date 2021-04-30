@@ -31,8 +31,8 @@ public class AbstractBookshelf {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "abstractbookshelf_user",
-            joinColumns = @JoinColumn(name = "abstractbookshelf_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_name")
+            joinColumns = @JoinColumn(name = "user_name"),
+            inverseJoinColumns = @JoinColumn(name = "abstractbookshelf_id")
     )
     private User bookshelfUser;
 
