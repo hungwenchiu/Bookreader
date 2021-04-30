@@ -1,12 +1,10 @@
 // Code source reference https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
 import React, {useState} from 'react';
 import { useHistory } from "react-router-dom";
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -58,7 +56,7 @@ export default function SignUp() {
         // duplicate username
         axios.get('/api/user/' + username)
             .then(res => {
-                if (204 != res.status) {
+                if (204 !== res.status) {
                     setNameError("username already exist. ");
                     return;
                 } else {
@@ -78,7 +76,7 @@ export default function SignUp() {
         setPassword(password);
     }
     const updateRepassword = (repassword) => {
-        if (password != repassword) {
+        if (password !== repassword) {
             setRepasswordError("Re-Password doesn't match password ");
             return;
         } else {
@@ -102,6 +100,7 @@ export default function SignUp() {
             })
             .then(data => {
                 sessionStorage.setItem('currentUser', name);
+                sessionStorage.setItem('currentUserID', data.id);
                 history.push('/home');
             });
     }
