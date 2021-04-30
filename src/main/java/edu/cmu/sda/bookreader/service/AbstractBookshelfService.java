@@ -112,10 +112,39 @@ public class AbstractBookshelfService {
         if (bookshelf.isPresent()) {
             Set<Book> books = bookshelf.get().getBooks();
             books.add(newBook);
+            bookshelfRepository.save(bookshelf.get());
+            return bookshelf.get();
+        }
+        return null;
+    }
+
+    public AbstractBookshelf removeBook(long bookshelfID, Book book) {
+        Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(bookshelfID));
+
+        if (bookshelf.isPresent()) {
+            Set<Book> books = bookshelf.get().getBooks();
+            books.remove(book);
+            bookshelfRepository.save(bookshelf.get());
             return bookshelf.get();
         }
         return null;
     }
 
     // move book to a bookshelf
+    public String moveBook(long bookshelfID_current, long bookshelfID_new, long bookID) {
+        Book book = this.getBookByID(bookshelfID_current, bookID);
+        if (book != null) {
+            // add book to new bookshelf
+            this.addBook(bookshelfID_new, book);
+
+            // delete book from current bookshelf
+            Optional<Bookshelf> currentBookshelf = bookshelfRepository.findById(new Long(bookshelfID_current));
+            if (currentBookshelf.isPresent()) {
+                if (this.removeBook(bookshelfID_current, book) != null) {
+                    return "Successfully moved book";
+                }
+            }
+        }
+        return "Could not move book to another bookshelf";
+    }
 }

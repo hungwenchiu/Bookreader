@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -31,7 +32,7 @@ public class BookshelfController {
     }
 
     @RequestMapping(value = "/bookshelves/{id}/books", method = RequestMethod.POST)
-    public AbstractBookshelf addBookshelf(@PathVariable("id") int id, @RequestBody Book book) {
+    public AbstractBookshelf addBook(@PathVariable("id") int id, @RequestBody Book book) {
         return bookshelfService.addBook(id, book);
     }
 
@@ -63,5 +64,10 @@ public class BookshelfController {
     @RequestMapping("/bookshelves/all")
     public List<AbstractBookshelf> getAll() {
         return bookshelfService.getAllAbstractBookshelf();
+    }
+
+    @RequestMapping(value = "/bookshelves/{id}", method = RequestMethod.PUT)
+    public String moveBook(@PathVariable("id") long currentBookshelfID, @RequestBody Map<String, Long> json) {
+        return bookshelfService.moveBook(currentBookshelfID, json.get("bookshelfID"), json.get("bookID"));
     }
 }
