@@ -1,6 +1,7 @@
 package edu.cmu.sda.bookreader.controller;
 
 import edu.cmu.sda.bookreader.entity.AbstractBookshelf;
+import edu.cmu.sda.bookreader.entity.Book;
 import edu.cmu.sda.bookreader.entity.Bookshelf;
 import edu.cmu.sda.bookreader.entity.RecommendedBookshelf;
 import edu.cmu.sda.bookreader.service.AbstractBookshelfService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api")
@@ -23,12 +25,27 @@ public class BookshelfController {
     @Autowired
     private AbstractBookshelfService bookshelfService;
 
-    @RequestMapping(value = "/bookshelf", method = RequestMethod.POST)
+    @RequestMapping(value = "/bookshelves", method = RequestMethod.POST)
     public AbstractBookshelf addBookshelf(@RequestBody AbstractBookshelf bookshelf) {
         return bookshelfService.addBookshelf(bookshelf);
     }
 
-    @RequestMapping(value="/bookshelf", method = RequestMethod.GET)
+    @RequestMapping(value = "/bookshelves/{id}/books", method = RequestMethod.POST)
+    public AbstractBookshelf addBookshelf(@PathVariable("id") int id, @RequestBody Book book) {
+        return bookshelfService.addBook(id, book);
+    }
+
+    @RequestMapping("/bookshelves/{id}/books/{bookid}")
+    public Book getBookFromBookshelf(@PathVariable("id") int id, @PathVariable("bookid") int bookID) {
+        return bookshelfService.getBookByID(id, bookID);
+    }
+
+    @RequestMapping("/bookshelves/{id}/books")
+    public Set<Book> getBookFromBookshelf(@PathVariable("id") int id) {
+        return bookshelfService.getAllBooksInBookshelf(id);
+    }
+
+    @RequestMapping(value="/bookshelves", method = RequestMethod.GET)
     public List<Bookshelf> getAllBookshelves() {
         return bookshelfService.getAllRegularBookshelves();
     }
@@ -38,13 +55,12 @@ public class BookshelfController {
         return bookshelfService.getAllRecommendedBookshelves();
     }
 
-
-    @RequestMapping("/bookshelf/{id}")
+    @RequestMapping("/bookshelves/{id}")
     public AbstractBookshelf getAnyBookshelf(@PathVariable("id") int id) {
         return bookshelfService.getBookshelf(id);
     }
 
-    @RequestMapping("/bookshelf/all")
+    @RequestMapping("/bookshelves/all")
     public List<AbstractBookshelf> getAll() {
         return bookshelfService.getAllAbstractBookshelf();
     }
