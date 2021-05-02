@@ -24,6 +24,10 @@ public class User {
     @NotNull
     private String password;
 
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookshelfUser")
+//    private Set<Bookshelf> bookshelves;
+
+
     @ManyToMany
     @JoinTable(
         name = "friendship",

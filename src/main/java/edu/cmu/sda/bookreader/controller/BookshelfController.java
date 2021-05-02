@@ -26,48 +26,57 @@ public class BookshelfController {
     @Autowired
     private AbstractBookshelfService bookshelfService;
 
+    // add a new bookshelf
     @RequestMapping(value = "/bookshelves", method = RequestMethod.POST)
     public AbstractBookshelf addBookshelf(@RequestBody AbstractBookshelf bookshelf) {
         return bookshelfService.addBookshelf(bookshelf);
     }
 
-    @RequestMapping(value = "/bookshelves/{id}/books", method = RequestMethod.POST)
-    public AbstractBookshelf addBook(@PathVariable("id") int id, @RequestBody Book book) {
-        return bookshelfService.addBook(id, book);
+    // add a new book to a bookshelf
+    @RequestMapping(value = "/bookshelves/{id}/books", method = RequestMethod.PUT)
+    public AbstractBookshelf addBook(@PathVariable("id") int id, @RequestBody Map<String, String> json) {
+        return bookshelfService.addBook(id, json.get("bookID"));
     }
 
+    // get a particular book from a particular bookshelf
     @RequestMapping("/bookshelves/{id}/books/{bookid}")
-    public Book getBookFromBookshelf(@PathVariable("id") int id, @PathVariable("bookid") int bookID) {
+    public Book getBookFromBookshelf(@PathVariable("id") int id, @PathVariable("bookid") String bookID) {
         return bookshelfService.getBookByID(id, bookID);
     }
 
+    // get all books in a bookshelf
     @RequestMapping("/bookshelves/{id}/books")
-    public Set<Book> getBookFromBookshelf(@PathVariable("id") int id) {
+    public List<Book> getBooksFromBookshelf(@PathVariable("id") int id) {
         return bookshelfService.getAllBooksInBookshelf(id);
     }
 
-    @RequestMapping(value="/bookshelves", method = RequestMethod.GET)
+    // get all regular bookshelves
+    @RequestMapping(value="/bookshelves/regular", method = RequestMethod.GET)
     public List<Bookshelf> getAllBookshelves() {
         return bookshelfService.getAllRegularBookshelves();
     }
 
-    @RequestMapping(value = "/recommended", method = RequestMethod.GET)
+    // get all recommended bookshelves
+    @RequestMapping(value = "/bookshelves/recommended", method = RequestMethod.GET)
     public List<RecommendedBookshelf> getAllRecommendBookshelves() {
         return bookshelfService.getAllRecommendedBookshelves();
     }
 
-    @RequestMapping("/bookshelves/{id}")
-    public AbstractBookshelf getAnyBookshelf(@PathVariable("id") int id) {
-        return bookshelfService.getBookshelf(id);
-    }
-
+    // get all bookshelves
     @RequestMapping("/bookshelves/all")
     public List<AbstractBookshelf> getAll() {
         return bookshelfService.getAllAbstractBookshelf();
     }
 
+    // get a bookshelf
+    @RequestMapping("/bookshelves/{id}")
+    public AbstractBookshelf getAnyBookshelf(@PathVariable("id") int id) {
+        return bookshelfService.getBookshelf(id);
+    }
+
+    // move book from a bookshelf
     @RequestMapping(value = "/bookshelves/{id}", method = RequestMethod.PUT)
-    public String moveBook(@PathVariable("id") long currentBookshelfID, @RequestBody Map<String, Long> json) {
-        return bookshelfService.moveBook(currentBookshelfID, json.get("bookshelfID"), json.get("bookID"));
+    public String moveBook(@PathVariable("id") long currentBookshelfID, @RequestBody Map<String, String> json) {
+        return bookshelfService.moveBook(currentBookshelfID, Long.parseLong(json.get("newBookshelfID")), json.get("bookID"));
     }
 }
