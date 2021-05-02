@@ -23,11 +23,4 @@ public class User {
     private String name;
     @NotNull
     private String password;
-
-    @ManyToMany
-    @JoinTable(
-        name = "friendship",
-        joinColumns = @JoinColumn(name = "user_id")
-    )
-    Set<User> friends = new HashSet<>();
 }
