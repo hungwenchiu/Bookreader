@@ -68,11 +68,15 @@ public class UserService {
     /**
      * authenticate if given user
      * @param user user to be authenticated
-     * @return true if name and password match, else false
+     * @return user id if authenticated, else null
      */
-    public boolean authenticateUser(User user) {
+    public Long authenticateUser(User user) {
         User currentUser = repository.findByName((user.getName())).orElse(null);
-        return null != currentUser && user.getPassword().equals(currentUser.getPassword());
+        if (null != currentUser && user.getPassword().equals(currentUser.getPassword())) {
+            return currentUser.getId();
+        } else {
+            return null;
+        }
     }
 
 }

@@ -31,7 +31,9 @@ public class UserController {
     @PostMapping("/login")
     public Map<String, String> authenticateUser(@RequestBody User user) {
         Map<String, String> map = new HashMap<>();
-        map.put("loginStatus", String.valueOf(service.authenticateUser(user)));
+        Long userId = service.authenticateUser(user);
+        map.put("userId", String.valueOf(userId));
+        map.put("loginStatus", null == userId ? "false" : "true");
         return map;
     }
 
