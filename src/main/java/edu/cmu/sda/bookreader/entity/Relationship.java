@@ -17,7 +17,7 @@ import javax.persistence.*;
 })
 public class Relationship {
     public enum Status {
-        PENDING, ACCEPTED, DECLINED
+        PENDING, ACCEPTED
     }
     @Id
     @GeneratedValue

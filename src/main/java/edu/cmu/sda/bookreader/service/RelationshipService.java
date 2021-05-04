@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,15 @@ public class RelationshipService {
     }
 
     /**
+     * "toUser" reject friend request from "fromUser"
+     * @param fromUser friend request invitor
+     * @param toUser the user rejecting the request
+     */
+    public void rejectRequest(User fromUser, User toUser) {
+        repository.rejectRequest(fromUser, toUser);
+    }
+
+    /**
      * get the user's friend list
      * @param user user
      * @return a list of user who is friend with provided user
@@ -55,7 +66,7 @@ public class RelationshipService {
         for (Relationship relationship : friendRelationships) {
             User userOne = relationship.getUserOne();
             User userTwo = relationship.getUserTwo();
-            friendList.add(userOne.equals(user) ? userTwo : userOne);
+            friendList.add(userOne.getId() == user.getId() ? userTwo : userOne);
         }
         return friendList;
     }
@@ -71,7 +82,7 @@ public class RelationshipService {
         for (Relationship relationship : pendingRelationships) {
             User userOne = relationship.getUserOne();
             User userTwo = relationship.getUserTwo();
-            pendingList.add(userOne.equals(user) ? userTwo : userOne);
+            pendingList.add(userOne.getId() == user.getId() ? userTwo : userOne);
         }
         return pendingList;
     }
@@ -87,8 +98,41 @@ public class RelationshipService {
         for (Relationship relationship : pendingRelationships) {
             User userOne = relationship.getUserOne();
             User userTwo = relationship.getUserTwo();
-            pendingList.add(userOne.equals(user) ? userTwo : userOne);
+            pendingList.add(userOne.getId() == user.getId() ? userTwo : userOne);
         }
         return pendingList;
     }
+
+    /**
+     * Get the all users who has no relationship with the given user
+     * @param user user
+     * @return a list of users who has no relationship with the given user
+     */
+    public List<User> getNotFriends(User user) {
+        List<List<Object>> dbResult = repository.getNoRelationship(user);
+        List<User> result = new ArrayList<>();
+        dbResult.stream().forEach((r) -> {
+            User u = new User();
+            u.setId(((BigInteger) r.get(0)).longValue());
+            u.setName(String.valueOf(r.get(1)));
+            result.add(u);
+        });
+        return result;
+    }
+
+//    /**
+//     * Get all users that has no relationship with the given user
+//     * @param user user
+//     * @return a list of users who has no relationship with
+//     */
+//    public List<User> getAllUserWithNoRelationship(User user) {
+//        List<Relationship> noRelationship = repository.getAllPendingSentRequest(user);
+//        List<User> pendingList = new ArrayList<>();
+//        for (Relationship relationship : pendingRelationships) {
+//            User userOne = relationship.getUserOne();
+//            User userTwo = relationship.getUserTwo();
+//            pendingList.add(userOne.equals(user) ? userTwo : userOne);
+//        }
+//        return pendingList;
+//    }
 }
