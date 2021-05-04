@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -23,11 +21,4 @@ public class User {
     private String name;
     @NotNull
     private String password;
-
-    @ManyToMany
-    @JoinTable(
-        name = "friendship",
-        joinColumns = @JoinColumn(name = "user_id")
-    )
-    Set<User> friends = new HashSet<>();
 }
