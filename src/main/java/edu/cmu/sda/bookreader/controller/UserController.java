@@ -37,9 +37,18 @@ public class UserController {
         return map;
     }
 
-    @GetMapping("/user/{name}")
+    @GetMapping("/user/name/{name}")
     public ResponseEntity<User> findUserByName(@PathVariable String name) {
         User user = service.getUserByName(name);
+        if (null == user) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/user/{name}")
+    public ResponseEntity<User> findUserById(@PathVariable long id) {
+        User user = service.getUser(id);
         if (null == user) {
             return ResponseEntity.noContent().build();
         }
