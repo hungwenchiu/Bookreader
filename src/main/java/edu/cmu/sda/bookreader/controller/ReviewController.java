@@ -29,7 +29,7 @@ public class ReviewController {
         return service.saveReview(review);
     }
 
-    @GetMapping("/review/{googleBookId}")
+    @GetMapping("/review//book/{googleBookId}")
     public ResponseEntity<List<Review>> findReviewsByGoogleBookID(@PathVariable String googleBookId) {
         List<Review> reviews = service.getReviewsByGoogleBookId(googleBookId);
 
@@ -39,7 +39,7 @@ public class ReviewController {
         }
         return ResponseEntity.ok(reviews);
     }
-    @GetMapping("/review/{userId}")
+    @GetMapping("/review/user/{userId}")
     public ResponseEntity<List<Review>> findReviewsByUserID(@PathVariable long userId) {
         List<Review> reviews = service.getReviewsByUserId(userId);
 
