@@ -3,6 +3,7 @@ package edu.cmu.sda.bookreader.controller;
 import edu.cmu.sda.bookreader.entity.Relationship;
 import edu.cmu.sda.bookreader.entity.User;
 import edu.cmu.sda.bookreader.service.RelationshipService;
+import edu.cmu.sda.bookreader.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,45 +25,49 @@ public class RelationshipController {
     @Autowired
     private RelationshipService service;
 
+    @Qualifier("userService")
+    @Autowired
+    private UserService userService;
+
     /**
      * get all incoming friend requests
-     * @param user
+     * @param userId
      * @return
      */
-    @PostMapping("/relationship/incoming")
-    public List<User> getAllIncomingRequest(@RequestBody User user) {
-        return service.getAllPendingFriendRequests(user);
+    @GetMapping("/relationship/incoming/{userId}")
+    public List<User> getAllIncomingRequest(@PathVariable long userId) {
+        return service.getAllPendingFriendRequests(userService.getUser(userId));
     }
 
     /**
      * get all outgoing friend requests
-     * @param user
+     * @param userId
      * @return
      */
-    @PostMapping("/relationship/outgoing")
-    public List<User> getAllOutgoingRequest(@RequestBody User user) {
-        return service.getAllPendingSentFriendRequests(user);
+    @GetMapping("/relationship/outgoing/{userId}")
+    public List<User> getAllOutgoingRequest(@PathVariable long userId) {
+        return service.getAllPendingSentFriendRequests(userService.getUser(userId));
     }
 
     /**
      * get all friends
-     * @param user
+     * @param userId
      * @return
      */
-    @PostMapping("/relationship/friends")
-    public List<User> getAllFriends(@RequestBody User user) {
-        return service.getAllFriends(user);
+    @GetMapping("/relationship/friends/{userId}")
+    public List<User> getAllFriends(@PathVariable long userId) {
+        return service.getAllFriends(userService.getUser(userId));
     }
 
     /**
      * get all user has no relationship with the given user
-     * @param user
+     * @param userId
      * @return
      */
-    @PostMapping("/relationship/none")
-    public List<User> getAllNotFriends(@RequestBody User user) {
-        List<User> users = service.getNotFriends(user);
-        users.remove(user);
+    @GetMapping("/relationship/none/{userId}")
+    public List<User> getAllNotFriends(@PathVariable long userId) {
+        List<User> users = service.getNotFriends(userService.getUser(userId));
+        users.remove(userService.getUser(userId));
         return users;
     }
 

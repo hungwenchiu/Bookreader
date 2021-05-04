@@ -6,7 +6,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import {
     Avatar,
     Collapse,
-    Divider,
     IconButton,
     ListItemAvatar,
     ListItemSecondaryAction,
@@ -15,36 +14,30 @@ import {
 import axios from "axios";
 import Container from "@material-ui/core/Container";
 import AddIcon from '@material-ui/icons/Add';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
 
 const FriendsPage = () => {
     const [incomingRequests, setIncomingRequests] = useState([])
     const [allFriends, setAllFriends] = useState([])
     const [notFriends, setNotFriends] = useState([])
     const [update, setUpdate] = useState(false)
-    const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
+    const currentUser = sessionStorage.getItem('currentUserID') //{id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
 
     useEffect(() => {
-        axios.post(`/api/relationship/incoming`, currentUser)
+        axios.get(`/api/relationship/incoming/${currentUser}`)
             .then(res => {
                 setIncomingRequests(res.data);
             });
-        axios.post(`/api/relationship/friends`, currentUser)
+        axios.get(`/api/relationship/friends/${currentUser}`)
             .then(res => {
                 setAllFriends(res.data);
             });
-        axios.post(`/api/relationship/none`, currentUser)
+        axios.get(`/api/relationship/none/${currentUser}`)
             .then(res => {
                 setNotFriends(res.data);
             });
     }, [update]);
-
-    function randomColor() {
-        let hex = Math.floor(Math.random() * 0xFFFFFF);
-        let color = "#" + hex.toString(16);
-        return color;
-    }
 
     function handleAddFriend(toUser) {
         const data = [currentUser, toUser]
@@ -82,20 +75,21 @@ const FriendsPage = () => {
                 {incomingRequests.map(user => (
                     <ListItem key={user.name}>
                         <ListItemAvatar>
-                            <Avatar style={{
-                                backgroundColor: randomColor()
-                            }}>
+                            <Avatar>
                                 {user.name.charAt(0).toUpperCase()}
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={user.name} />
                         <ListItemSecondaryAction>
+
                             <Button variant="contained" color="primary" onClick={() => {handleAcceptFriend(user, currentUser)}}>
                                 Accept
                             </Button>
+                            <Box component="span" m={1} />
                             <Button variant="contained" color="secondary" onClick={() => handleDeleteFriendRequest(user, currentUser)}>
                                 Delete
                             </Button>
+
                         </ListItemSecondaryAction>
                     </ListItem>
                 ))}
@@ -111,9 +105,7 @@ const FriendsPage = () => {
                 {allFriends.map(user => (
                     <ListItem key={user.name}>
                         <ListItemAvatar>
-                            <Avatar style={{
-                                backgroundColor: randomColor()
-                            }}>
+                            <Avatar>
                                 {user.name.charAt(0).toUpperCase()}
                             </Avatar>
                         </ListItemAvatar>
@@ -132,9 +124,7 @@ const FriendsPage = () => {
                 {notFriends.map(user => (
                     <ListItem key={user.name}>
                         <ListItemAvatar>
-                            <Avatar style={{
-                                backgroundColor: randomColor()
-                            }}>
+                            <Avatar>
                                 {user.name.charAt(0).toUpperCase()}
                             </Avatar>
                         </ListItemAvatar>
