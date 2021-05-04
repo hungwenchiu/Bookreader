@@ -20,10 +20,11 @@ import Button from "@material-ui/core/Button";
 
 const FriendsPage = () => {
     const [incomingRequests, setIncomingRequests] = useState([])
-    const [outgoingRequests, setOutgoingRequests] = useState([])
+    const [allFriends, setAllFriends] = useState([])
     const [notFriends, setNotFriends] = useState([])
     const [update, setUpdate] = useState(false)
     const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
+
     useEffect(() => {
         axios.post(`/api/relationship/incoming`, currentUser)
             .then(res => {
@@ -33,19 +34,18 @@ const FriendsPage = () => {
         axios.post(`/api/relationship/friends`, currentUser)
             .then(res => {
                 console.log(res.data);
-                setOutgoingRequests(res.data);
+                setAllFriends(res.data);
             });
         axios.post(`/api/relationship/none`, currentUser)
             .then(res => {
                 console.log(res.data);
                 setNotFriends(res.data);
             });
-    }, []);
+    }, [update]);
 
     function randomColor() {
         let hex = Math.floor(Math.random() * 0xFFFFFF);
         let color = "#" + hex.toString(16);
-
         return color;
     }
 
@@ -53,7 +53,7 @@ const FriendsPage = () => {
         const data = [currentUser, toUser]
         axios.post(`/api/relationship`, data)
             .then(res => {
-                // setUpdate(!update)
+                setUpdate(!update)
             });
     }
 
@@ -61,7 +61,7 @@ const FriendsPage = () => {
         const data = [fromUser, toUser]
         axios.post(`/api/relationship/accept`, data)
             .then(res => {
-                // setUpdate(!update)
+                setUpdate(!update)
             });
     }
 
@@ -69,7 +69,7 @@ const FriendsPage = () => {
         const data = [fromUser, toUser]
         axios.delete(`/api/relationship`, {data: data})
             .then(res => {
-                // setUpdate(!update)
+                setUpdate(!update)
             });
     }
 
@@ -111,7 +111,7 @@ const FriendsPage = () => {
                         Friends
                     </ListSubheader>
                 }>
-                {outgoingRequests.map(user => (
+                {allFriends.map(user => (
                     <ListItem key={user.name}>
                         <ListItemAvatar>
                             <Avatar style={{
