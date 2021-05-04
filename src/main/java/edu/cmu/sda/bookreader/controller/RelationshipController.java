@@ -3,12 +3,10 @@ package edu.cmu.sda.bookreader.controller;
 import edu.cmu.sda.bookreader.entity.Relationship;
 import edu.cmu.sda.bookreader.entity.User;
 import edu.cmu.sda.bookreader.service.RelationshipService;
-import edu.cmu.sda.bookreader.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 

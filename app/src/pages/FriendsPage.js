@@ -28,17 +28,14 @@ const FriendsPage = () => {
     useEffect(() => {
         axios.post(`/api/relationship/incoming`, currentUser)
             .then(res => {
-                console.log(res.data);
                 setIncomingRequests(res.data);
             });
         axios.post(`/api/relationship/friends`, currentUser)
             .then(res => {
-                console.log(res.data);
                 setAllFriends(res.data);
             });
         axios.post(`/api/relationship/none`, currentUser)
             .then(res => {
-                console.log(res.data);
                 setNotFriends(res.data);
             });
     }, [update]);
@@ -93,7 +90,7 @@ const FriendsPage = () => {
                         </ListItemAvatar>
                         <ListItemText primary={user.name} />
                         <ListItemSecondaryAction>
-                            <Button variant="contained" color="primary" onClick={() => {console.log(user);handleAcceptFriend(user, currentUser)}}>
+                            <Button variant="contained" color="primary" onClick={() => {handleAcceptFriend(user, currentUser)}}>
                                 Accept
                             </Button>
                             <Button variant="contained" color="secondary" onClick={() => handleDeleteFriendRequest(user, currentUser)}>

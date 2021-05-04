@@ -20,8 +20,6 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    private EntityManager entityManager;
-
     /**
      * save a new user to db
      * @param user user to be saved
