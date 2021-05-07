@@ -54,7 +54,7 @@ export default function SignUp() {
             setNameError(null);
         }
         // duplicate username
-        axios.get('/api/user/' + username)
+        axios.get('/api/user/name/' + username)
             .then(res => {
                 if (204 !== res.status) {
                     setNameError("username already exist. ");
@@ -94,7 +94,7 @@ export default function SignUp() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({name: name, password: password})
         };
-        fetch('/api/user', requestOptions)
+        fetch('/api/user/', requestOptions)
             .then(response => {
                 return response.json()
             })

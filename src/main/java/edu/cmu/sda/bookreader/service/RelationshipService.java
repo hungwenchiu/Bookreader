@@ -111,8 +111,12 @@ public class RelationshipService {
         List<List<Object>> dbResult = repository.getNoRelationship(user);
         List<User> result = new ArrayList<>();
         dbResult.stream().forEach((r) -> {
+            long userId = ((BigInteger) r.get(0)).longValue();
+            if(user.getId() == userId) {
+                return;
+            }
             User u = new User();
-            u.setId(((BigInteger) r.get(0)).longValue());
+            u.setId(userId);
             u.setName(String.valueOf(r.get(1)));
             result.add(u);
         });
