@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Toolbar, AppBar, Typography, Link, InputBase} from '@material-ui/core';
+import {Button, Toolbar, AppBar, Typography, Link} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import logo from '../assets/logo.png'
@@ -33,6 +33,7 @@ export default function Layout (props) {
   const classes = StyleSheet()
   const logout = () => {
     sessionStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUserID');
     history.push('/');
   }
   

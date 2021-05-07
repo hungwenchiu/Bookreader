@@ -1,6 +1,5 @@
 // Code source reference https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-in
 import React, {useState} from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,7 +8,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -61,8 +59,10 @@ export default function SignIn() {
                 if ("true" === data.loginStatus) {
                     setLoginError(null);
                     sessionStorage.setItem('currentUser', name);
+                    sessionStorage.setItem('currentUserID', data.userId);
                     history.push('/home')
                 } else {
+                    sessionStorage.removeItem('currentUserID');
                     sessionStorage.removeItem('currentUser');
                     setLoginError("Invalid credentials. ")
                     return;
@@ -73,7 +73,7 @@ export default function SignIn() {
         <Container component="main" maxWidth="xs">
             <CssBaseline/>
             <div className={classes.paper}>
-                <img src={logoTransparentBackground} width="150" />
+                <img src={logoTransparentBackground} width="150" alt="readingpal logo" />
                 <Typography component="h1" variant="h5">
                     Sign In
                 </Typography>
@@ -89,6 +89,7 @@ export default function SignIn() {
                         autoComplete="username"
                         autoFocus
                         onChange={e => setName(e.target.value)}
+                        {...(loginError && {error: true, helperText: loginError})}
                     />
                     <TextField
                         variant="outlined"

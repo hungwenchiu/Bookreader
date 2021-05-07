@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
+@Scope(value = "session")
 @Component(value = "bookService")
 public class BookService {
     @Autowired
@@ -42,7 +45,7 @@ public class BookService {
 
     /**
      * update book with given book object
-     * @param book
+     * @param book book to be updated
      * @return null if the given book's id doesn't exist, else return the updated book
      */
     public Book updateBook(Book book) {
