@@ -31,13 +31,24 @@ public class UserController {
     @PostMapping("/login")
     public Map<String, String> authenticateUser(@RequestBody User user) {
         Map<String, String> map = new HashMap<>();
-        map.put("loginStatus", String.valueOf(service.authenticateUser(user)));
+        Long userId = service.authenticateUser(user);
+        map.put("userId", String.valueOf(userId));
+        map.put("loginStatus", null == userId ? "false" : "true");
         return map;
     }
 
-    @GetMapping("/user/{name}")
+    @GetMapping("/user/name/{name}")
     public ResponseEntity<User> findUserByName(@PathVariable String name) {
         User user = service.getUserByName(name);
+        if (null == user) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/user/{name}")
+    public ResponseEntity<User> findUserById(@PathVariable long id) {
+        User user = service.getUser(id);
         if (null == user) {
             return ResponseEntity.noContent().build();
         }

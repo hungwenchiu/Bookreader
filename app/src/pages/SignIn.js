@@ -59,7 +59,7 @@ export default function SignIn() {
                 if ("true" === data.loginStatus) {
                     setLoginError(null);
                     sessionStorage.setItem('currentUser', name);
-                    sessionStorage.setItem('currentUserID', data.id);
+                    sessionStorage.setItem('currentUserID', data.userId);
                     history.push('/home')
                 } else {
                     sessionStorage.removeItem('currentUserID');
@@ -89,6 +89,7 @@ export default function SignIn() {
                         autoComplete="username"
                         autoFocus
                         onChange={e => setName(e.target.value)}
+                        {...(loginError && {error: true, helperText: loginError})}
                     />
                     <TextField
                         variant="outlined"

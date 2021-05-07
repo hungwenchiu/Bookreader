@@ -29,7 +29,7 @@ public class ReviewController {
         return service.saveReview(review);
     }
 
-    @GetMapping("/review/{googleBookId}")
+    @GetMapping("/review//book/{googleBookId}")
     public ResponseEntity<List<Review>> findReviewsByGoogleBookID(@PathVariable String googleBookId) {
         List<Review> reviews = service.getReviewsByGoogleBookId(googleBookId);
 
