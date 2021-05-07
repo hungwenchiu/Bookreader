@@ -2,9 +2,12 @@ package edu.cmu.sda.bookreader.entity;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @JsonTypeInfo(
@@ -24,34 +27,15 @@ import java.util.Set;
 public class AbstractBookshelf {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "generator")
-    public Long id;
+    private Long id;
+    private String name;
+    @NonNull
+    private long bookshelfUserID;
+    @Column
+    @ElementCollection(targetClass=String.class)
+    private List<String> books = new ArrayList<>();
 
-    public String name;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "abstractbookshelf_user",
-            joinColumns = @JoinColumn(name = "abstractbookshelf_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_name")
-    )
-    private User bookshelfUser;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "abstractbookshelf_books",
-            joinColumns = @JoinColumn(name = "abstractbookshelf_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    private Set<Book> books = new HashSet<>();
-
-    private String type;
-
-    public void setType(String type) { this.type = type; }
-
-    public String getType() { return type; }
-
-    public AbstractBookshelf() {
-    }
+    public AbstractBookshelf() {}
 
     public Long getId() {
         return id;
@@ -65,19 +49,17 @@ public class AbstractBookshelf {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
-    public User getBookshelfUser() { return bookshelfUser; }
+    public long getBookshelfUserID() { return bookshelfUserID; }
 
-    public void setBookshelfUser(User bookshelfUser) { this.bookshelfUser = bookshelfUser; }
+    public void setBookshelfUser(long bookshelfUserID) { this.bookshelfUserID = bookshelfUserID; }
 
-    public Set<Book> getBooks() {
+    public List<String> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<Book> books) {
+    public void setBooks(List<String> books) {
         this.books = books;
     }
 
@@ -86,7 +68,7 @@ public class AbstractBookshelf {
         return "AbstractBookshelf{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", user='" + bookshelfUser + '\'' +
+                ", user='" + bookshelfUserID + '\'' +
                 ", books=" + books +
                 '}';
     }
