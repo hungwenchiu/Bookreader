@@ -4,28 +4,25 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "recommendedBookshelf")
 public class RecommendedBookshelf extends AbstractBookshelf {
-    @ManyToMany
-    @JoinTable(
-            name = "recommendedBookshelf_recommenders",
-            joinColumns = @JoinColumn(name = "abstractbookshelf_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_name")
-    )
-    private Set<User> recommenders;
+    @Column
+    @ElementCollection(targetClass=Long.class)
+    private List<Long> recommenderIDs;
 
     public RecommendedBookshelf() {
         super();
     }
 
-    public Set<User> getRecommenders() {
-        return recommenders;
+    public List<Long> getRecommenders() {
+        return recommenderIDs;
     }
 
-    public void setRecommenders(Set<User> recommenders) {
-        this.recommenders = recommenders;
+    public void setRecommenders(List<Long> recommenderIDs) {
+        this.recommenderIDs = recommenderIDs;
     }
 }

@@ -62,11 +62,14 @@ public class AbstractBookshelfService {
 
     // Get a bookshelf by ID
     public AbstractBookshelf getBookshelf(long id) {
-        System.out.println("reached bookshelf in service");
         Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(id));
-        System.out.println(bookshelf.isPresent());
+        Optional<RecommendedBookshelf> recommendedBookshelf = recommendedBookshelfRepository.findById(new Long(id));
+
         if (bookshelf.isPresent()) {
             return bookshelf.get();
+        }
+        else if (recommendedBookshelf.isPresent()) {
+           return recommendedBookshelf.get();
         }
         return null;
     }
@@ -85,45 +88,86 @@ public class AbstractBookshelfService {
     }
 
     // Get Book from a bookshelf
-    public Book getBookByID(long bookshelfID, long bookID) {
-        Optional<AbstractBookshelf> bookshelf = bookshelfRepository.findById(new Long(bookshelfID));
+    public Book getBookByID(long bookshelfID, String bookID) {
+        Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(bookshelfID));
+        Optional<RecommendedBookshelf> recommendedBookshelf = recommendedBookshelfRepository.findById(new Long(bookshelfID));
+
         if (bookshelf.isPresent()) {
-            Optional<Book> book = bookRepository.findById(bookID);
-            return book.get();
+            List<String> books = bookshelf.get().getBooks();
+            if (books.contains(bookID)) {
+                Book book = bookRepository.findByGoogleBookId(bookID);
+                return book;
+            }
+        }
+        if (recommendedBookshelf.isPresent()) {
+            List<String> books = recommendedBookshelf.get().getBooks();
+            if (books.contains(bookID)) {
+                Book book = bookRepository.findByGoogleBookId(bookID);
+                return book;
+            }
         }
         return null;
     }
 
     // Get all books from a bookshelf
-    public Set<Book> getAllBooksInBookshelf(long bookshelfID) {
+    public List<Book> getAllBooksInBookshelf(long bookshelfID) {
         Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(bookshelfID));
+        Optional<RecommendedBookshelf> recommendedBookshelf = recommendedBookshelfRepository.findById(new Long(bookshelfID));
 
         if (bookshelf.isPresent()) {
-            Set<Book> books = bookshelf.get().getBooks();
+            List<String> bookIDs = bookshelf.get().getBooks();
+            List<Book> books = new ArrayList<>();
+            for (String bookID: bookIDs) {
+                Book book = bookRepository.findByGoogleBookId(bookID);
+                if (book != null) {
+                    books.add(book);
+                }
+            }
+            return books;
+        }
+        if (recommendedBookshelf.isPresent()) {
+            List<String> bookIDs = recommendedBookshelf.get().getBooks();
+            List<Book> books = new ArrayList<>();
+            for (String bookID: bookIDs) {
+                Book book = bookRepository.findByGoogleBookId(bookID);
+                if (book != null) {
+                    books.add(book);
+                }
+            }
             return books;
         }
         return null;
     }
 
     // add a book to a bookshelf
-    public AbstractBookshelf addBook(long bookshelfID, Book newBook) {
+    public AbstractBookshelf addBook(long bookshelfID, String newBookID) {
         Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(bookshelfID));
-
+        Optional<RecommendedBookshelf> recommendedBookshelf = recommendedBookshelfRepository.findById(new Long(bookshelfID));
         if (bookshelf.isPresent()) {
-            Set<Book> books = bookshelf.get().getBooks();
-            books.add(newBook);
-            bookshelfRepository.save(bookshelf.get());
+            List<String> bookIDs = bookshelf.get().getBooks();
+            if (!bookIDs.contains(newBookID)) {
+                bookIDs.add(newBookID);
+                bookshelfRepository.save(bookshelf.get());
+            }
             return bookshelf.get();
+        }
+        if (recommendedBookshelf.isPresent()) {
+            List<String> bookIDs = recommendedBookshelf.get().getBooks();
+            if (!bookIDs.contains(newBookID)) {
+                bookIDs.add(newBookID);
+                bookshelfRepository.save(bookshelf.get());
+            }
+            return recommendedBookshelf.get();
         }
         return null;
     }
 
-    public AbstractBookshelf removeBook(long bookshelfID, Book book) {
-        Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(bookshelfID));
+    public AbstractBookshelf removeBook(long bookshelfID, String bookID) {
+        Optional<AbstractBookshelf> bookshelf = bookshelfRepository.findById(new Long(bookshelfID));
 
         if (bookshelf.isPresent()) {
-            Set<Book> books = bookshelf.get().getBooks();
-            books.remove(book);
+            List<String> bookIDs = bookshelf.get().getBooks();
+            bookIDs.remove(bookID);
             bookshelfRepository.save(bookshelf.get());
             return bookshelf.get();
         }
@@ -131,18 +175,37 @@ public class AbstractBookshelfService {
     }
 
     // move book to a bookshelf
-    public String moveBook(long bookshelfID_current, long bookshelfID_new, long bookID) {
-        Book book = this.getBookByID(bookshelfID_current, bookID);
-        if (book != null) {
-            // add book to new bookshelf
-            this.addBook(bookshelfID_new, book);
+    public String moveBook(long bookshelfID_current, long bookshelfID_new, String bookID) {
+        Optional<Bookshelf> currentBookshelf = bookshelfRepository.findById(bookshelfID_current);
+        Optional<RecommendedBookshelf> currentRecommendedBookshelf = recommendedBookshelfRepository.findById(bookshelfID_current);
 
-            // delete book from current bookshelf
-            Optional<Bookshelf> currentBookshelf = bookshelfRepository.findById(new Long(bookshelfID_current));
+        if (currentBookshelf.isPresent() || currentRecommendedBookshelf.isPresent()) {
+            List<String> bookIDs;
             if (currentBookshelf.isPresent()) {
-                if (this.removeBook(bookshelfID_current, book) != null) {
-                    return "Successfully moved book";
+                bookIDs = currentBookshelf.get().getBooks();
+            } else {
+                bookIDs = currentRecommendedBookshelf.get().getBooks();
+            }
+
+            // check if the book exists in the current bookshelf
+            if (bookIDs.contains(bookID)) {
+                // remove bookID from existing bookshelf
+                this.removeBook(bookshelfID_current, bookID);
+
+                // add bookID to new bookshelf
+                Optional<Bookshelf> newBookshelf = bookshelfRepository.findById(bookshelfID_new);
+                Optional<RecommendedBookshelf> newRecommendedBookshelf = recommendedBookshelfRepository.findById(bookshelfID_new);
+
+                if (newBookshelf.isPresent() || newRecommendedBookshelf.isPresent()) {
+                    AbstractBookshelf result = this.addBook(bookshelfID_new, bookID);
+                    if (result != null) {
+                        return "Successfully moved book to another bookshelf";
+                    }
+                } else {
+                    return "New bookshelf does not exist. Please try again.";
                 }
+            } else {
+                return "Current bookshelf or the requested book does not exist. Please try again.";
             }
         }
         return "Could not move book to another bookshelf";

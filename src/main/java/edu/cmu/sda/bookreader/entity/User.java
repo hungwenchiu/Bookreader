@@ -21,4 +21,15 @@ public class User {
     private String name;
     @NotNull
     private String password;
+
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookshelfUser")
+//    private Set<Bookshelf> bookshelves;
+
+
+    @ManyToMany
+    @JoinTable(
+        name = "friendship",
+        joinColumns = @JoinColumn(name = "user_id")
+    )
+    Set<User> friends = new HashSet<>();
 }
