@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
-@Scope(value = "session")
 @Component(value = "userService")
 public class UserService {
 

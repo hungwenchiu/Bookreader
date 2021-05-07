@@ -27,5 +27,4 @@ public class Book {
     @NonNull
     private int totalPage;
     private String kind;
-
 }

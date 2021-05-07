@@ -23,3 +23,5 @@ public class EventController {
     @PostMapping("/event") // add timeline event
     public Event addEvent(Event event) { return service.saveEvent(event);}
 }
+
+

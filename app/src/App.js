@@ -6,7 +6,6 @@ import SearchResult from './pages/SearchResult'
 import HomePage from './pages/HomePage'
 import FriendsPage from './pages/FriendsPage'
 import BookShelvesPage from './pages/BookShelvesPage'
-import BookPage from './pages/BookPage'
 import PrivateRoute from "./components/PrivateRoute";
 import PersonalTimeline from "./pages/PersonalTimeline";
 
@@ -17,9 +16,8 @@ function App() {
   return (
     <Switch>
       <Route exact path="/" component={SignIn} />
-      <Route exact path="/signup" component={SignUp} />
-      <PrivateRoute path="/book/:id" component={BookPage} />
-      <PrivateRoute path="/searchresult" component={SearchResult} />
+      <Route exact path="/SignUp" component={SignUp} />
+      <PrivateRoute path="/SearchResult" component={SearchResult} />
       <PrivateRoute exact path="/home" component={HomePage} />
       <PrivateRoute exact path="/friends" component={FriendsPage} />
       <PrivateRoute exact path="/bookshelves" component={BookShelvesPage} />
