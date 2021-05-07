@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -21,11 +23,6 @@ public class User {
     private String name;
     @NotNull
     private String password;
-
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookshelfUser")
-//    private Set<Bookshelf> bookshelves;
-
-
     @ManyToMany
     @JoinTable(
         name = "friendship",
