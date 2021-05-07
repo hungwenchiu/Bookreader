@@ -16,8 +16,18 @@ import Container from "@material-ui/core/Container";
 import AddIcon from '@material-ui/icons/Add';
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
+import {makeStyles} from "@material-ui/core/styles";
+import {blue} from "@material-ui/core/colors";
+
+
+const useStyles = makeStyles((theme) => ({
+    avatar: {
+        backgroundColor: blue[500],
+    },
+}));
 
 const FriendsPage = () => {
+    const classes = useStyles();
     const [incomingRequests, setIncomingRequests] = useState([])
     const [allFriends, setAllFriends] = useState([])
     const [notFriends, setNotFriends] = useState([])
@@ -76,7 +86,7 @@ const FriendsPage = () => {
                 {incomingRequests.map(user => (
                     <ListItem key={user.name}>
                         <ListItemAvatar>
-                            <Avatar>
+                            <Avatar className={classes.avatar}>
                                 {user.name.charAt(0).toUpperCase()}
                             </Avatar>
                         </ListItemAvatar>
@@ -106,7 +116,7 @@ const FriendsPage = () => {
                 {allFriends.map(user => (
                     <ListItem key={user.name}>
                         <ListItemAvatar>
-                            <Avatar>
+                            <Avatar className={classes.avatar}>
                                 {user.name.charAt(0).toUpperCase()}
                             </Avatar>
                         </ListItemAvatar>
@@ -125,7 +135,7 @@ const FriendsPage = () => {
                 {notFriends.map(user => (
                     <ListItem key={user.name}>
                         <ListItemAvatar>
-                            <Avatar>
+                            <Avatar className={classes.avatar}>
                                 {user.name.charAt(0).toUpperCase()}
                             </Avatar>
                         </ListItemAvatar>

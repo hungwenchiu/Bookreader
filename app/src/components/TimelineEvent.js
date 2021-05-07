@@ -20,6 +20,8 @@ import SendIcon from '@material-ui/icons/Send';
 import Button from "@material-ui/core/Button";
 import {Send} from "@material-ui/icons";
 
+const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
+
 const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: "60%",
@@ -107,7 +109,7 @@ export default function RecipeReviewCard(props) {
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
-                        P
+                        {currentUser.name.charAt(0).toUpperCase()}
                     </Avatar>
                 }
                 title={props.username}
