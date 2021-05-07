@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import logo from '../assets/logo.png'
 import SearchBar from './SearchBar.js'
 import {useHistory} from "react-router-dom";
+import TimelineMenu from "./TimeLine";
 
 const StyleSheet = makeStyles((theme) => ({
   root: {
@@ -51,7 +52,7 @@ export default function Layout (props) {
 
           </div>
           <SearchBar />
-
+          <TimelineMenu/> {/* For timeline*/}
           <Button onClick={logout} color="inherit" className={classes.buttons}>Sign Out</Button>
         </Toolbar>
       </AppBar>

@@ -8,8 +8,10 @@ import FriendsPage from './pages/FriendsPage'
 import BookShelvesPage from './pages/BookShelvesPage'
 import BookPage from './pages/BookPage'
 import PrivateRoute from "./components/PrivateRoute";
+import PersonalTimeline from "./pages/PersonalTimeline";
 
 import './App.css';
+
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
       <PrivateRoute exact path="/home" component={HomePage} />
       <PrivateRoute exact path="/friends" component={FriendsPage} />
       <PrivateRoute exact path="/bookshelves" component={BookShelvesPage} />
+      <PrivateRoute exact path="/personalTimeline" component={PersonalTimeline} />
     </Switch>
   );
 }
