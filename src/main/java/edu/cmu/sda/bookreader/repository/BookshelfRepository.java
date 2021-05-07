@@ -8,4 +8,5 @@ import java.util.Set;
 
 public interface BookshelfRepository<T> extends JpaRepository<Bookshelf, Long> {
     Book save(Book book);
+    List<Bookshelf> findByBookshelfUserID(Long userID);
 }
