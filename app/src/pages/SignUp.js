@@ -94,7 +94,7 @@ export default function SignUp() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({name: name, password: password})
         };
-        fetch('/api/user/name/', requestOptions)
+        fetch('/api/user/', requestOptions)
             .then(response => {
                 return response.json()
             })

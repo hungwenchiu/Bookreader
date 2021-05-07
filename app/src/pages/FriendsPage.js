@@ -22,18 +22,19 @@ const FriendsPage = () => {
     const [allFriends, setAllFriends] = useState([])
     const [notFriends, setNotFriends] = useState([])
     const [update, setUpdate] = useState(false)
-    const currentUser = sessionStorage.getItem('currentUserID') //{id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
+    const currentUserId = sessionStorage.getItem('currentUserID');
+    const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
 
     useEffect(() => {
-        axios.get(`/api/relationship/incoming/${currentUser}`)
+        axios.get(`/api/relationship/incoming/${currentUserId}`)
             .then(res => {
                 setIncomingRequests(res.data);
             });
-        axios.get(`/api/relationship/friends/${currentUser}`)
+        axios.get(`/api/relationship/friends/${currentUserId}`)
             .then(res => {
                 setAllFriends(res.data);
             });
-        axios.get(`/api/relationship/none/${currentUser}`)
+        axios.get(`/api/relationship/none/${currentUserId}`)
             .then(res => {
                 setNotFriends(res.data);
             });

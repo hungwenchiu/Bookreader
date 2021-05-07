@@ -66,9 +66,7 @@ public class RelationshipController {
      */
     @GetMapping("/relationship/none/{userId}")
     public List<User> getAllNotFriends(@PathVariable long userId) {
-        List<User> users = service.getNotFriends(userService.getUser(userId));
-        users.remove(userService.getUser(userId));
-        return users;
+        return service.getNotFriends(userService.getUser(userId));
     }
 
     /**
