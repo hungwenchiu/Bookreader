@@ -1,6 +1,5 @@
 package edu.cmu.sda.bookreader.service;
 
-import edu.cmu.sda.bookreader.entity.Book;
 import edu.cmu.sda.bookreader.entity.BookProgress;
 import edu.cmu.sda.bookreader.repository.BookProgressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class BookProgressService {
     public BookProgress initializeBookProgressForUser(Long userID, String bookID) {
         BookProgress bookProgress = new BookProgress();
         bookProgress.setGoogleBookID(bookID);
-        bookProgress.setUserID(0);
+        bookProgress.setUserID(userID);
         bookProgress.setPagesFinished(0);
 
         return bookProgressRepository.save(bookProgress);
@@ -27,7 +26,6 @@ public class BookProgressService {
     // update Progress for a book for a user
     public BookProgress updateBookProgressForUser(Long userID, String bookID, Long pagesFinished) {
         BookProgress currentBookProgress = bookProgressRepository.getBookProgressForUserByBook(userID, bookID);
-        System.out.println(currentBookProgress);
         if (currentBookProgress != null) {
             currentBookProgress.setPagesFinished(pagesFinished);
             return bookProgressRepository.save(currentBookProgress);
@@ -35,8 +33,12 @@ public class BookProgressService {
         return null;
     }
 
-    // calculate progress for a book for a user
-//    public Long getBookProgressForUser() {
-//        bookProgressRepository.getBookProgressForUserByBook(userID, )
-//    }
+    // get book progress
+    public long getBookProgress(Long userID, String bookID) {
+        BookProgress currentBookProgress = bookProgressRepository.getBookProgressForUserByBook(userID, bookID);
+        if (currentBookProgress != null) {
+            return currentBookProgress.getPagesFinished();
+        }
+        return -1;
+    }
 }

@@ -32,4 +32,10 @@ public class BookProgressController {
     public BookProgress updateProgress(@RequestBody Map<String, String> json) {
         return bookProgressService.updateBookProgressForUser(Long.parseLong(json.get("userID")), json.get("bookID"), Long.parseLong(json.get("pagesFinished")));
     }
+
+    // get book progress
+    @RequestMapping(value = "/progress", method = RequestMethod.GET)
+    public long getBookProgress(@RequestBody Map<String, String> json) {
+        return bookProgressService.getBookProgress(Long.parseLong(json.get("userID")), json.get("bookID"));
+    }
 }
