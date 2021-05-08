@@ -39,16 +39,15 @@ public class BookshelfController {
     }
 
     // add a new book to a bookshelf
-    @RequestMapping(value = "/bookshelves/{id}/books", method = RequestMethod.PUT)
-    public AbstractBookshelf addBook(@PathVariable("id") int id, @RequestBody Map<String, String> json) {
-        Long userID;
-        if (json.size() == 0) {
-            // recommended bookshelf, need to check friendship of recommender
-            userID = Long.valueOf(0);
-        } else {
-            userID = Long.parseLong(json.get("userID"));
-        }
-        return bookshelfService.addBook(id, json.get("bookID"), userID);
+    @RequestMapping(value = "/bookshelves/{name}/books", method = RequestMethod.PUT)
+    public AbstractBookshelf addBook(@PathVariable("name") String name, @RequestBody Map<String, String> json) {
+        return bookshelfService.addBook(name, json.get("bookID"), Long.parseLong(json.get("userID")));
+    }
+
+    // add a new book to a recommended bookshelf
+    @RequestMapping(value = "/bookshelves/recommended/books", method = RequestMethod.PUT)
+    public RecommendedBookshelf addRecommendedBook(@RequestBody Map<String, String> json) {
+        return bookshelfService.addRecommendedBook(Long.parseLong(json.get("userID")), Long.parseLong(json.get("recommenderID")), json.get("bookID"));
     }
 
     // get a particular book from a particular bookshelf
@@ -94,8 +93,8 @@ public class BookshelfController {
     }
 
     // move book from a bookshelf
-    @RequestMapping(value = "/bookshelves/{id}", method = RequestMethod.PUT)
-    public String moveBook(@PathVariable("id") long currentBookshelfID, @RequestBody Map<String, String> json) {
-        return bookshelfService.moveBook(currentBookshelfID, Long.parseLong(json.get("newBookshelfID")), json.get("bookID"), Long.parseLong(json.get("userID")));
+    @RequestMapping(value = "/bookshelves/{name}", method = RequestMethod.PUT)
+    public String moveBook(@PathVariable("name") String currentBookshelf, @RequestBody Map<String, String> json) {
+        return bookshelfService.moveBook(currentBookshelf, json.get("newBookshelfID"), json.get("bookID"), Long.parseLong(json.get("userID")));
     }
 }

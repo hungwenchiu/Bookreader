@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RecommendedBookshelfRepository extends JpaRepository<RecommendedBookshelf, Long> {
-    List<RecommendedBookshelf> findByBookshelfUserID(Long userID);
+    RecommendedBookshelf findByBookshelfUserID(Long userID);
 }
