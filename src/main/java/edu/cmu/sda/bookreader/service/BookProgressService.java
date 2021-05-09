@@ -1,7 +1,9 @@
 package edu.cmu.sda.bookreader.service;
 
+import edu.cmu.sda.bookreader.entity.Book;
 import edu.cmu.sda.bookreader.entity.BookProgress;
 import edu.cmu.sda.bookreader.repository.BookProgressRepository;
+import edu.cmu.sda.bookreader.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Service;
 public class BookProgressService {
     @Autowired
     BookProgressRepository bookProgressRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     /* TO DO FOR SHREYA-initialize progress for a book when user adds it in the bookshelf*/
     // initialize Progress for a book for a user
@@ -24,7 +29,7 @@ public class BookProgressService {
     }
 
     // update Progress for a book for a user
-    public BookProgress updateBookProgressForUser(Long userID, String bookID, Long pagesFinished) {
+    public BookProgress updateBookProgressForUser(Long userID, String bookID, int pagesFinished) {
         BookProgress currentBookProgress = bookProgressRepository.getBookProgressForUserByBook(userID, bookID);
         if (currentBookProgress != null) {
             currentBookProgress.setPagesFinished(pagesFinished);
@@ -34,11 +39,31 @@ public class BookProgressService {
     }
 
     // get book progress
-    public long getBookProgress(Long userID, String bookID) {
+    public int getPagesFinished(Long userID, String bookID) {
         BookProgress currentBookProgress = bookProgressRepository.getBookProgressForUserByBook(userID, bookID);
         if (currentBookProgress != null) {
             return currentBookProgress.getPagesFinished();
         }
         return -1;
+    }
+
+    // calculate book progress in percentage
+    public int calculateProgress(Long userID, String bookID) {
+        Book book = bookRepository.findByGoogleBookId(bookID);
+        int totalPage = book.getTotalPage();
+
+        BookProgress progress = bookProgressRepository.getBookProgressForUserByBook(userID, bookID);
+        int pagesFinished = 0;
+        if (progress != null) {
+            pagesFinished = progress.getPagesFinished();
+        }
+        System.out.println("GET PROGRESS "+pagesFinished);
+        System.out.println("TOTAL PAGE "+ totalPage);
+        if (totalPage > 0) {
+            int percentage = (int) (pagesFinished * 100 / totalPage);
+            System.out.println("PERCENTAGE "+percentage);
+            return percentage;
+        }
+        return 0;
     }
 }
