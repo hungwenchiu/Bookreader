@@ -46,7 +46,7 @@ export default function BookPage() {
       setDescription(res.data.volumeInfo.description)
     })
 
-    axios.get(`/api/review/`+id)
+    axios.get(`/api/review/book/`+id)
     .then(res => {
       setReviews(res.data)
       const avgRating = calculateRating(res.data)
@@ -88,7 +88,7 @@ export default function BookPage() {
             </Typography>
             <List>
               {reviews.map((review) => (
-                <Review userId={review.userId} content={review.content} rating={review.rating}/>
+                <Review key="review.userId" userId={review.userId} content={review.content} rating={review.rating}/>
               ))}
             </List>
           </Grid>
