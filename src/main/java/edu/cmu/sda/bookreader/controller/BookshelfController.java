@@ -51,15 +51,15 @@ public class BookshelfController {
     }
 
     // get a particular book from a particular bookshelf
-    @RequestMapping("/bookshelves/{id}/books/{bookid}")
-    public Book getBookFromBookshelf(@PathVariable("id") int id, @PathVariable("bookid") String bookID, @RequestBody Map<String, String> json) {
-        return bookshelfService.getBookByID(id, bookID, Long.parseLong(json.get("userID")));
+    @RequestMapping("/bookshelves/{name}/books/{bookid}")
+    public Book getBookFromBookshelf(@PathVariable("name") String name, @PathVariable("bookid") String bookid, @RequestBody Map<String, String> json) {
+        return bookshelfService.getBookByID(name, bookid, Long.parseLong(json.get("userID")));
     }
 
     // get all books in a bookshelf
-    @RequestMapping("/bookshelves/{id}/books")
-    public List<Book> getBooksFromBookshelf(@PathVariable("id") int id, @RequestBody Map<String, String> json) {
-        return bookshelfService.getAllBooksInBookshelf(id, Long.parseLong(json.get("userID")));
+    @RequestMapping("/bookshelves/{name}/books")
+    public List<Book> getBooksFromBookshelf(@PathVariable("name") String name, @RequestBody Map<String, String> json) {
+        return bookshelfService.getAllBooksInBookshelf(name, Long.parseLong(json.get("userID")));
     }
 
     // get all bookshelves for a user
