@@ -19,23 +19,25 @@ import {Input} from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
 import Button from "@material-ui/core/Button";
 import {Send} from "@material-ui/icons";
+import axios from "axios";
 
 const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: "60%",
+        maxWidth: "900px",
         maxHeight:"20%",
         margin: "20px auto",
 
     },
     media: {
-        height: "40vh",
-        // paddingTop: '56.25%', // 16:9
+        height: "30vh",
         width: "100%",
-        textAlign: "center",
+
     },
     bookImg: {
+        display: "inline-block",
+        marginLeft: "5%",
         maxHeight:"100%",
         maxWidth: "100%",
     },
@@ -53,8 +55,14 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: blue[500],
     },
     bookName: {
-        margin: "10px 0 0 auto",
-        color: "#203F67",
+        verticalAlign: "top",
+        marginLeft: "4vw",
+        marginTop: "0px",
+        display: "inline-block",
+        color: "#1274f1",
+        width: 'calc(100% - 300px)',
+        height: '100%',
+
     },
     replyField: {
         width:"100%",
@@ -76,6 +84,12 @@ export default function RecipeReviewCard(props) {
         setExpanded(!expanded);
     };
 
+    const convertTime = () => {
+
+        const date = new Date(props.time);
+        return date.toDateString() + "  " + date.getHours() + ":" + date.getMinutes() +  ":" +  date.getSeconds();
+    }
+
     const actionType = (action) => {  // TODO
 
         if(action === "review")
@@ -96,13 +110,26 @@ export default function RecipeReviewCard(props) {
             sendReply();
     }
 
-    const sendReply = () => { // TODO
+    const sendReply = () => {
 
         if(input_txt === "") return;
 
-        console.log(input_txt);
+        /* Reply the comment */
+        axios({
+            method: 'post',
+            url: '/api/reply',
+            data: {
+                eventid:props.id,
+                bookname: props.bookname,
+                reply: input_txt,
+                receiver: props.username,
+                sender: currentUser.name,
+            }
+        }).then(() => {
+            console.log("props.bookname : ", props.id);
+        });
         setInputTxt("");
-    }
+    } // user reply
 
     return (
         <Card className={classes.root}>
@@ -113,17 +140,18 @@ export default function RecipeReviewCard(props) {
                     </Avatar>
                 }
                 title={props.username}
-                subheader={props.time}
+                subheader={convertTime()}
             />
             <CardMedia className={classes.media} title={props.title}>
                 <img className={classes.bookImg} src={props.image}/>
-                <LinearWithValueLabel variant="determinate" value={props.progress}/>
+                <div className={classes.bookName}>
+                    <Typography variant="h5" color="primary" component="h5">
+                        Book Name:  {props.bookname}
+                    </Typography>
+                </div>
             </CardMedia>
-
+            <LinearWithValueLabel variant="determinate" value={props.progress}/>
             <CardContent>
-                <Typography className={classes.bookName} variant="h5" color="primary" component="h5">
-                    Book Name:  {props.bookname}
-                </Typography>
                 <Typography variant="subtitle1" color="textSecondary" component="p">
                     <div>Review:</div>
                     {props.comment}
@@ -150,10 +178,7 @@ export default function RecipeReviewCard(props) {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
                     <Typography paragraph>Review:</Typography>
-                    <Typography paragraph> // users' comments
-                        fgdg
-                        dfgfdg
-                        dfgdfg
+                    <Typography paragraph>
                     </Typography>
                     <div className={classes.replyField}>
                         <Input className={classes.replyTxt} placeholder="Write Comment..." inputProps={{ 'aria-label': 'description' }} value={input_txt} onChange={getTxt} onKeyDown={inputKeyDown}/>
