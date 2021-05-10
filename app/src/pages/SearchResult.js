@@ -2,7 +2,7 @@
 /*reference https://www.youtube.com/watch?v=LGcgChoD_qY*/
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import axios from 'axios';
+import axios from 'axios';import logo from '../assets/logo.png'
 import Layout from '../components/Layout'
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
