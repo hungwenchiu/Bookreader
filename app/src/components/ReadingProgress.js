@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import {withStyles} from "@material-ui/core";
 
 function LinearProgressWithLabel(props) {
     const classes = useStyles();
@@ -20,6 +21,28 @@ function LinearProgressWithLabel(props) {
         </Box>
     );
 }
+
+const BorderLinearProgress = withStyles((theme) => ({
+    root: {
+        display:"block",
+        marginTop: "10px",
+        marginBottom: "10px",
+        margin: "0 auto",
+        width: "80%",
+        height: "20px",
+        borderRadius: 5,
+        boxShadow: "0 5px 5px 0 #ccc",
+
+    },
+    colorPrimary: {
+        backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+    },
+    bar: {
+        borderRadius: 5,
+        backgroundColor: '#7ECB3C',
+            // '#1a90ff',
+    },
+}))(LinearProgress);
 
 LinearProgressWithLabel.propTypes = {
     /**
@@ -44,7 +67,8 @@ const useStyles = makeStyles({
 export default function LinearWithValueLabel(props) {
     const classes = useStyles();
     const [progress, setProgress] = React.useState(0);
-    const target = (isNaN(props.progress)) ? 100 : props.progress;
+    const {value} = props;
+    const target = (isNaN(value)) ? 100 : value;
 
     React.useEffect(() => {
 
@@ -61,7 +85,8 @@ export default function LinearWithValueLabel(props) {
 
     return (
         <div className={classes.root}>
-            <LinearProgressWithLabel value={progress} />
+            {/*<LinearProgressWithLabel value={progress} />*/}
+            <BorderLinearProgress color="primary" variant="determinate" value={progress} />
         </div>
     );
 }
