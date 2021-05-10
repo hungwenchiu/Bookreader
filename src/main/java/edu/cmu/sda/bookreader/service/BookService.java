@@ -4,6 +4,7 @@ import edu.cmu.sda.bookreader.entity.Book;
 import edu.cmu.sda.bookreader.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +59,14 @@ public class BookService {
         existingBook.setKind(book.getKind());
         existingBook.setTotalPage(book.getTotalPage());
         return repository.save(existingBook);
+    }
+
+    public int getTotalPage(String googleBookID) {
+        Book book = this.getBookByGoogleBookId(googleBookID);
+        if (book == null) {
+            return 0;
+        }
+        return book.getTotalPage();
     }
 
 }

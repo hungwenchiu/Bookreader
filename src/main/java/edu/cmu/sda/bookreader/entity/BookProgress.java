@@ -24,7 +24,7 @@ public class BookProgress {
     @NonNull
     private long userID;
     @NonNull
-    private long pagesFinished;
+    private int pagesFinished;
 
     public long getId() {
         return id;
@@ -50,11 +50,11 @@ public class BookProgress {
         this.userID = userID;
     }
 
-    public long getPagesFinished() {
+    public int getPagesFinished() {
         return pagesFinished;
     }
 
-    public void setPagesFinished(long pagesFinished) {
+    public void setPagesFinished(int pagesFinished) {
         this.pagesFinished = pagesFinished;
     }
 }
