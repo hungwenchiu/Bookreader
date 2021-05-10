@@ -13,4 +13,7 @@ public interface BookshelfRepository<T> extends JpaRepository<Bookshelf, Long> {
 
     @Query(value = "SELECT b from Bookshelf b where (b.name = :name and b.bookshelfUserID = :userID)")
     Bookshelf findBookshelfByNameForUser(String name, Long userID);
+
+//    @Query(value = "SELECT b from Bookshelf b where (b.bookshelfUserID = :userID and :bookID in b.books)")
+//    List<Bookshelf> findBookshelfName(Long userID, String bookID);
 }
