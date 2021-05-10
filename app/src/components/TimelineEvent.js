@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -20,6 +20,9 @@ import SendIcon from '@material-ui/icons/Send';
 import Button from "@material-ui/core/Button";
 import {Send} from "@material-ui/icons";
 import axios from "axios";
+import ReplyCard from "./ReplyCard";
+import Slider from "@material-ui/core/Slider";
+import Grid from "@material-ui/core/Grid";
 
 const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
 
@@ -28,18 +31,27 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: "900px",
         maxHeight:"20%",
         margin: "20px auto",
+        boxShadow: "0px 10px 11px 2px #ccc",
+
 
     },
     media: {
+        display: "inline-block",
         height: "30vh",
-        width: "100%",
+        width: "30%",
+        textAlign:"center",
 
+    },
+    bookContainer: {
+        height:"70%",
     },
     bookImg: {
         display: "inline-block",
-        marginLeft: "5%",
-        maxHeight:"100%",
+        height:"90%",
+        marginLeft: "10px",
         maxWidth: "100%",
+        boxShadow: "3px 3px 5px 6px #ccc",
+
     },
     expand: {
         transform: 'rotate(0deg)',
@@ -54,14 +66,14 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         backgroundColor: blue[500],
     },
-    bookName: {
+    bookInfo: {
         verticalAlign: "top",
         marginLeft: "4vw",
         marginTop: "0px",
         display: "inline-block",
-        color: "#1274f1",
-        width: 'calc(100% - 300px)',
-        height: '100%',
+        width: '60%',
+        height: '250px',
+        overflow:'auto',
 
     },
     replyField: {
@@ -72,13 +84,47 @@ const useStyles = makeStyles((theme) => ({
     },
     replyBtn: {
         marginLeft: "10px",
+        float:"right",
     },
+    slider: {
+        marginTop: 40,
+        width: 400,
+    },
+    cardContent: {
+        height: "60px",
+    },
+    reviewContent: {
+        height: "100%",
+        width:"100%",
+        overflow:"auto",
+    }
 }));
 
 export default function RecipeReviewCard(props) {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const [input_txt, setInputTxt] = React.useState("");
+    const [userreply, setUserReply] = React.useState(null);
+
+    const ftechReply = (eventid) => {
+
+        axios.get(`/api/reply?eventid=${eventid}`)
+            .then(res =>{
+                if(res.data === userreply)
+                    return;
+                console.log(res);
+                setUserReply(res.data);
+
+            })
+            .catch( error => {
+            });
+    }
+
+    // setInterval(ftechReply, 5000);
+
+    useEffect(() =>{
+        ftechReply(props.id);
+    }, []);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -126,7 +172,7 @@ export default function RecipeReviewCard(props) {
                 sender: currentUser.name,
             }
         }).then(() => {
-            console.log("props.bookname : ", props.id);
+            ftechReply(props.id);
         });
         setInputTxt("");
     } // user reply
@@ -142,25 +188,29 @@ export default function RecipeReviewCard(props) {
                 title={props.username}
                 subheader={convertTime()}
             />
-            <CardMedia className={classes.media} title={props.title}>
-                <img className={classes.bookImg} src={props.image}/>
-                <div className={classes.bookName}>
-                    <Typography variant="h5" color="primary" component="h5">
-                        Book Name:  {props.bookname}
+            <div>
+                <CardMedia className={classes.media} title={props.title}>
+                    <img className={classes.bookImg} src={props.image}/>
+                    <LinearWithValueLabel value={50}></LinearWithValueLabel>
+                </CardMedia>
+                <div className={classes.bookInfo}>
+                    <Typography variant="h6" gutterBottom>
+                        Boogle Book(Title)
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
+                        unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam
+                        dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.
                     </Typography>
                 </div>
-            </CardMedia>
-            <LinearWithValueLabel variant="determinate" value={props.progress}/>
-            <CardContent>
-                <Typography variant="subtitle1" color="textSecondary" component="p">
-                    <div>Review:</div>
+            </div>
+            <CardContent className={classes.cardContent}>
+                <Typography variant="h6" gutterBottom> Review </Typography>
+                <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
                     {props.comment}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
-                <Box component="fieldset" mb={3} borderColor="transparent">
-                    <Rating name="half-rating-read" defaultValue={2.5} precision={0.5} readOnly />
-                </Box>
                 {/*<IconButton aria-label="share">*/}
                 {/*    <ShareIcon/>*/}
                 {/*</IconButton>*/}
@@ -177,9 +227,21 @@ export default function RecipeReviewCard(props) {
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <Typography paragraph>Review:</Typography>
-                    <Typography paragraph>
-                    </Typography>
+                    <Typography variant="h6" gutterBottom> Comment </Typography>
+                    {userreply && userreply.map((r, idx) => {
+                        // console.log(r);
+                        return (
+                            <ReplyCard
+                                bookName={r.bookname}
+                                eventId={r.eventid}
+                                receiver={r.receiver}
+                                reply={r.reply}
+                                sender={r.sender}
+                                time={convertTime(r.time)}
+                                key={idx}
+                            />
+                        );
+                    })}
                     <div className={classes.replyField}>
                         <Input className={classes.replyTxt} placeholder="Write Comment..." inputProps={{ 'aria-label': 'description' }} value={input_txt} onChange={getTxt} onKeyDown={inputKeyDown}/>
                         <Button className={[classes.button, classes.replyBtn]} variant="contained"  color="primary" onClick={sendReply}>

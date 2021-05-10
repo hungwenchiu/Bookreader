@@ -75,7 +75,6 @@ export default function PersonalTimeline(){
                 <div>
                     {/*<InfiniteScroll next={} hasMore={} loader={} dataLength={}*/}
                     {event_data && event_data.map((timeline_event, idx) => {
-                        // console.log(timeline_event);
                         return (
                             <RecipeReviewCard username={timeline_event.name}
                                               bookname={timeline_event.bookName}
@@ -86,6 +85,7 @@ export default function PersonalTimeline(){
                                               time={timeline_event.time}
                                               image={timeline_event.img}
                                               id={timeline_event.id}
+                                              key={idx}
                                                 />
                         );
                     })}

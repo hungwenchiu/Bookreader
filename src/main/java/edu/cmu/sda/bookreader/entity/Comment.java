@@ -21,6 +21,7 @@ public class Comment {
     private String eventid;
     private String receiver;
     private String bookname;
+    @Column(columnDefinition="varchar(500)")
     private String reply;
     private String sender;
     @CreationTimestamp
