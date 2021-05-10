@@ -2,10 +2,9 @@
 /*reference https://www.youtube.com/watch?v=LGcgChoD_qY*/
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import axios from 'axios';
+import axios from 'axios';import logo from '../assets/logo.png'
 import Layout from '../components/Layout'
 import GridList from '@material-ui/core/GridList';
-import logo from '../assets/logo.png'
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import {
@@ -49,17 +48,11 @@ export default function SearchResult() {
           firstAuthor = book.volumeInfo.authors[0]
       }
 
-      let thumbnailLink = "";
-      if (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
-          thumbnailLink = book.volumeInfo.imageLinks.thumbnail
-      }
-
       const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
-          author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind,
-              thumbnail:thumbnailLink})
+          author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind})
       };
       fetch('/api/book', requestOptions)
           .then(response => {
@@ -78,11 +71,11 @@ export default function SearchResult() {
         {result.map((book) => (
           <GridListTile key={book.volumeInfo.imageLinks.thumbnail}>
               <a href={"/book/"+book.id}>
-                <img src={book.volumeInfo.imageLinks.thumbnail} alt={logo} />
+                <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
               </a>
             <GridListTileBar
               title={book.volumeInfo.title}
-              subtitle={<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
+              subtitle={<span>author: {book.volumeInfo.authors[0]}</span>}
             />
           </GridListTile>
         ))}
