@@ -122,6 +122,7 @@ export default function RecipeReviewCard(props) {
 
     // setInterval(ftechReply, 5000);
     // sdfsdfs
+    // sdfdsf
 
     useEffect(() =>{
         ftechReply(props.id);
