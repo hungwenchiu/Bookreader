@@ -26,7 +26,17 @@ public class BookController {
 
     @PostMapping("/book")
     public Book addBook(@RequestBody Book book) {
-        return service.saveBook(book);
+
+        Book exist_book = service.getBookByGoogleBookId(String.valueOf(book.getGoogleBookId()));
+
+        // insert if there are not duplicated records
+        if(exist_book == null) {
+            return service.saveBook(book);
+        } else {
+            System.out.println("exist_book: " + exist_book.getId());
+            return null;
+        }
+
     }
 
     @PostMapping("/books")

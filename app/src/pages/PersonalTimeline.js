@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import Layout from '../components/Layout';
 import RecipeReviewCard from '../components/TimelineEvent';
 import axios from 'axios';
-import Button from "@material-ui/core/Button";
-import useSocket from  'use-socket.io-client';
+// import Button from "@material-ui/core/Button";
+// import useSocket from  'use-socket.io-client';
 
 
 export default function PersonalTimeline(){
@@ -13,13 +13,22 @@ export default function PersonalTimeline(){
     const [event_data, setData] = useState(null);
     const [event_idx, setEventIdx] = useState(0);
     const [isFetching, setIsFetching] = useState(true);
+    const [bookinfo, setBookInfo] = useState(new Map());
     const name = sessionStorage.getItem("currentUser");
-    // const  [socket]  =  useSocket('http://localhost:9092');
-    // const [message, setMessage] = useState(null);
 
-    // socket.connect();
-    // console.log(socket);
+    function getBookInfoByGoogleID(googlebookid) {
 
+        if(bookinfo.has(googlebookid))
+            return;
+
+        axios.get(`/api/book/${googlebookid}`)
+            .then(res =>{
+                setBookInfo(bookinfo => new Map(bookinfo.set(googlebookid, res.data)));
+            })
+            .catch( error => {
+                console.log("getBookInfoByGoogleID error");
+            });
+    }
 
     function handleScroll() {
         if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
@@ -35,7 +44,9 @@ export default function PersonalTimeline(){
                     setData(new_data);
                     setEventIdx(event_idx + 3);
                     setIsFetching(false);
-
+                    res.data.map((t, idx) => {
+                        getBookInfoByGoogleID(t.googlebookid);
+                    });
             })
             .catch( error => {
                 setIsLoaded(true);
@@ -54,9 +65,6 @@ export default function PersonalTimeline(){
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isFetching]);
 
-    // useEffect(() => {
-    //     socket.on('connect_msg', (message) => console.log(message));
-    // }, [message]);
 
     if(error) {
         return (
@@ -75,15 +83,28 @@ export default function PersonalTimeline(){
                 <div>
                     {/*<InfiniteScroll next={} hasMore={} loader={} dataLength={}*/}
                     {event_data && event_data.map((timeline_event, idx) => {
+
+                        let bookdescription = "";
+                        let author = "";
+                        let thumbnail = "";
+
+                        if(bookinfo.has(timeline_event.googlebookid)) {
+                            bookdescription = bookinfo.get(timeline_event.googlebookid).description;
+                            author = bookinfo.get(timeline_event.googlebookid).author;
+                            thumbnail =  bookinfo.get(timeline_event.googlebookid).thumbnail;
+                        }
+
                         return (
                             <RecipeReviewCard username={timeline_event.name}
                                               bookname={timeline_event.bookName}
                                               action={"User Action: " + timeline_event.action}
                                               comment={timeline_event.review}
-                                              rate={timeline_event.rate}
-                                              progress={timeline_event.progress}
+                                              author={author}
+                                              bookdescription={bookdescription}
+                                              rate={5}
+                                              progress={20}
                                               time={timeline_event.time}
-                                              image={timeline_event.img}
+                                              image={thumbnail}
                                               id={timeline_event.id}
                                               key={idx}
                                                 />

@@ -21,6 +21,7 @@ import Button from "@material-ui/core/Button";
 import {Send} from "@material-ui/icons";
 import axios from "axios";
 import ReplyCard from "./ReplyCard";
+import parse from 'html-react-parser';
 import Slider from "@material-ui/core/Slider";
 import Grid from "@material-ui/core/Grid";
 
@@ -106,6 +107,7 @@ export default function RecipeReviewCard(props) {
     const [input_txt, setInputTxt] = React.useState("");
     const [userreply, setUserReply] = React.useState(null);
 
+
     const ftechReply = (eventid) => {
 
         axios.get(`/api/reply?eventid=${eventid}`)
@@ -121,8 +123,7 @@ export default function RecipeReviewCard(props) {
     }
 
     // setInterval(ftechReply, 5000);
-    // sdfsdfs
-    // sdfdsf
+
 
     useEffect(() =>{
         ftechReply(props.id);
@@ -193,16 +194,21 @@ export default function RecipeReviewCard(props) {
             <div>
                 <CardMedia className={classes.media} title={props.title}>
                     <img className={classes.bookImg} src={props.image}/>
-                    <LinearWithValueLabel value={50}></LinearWithValueLabel>
+                    <LinearWithValueLabel value={props.progress}></LinearWithValueLabel>
+                    <Box component="fieldset" mb={3} borderColor="transparent">
+                        <Rating name="read-only" value={props.rate} precision={0.5} readOnly />
+                    </Box>
                 </CardMedia>
                 <div className={classes.bookInfo}>
                     <Typography variant="h6" gutterBottom>
-                        Boogle Book(Title)
+                        {props.bookname}
                     </Typography>
+                    <Typography variant="h6" color="secondary" gutterBottom>
+                        {props.author}
+                    </Typography>
+
                     <Typography variant="body1" gutterBottom>
-                        body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                        unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam
-                        dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.
+                        {parse(props.bookdescription)}
                     </Typography>
                 </div>
             </div>

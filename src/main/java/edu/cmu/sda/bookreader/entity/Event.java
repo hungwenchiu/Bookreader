@@ -18,13 +18,14 @@ public class Event {
     @GeneratedValue
     @Column(unique=true)
     private long id;
+    private String userid;
     private String name;
     private String bookName;
     private String action;
+    @Column(columnDefinition="varchar(2000)")
     private String review;
-    private String rate;
-    private String progress;
-    private String img;
+    @Column(columnDefinition="varchar(500)")
+    private String googlebookid;
     @CreationTimestamp
     private Date time;
 }

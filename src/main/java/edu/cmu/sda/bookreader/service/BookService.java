@@ -19,13 +19,9 @@ public class BookService {
     @Autowired
     private BookRepository repository;
 
-    public Book saveBook(Book book) {
-        return repository.save(book);
-    }
+    public Book saveBook(Book book) { return repository.save(book); }
 
-    public List<Book> saveBooks(List<Book> books) {
-        return repository.saveAll(books);
-    }
+    public List<Book> saveBooks(List<Book> books) { return repository.saveAll(books); }
 
     public List<Book> getBooks() {
         return repository.findAll();
