@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Scope(value = "session")
 @Component(value = "abstractBookService")
 public class AbstractBookshelfService {
     @Autowired
@@ -29,6 +30,9 @@ public class AbstractBookshelfService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private BookProgressService progressService;
 
     // create all bookshelves for a user
     public List<AbstractBookshelf> initializeBookshelves(Long userID) {
@@ -116,10 +120,10 @@ public class AbstractBookshelfService {
         Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(abstractBookshelf.getName(), abstractBookshelf.getBookshelfUserID());
         RecommendedBookshelf recommendedBookshelf = recommendedBookshelfRepository.findByBookshelfUserID(abstractBookshelf.getBookshelfUserID());
 
-        if (bookshelf.getName().equals(abstractBookshelf.getName())) {
+        if (bookshelf != null && bookshelf.getName().equals(abstractBookshelf.getName())) {
             return bookshelf;
         }
-        if (recommendedBookshelf.getName().equals(abstractBookshelf.getName())) {
+        if (recommendedBookshelf != null && recommendedBookshelf.getName().equals(abstractBookshelf.getName())) {
             return recommendedBookshelf;
         }
         if (abstractBookshelf instanceof Bookshelf) {
@@ -205,6 +209,9 @@ public class AbstractBookshelfService {
                 bookshelfRepository.save(bookshelf);
             }
         }
+        if (name.equals("WantToRead")) {
+            progressService.initializeBookProgressForUser(userID, newBookID);
+        }
         return bookshelf;
     }
 
@@ -279,5 +286,17 @@ public class AbstractBookshelfService {
             }
         }
         return "Could not move book to another bookshelf";
+    }
+
+    // get the bookshelf name in which a particular book exists, given a user
+    public List<String> getBookshelfName(long userID, String bookID) {
+        List<Bookshelf> bookshelves = bookshelfRepository.findByBookshelfUserID(userID);
+        List<String> bookshelfNames = new ArrayList<>();
+        for (Bookshelf bookshelf: bookshelves) {
+            if (bookshelf.getBooks().contains(bookID)) {
+                bookshelfNames.add(bookshelf.getName());
+            }
+        }
+        return bookshelfNames;
     }
 }
