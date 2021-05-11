@@ -10,6 +10,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import PersonalTimeline from "./pages/PersonalTimeline";
 import BookPage from './pages/BookPage'
 import './App.css';
+import PublicTimeline from "./pages/PublicTimeline";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <PrivateRoute exact path="/friends" component={FriendsPage} />
       <PrivateRoute exact path="/bookshelves" component={BookShelvesPage} />
       <PrivateRoute exact path="/personalTimeline" component={PersonalTimeline} />
+      <PrivateRoute exact path="/publicTimeline" component={PublicTimeline} />
     </Switch>
   );
 }

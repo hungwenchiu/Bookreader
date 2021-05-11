@@ -12,6 +12,8 @@ import AddBookButtonGroup from '../components/AddBookButtonGroup';
 import Button from '@material-ui/core/Button';
 import Review from '../components/Review';
 import Rating from '@material-ui/lab/Rating';
+import ReviewPostDialog from '../components/ReviewPostDialog';
+import Button from "@material-ui/core/Button";
 
 const StyleSheet = makeStyles({
   container: {
@@ -44,11 +46,15 @@ export default function BookPage() {
     axios.get(`https://www.googleapis.com/books/v1/volumes/` + id + `?key=` + apiKey)
     .then(res => {
       setBook(res.data)
+      console.log(res.data)
+      res.data.volumeInfo.description = res.data.volumeInfo.description ? res.data.volumeInfo.description : "No Description...";
       setDescription(res.data.volumeInfo.description)
+      handleAddBook(res.data) // when user click the book and see the detail, I will insert the book in DB
     })
 
     axios.get(`/api/review/book/`+id)
     .then(res => {
+      console.log("review: ", res.data)
       setReviews(res.data)
       const avgRating = calculateRating(res.data)
       setRating(avgRating)
@@ -60,13 +66,48 @@ export default function BookPage() {
     return avgRating
   }
 
+  // insert book to database
+  function handleAddBook(book) {
+
+    let firstAuthor = "";
+    if (book.volumeInfo.authors) {
+      firstAuthor = book.volumeInfo.authors[0]
+    }
+
+    let thumbnailLink = "";
+    if (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
+      thumbnailLink = book.volumeInfo.imageLinks.thumbnail
+    }
+
+    let description = "";
+    if(book.volumeInfo.description) {
+      description = book.volumeInfo.description;
+    }
+
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
+        author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind,
+        thumbnail:thumbnailLink, description: description})
+    };
+    fetch('/api/book', requestOptions)
+        .then(response => {
+          return response.json()
+        })
+        .then(data => {
+          console.log(data)
+        });
+  }
+
   return(
     <Layout>
       <div className={classes.container}>
         <Grid container spacing={3} >
           <Grid item xs={3}>
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
-            <AddBookButtonGroup />
+            <AddBookButtonGroup/>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>
@@ -99,6 +140,7 @@ export default function BookPage() {
                 <Review key={review.userId} userId={review.userId} content={review.content} rating={review.rating}/>
               ))}
             </List>
+            <ReviewPostDialog bookInfo={book}></ReviewPostDialog>
           </Grid>
           
         </Grid>
