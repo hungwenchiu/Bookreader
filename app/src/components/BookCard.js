@@ -102,7 +102,7 @@ export default function BookCard(props) {
               <Button variant="contained" color="primary">
                 Add to Favorite
               </Button>
-              <TextField required fullWidth id="outlined-basic" label="Pages Finished" variant="outlined"/>
+              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" style ={{width: '100%'}} inputStyle ={{width: '100%'}} />
             </Grid>
 
           </Grid>

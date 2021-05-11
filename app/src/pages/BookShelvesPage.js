@@ -74,16 +74,17 @@ export default function BookShelvesPage() {
   const [books, setBooks] = useState([])
   useEffect(() => {
     // get books from a bookshelf
-    const bookshelfName = "WantToRead";
+    const bookshelfName = "WantToRead"
     axios.get(`/api/bookshelves/${bookshelfName}/books?userID=${sessionStorage.getItem("currentUserID")}`)
     .then(res =>{
         setBooks(res.data);
+        console.log('Inside get books');
         console.log(res);
+        console.log("books "+books);
     })
     .catch( error => {
         console.log(error);
     });
-
   }, [])
 
   const handleChange = (event, newValue) => {
