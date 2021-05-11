@@ -23,6 +23,7 @@ export default function ReviewPostDialog(props) {
         setInputTxt(value);
     }
 
+    // call API and insert to event table
     const postEvent = () => {
 
         const params = new URLSearchParams();
@@ -32,6 +33,7 @@ export default function ReviewPostDialog(props) {
         params.append("action", "Review");
         params.append("content", inputtxt);
         params.append("googlebookid", bookInfo.id);
+        params.append("rating", null); // TODO - input the rating of the book
 
         axios.post(`/api/event`, params
         )

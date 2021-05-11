@@ -3,26 +3,35 @@ import Layout from '../components/Layout';
 import RecipeReviewCard from '../components/TimelineEvent';
 import axios from 'axios';
 import FriendShipEventCard from "../components/FriendshipEventCard";
-// import Button from "@material-ui/core/Button";
-// import useSocket from  'use-socket.io-client';
+import {makeStyles} from "@material-ui/core/styles";
 
+// const useStyles = makeStyles((theme) => ({
+//
+//     root: {
+//         backgroundColor:"#CCBF97",
+//     }
+//
+// }));
 
 export default function PersonalTimeline(){
+
+    // const classes = useStyles();
     // three elements: books progress, comment, rate
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [event_data, setData] = useState(null);
-    const [event_idx, setEventIdx] = useState(0);
-    const [isFetching, setIsFetching] = useState(true);
+    // const [isFetching, setIsFetching] = useState(true);
     const [bookinfo, setBookInfo] = useState(new Map());
     const name = sessionStorage.getItem("currentUser");
     const userid = sessionStorage.getItem("currentUserID");
+
+
 
     function getBookInfoByGoogleID(googlebookid) {
 
         console.log("googlebookid  ", googlebookid);
 
-        if(bookinfo.has(googlebookid) || googlebookid === "null") // googlebookid == null means other actions
+        if(bookinfo.has(googlebookid)) // googlebookid == null means other actions
             return;
 
         axios.get(`/api/book/${googlebookid}`)
@@ -34,21 +43,15 @@ export default function PersonalTimeline(){
             });
     }
 
-    function handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
-        setIsFetching(true);
-    }
 
-    // get more timeline event, 5 events for each time
-    function fetchMoreEvent(event_idx) {
 
-        axios.get(`/api/personalTimeline?userid=${userid}&idx=${event_idx}`)
+    function fetchEvent() {
+
+        axios.get(`/api/personalTimeline?userid=${userid}`)
             .then(res =>{
                     const new_data = (event_data) ? event_data.concat(res.data) : res.data;
                     setIsLoaded(true);
                     setData(new_data);
-                    setEventIdx(event_idx + 3);
-                    setIsFetching(false);
                     res.data.map((t, idx) => {
                         getBookInfoByGoogleID(t.googlebookid);
                     });
@@ -61,14 +64,8 @@ export default function PersonalTimeline(){
 
     // load all timeline event from database
     useEffect(async () => {
-
-        window.addEventListener('scroll', handleScroll);
-        if(!isFetching)
-            return;
-        await fetchMoreEvent(event_idx);
-
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [isFetching]);
+        await fetchEvent();
+    }, []);
 
 
     if(error) {

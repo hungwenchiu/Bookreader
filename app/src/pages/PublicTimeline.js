@@ -11,18 +11,18 @@ export default function PublicTimeline(){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [event_data, setData] = useState(null);
-    const [event_idx, setEventIdx] = useState(0);
-    const [isFetching, setIsFetching] = useState(true);
+    // const [event_idx, setEventIdx] = useState(0);
+    // const [isFetching, setIsFetching] = useState(true);
     const [bookinfo, setBookInfo] = useState(new Map());
     const name = sessionStorage.getItem("currentUser");
     const userid = sessionStorage.getItem("currentUserID");
-    const [relationshipid, setRelationshipId] = useState(""); // store all relationship id (friends id and user id)
+    const [relationshipid, setRelationshipId] = useState(null); // store all relationship id (friends id and user id)
 
     function getBookInfoByGoogleID(googlebookid) {
 
         console.log("googlebookid  ", googlebookid);
 
-        if(bookinfo.has(googlebookid) || googlebookid === "null") // googlebookid == null means other actions
+        if(bookinfo.has(googlebookid)) // googlebookid == null means other actions
             return;
 
         axios.get(`/api/book/${googlebookid}`)
@@ -34,23 +34,26 @@ export default function PublicTimeline(){
             });
     }
 
-    function handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
-        setIsFetching(true);
-    }
+    // function handleScroll() {
+    //     if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+    //     setIsFetching(true);
+    // }
 
     // get more timeline event, 5 events for each time
-    function fetchMoreEvent(event_idx) {
+    function fetchEvent() {
 
-        axios.get(`/api/publicTimeline?userids=${relationshipid}&idx=${event_idx}`)
+        axios.get(`/api/publicTimeline?userids=${relationshipid}`)
             .then(res =>{
                 const new_data = (event_data) ? event_data.concat(res.data) : res.data;
                 setIsLoaded(true);
                 setData(new_data);
-                setEventIdx(event_idx + 3);
-                setIsFetching(false);
                 res.data.map((t, idx) => {
-                    getBookInfoByGoogleID(t.googlebookid);
+                    console.log(typeof t.googlebookid);
+                    if(t.googlebookid !== "null")
+                    {
+                        console.log("go to getBookInfoByGoogleID");
+                        getBookInfoByGoogleID(t.googlebookid);
+                    }
                 });
             })
             .catch( error => {
@@ -59,8 +62,7 @@ export default function PublicTimeline(){
             });
     }
 
-    // get friendship when the page first render
-    useEffect(async () => {
+    function getRelationshipId() {
 
         // query all friends' user id
         axios.get(`api/relationship/friends/${userid}`)
@@ -70,7 +72,6 @@ export default function PublicTimeline(){
                 res.data.map((item) => {
                     userids += "," + item.id;
                 });
-                console.log(userids);
                 setRelationshipId(userids);
 
             })
@@ -79,28 +80,18 @@ export default function PublicTimeline(){
                 setError(error);
             });
 
-        if(relationshipid) {
-            await fetchMoreEvent(event_idx);
-        }
+    }
 
+    // get friendship when the page first render
+    useEffect(() => {
+
+        getRelationshipId();
+        console.log(relationshipid);
+        if(relationshipid) {
+            fetchEvent();
+        }
 
     }, [relationshipid]);
-
-    // load remaining 3 timeline events from database
-    useEffect(async () => {
-
-        //after we get all friends id, we start to fetch users' events
-        if(relationshipid) {
-            window.addEventListener('scroll', handleScroll);
-            if (!isFetching)
-                return;
-            await fetchMoreEvent(event_idx);
-
-            return () => window.removeEventListener('scroll', handleScroll);
-        }
-
-    }, [isFetching]);
-
 
     if(error) {
         return (
