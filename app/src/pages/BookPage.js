@@ -9,6 +9,7 @@ import parse from 'html-react-parser'
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import AddBookButtonGroup from '../components/AddBookButtonGroup';
+import Button from '@material-ui/core/Button';
 import Review from '../components/Review';
 import Rating from '@material-ui/lab/Rating';
 
@@ -79,16 +80,23 @@ export default function BookPage() {
             <Typography variant="body1" gutterBottom>
               {parse(description)}
             </Typography>
+
           </Grid>
-          
           <Grid item xs={12} >
             <Divider className={classes.divider} />
+          </Grid>
+          
+          <Grid item xs={10} >
             <Typography variant="h6" className={classes.title}>
               Reviews
             </Typography>
+          </Grid>
+          
+          <Grid item xs={12} >
+          
             <List>
               {reviews.map((review) => (
-                <Review key="review.userId" userId={review.userId} content={review.content} rating={review.rating}/>
+                <Review key={review.userId} userId={review.userId} content={review.content} rating={review.rating}/>
               ))}
             </List>
           </Grid>
