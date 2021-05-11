@@ -13,19 +13,17 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table
-public class Event {
+public class Comment {
     @Id
     @GeneratedValue
     @Column(unique=true)
     private long id;
-    private String userid;
-    private String name;
-    private String bookName;
-    private String action;
-    @Column(columnDefinition="varchar(2000)")
-    private String content;
+    private String eventid;
+    private String receiver;
+    private String bookname;
     @Column(columnDefinition="varchar(500)")
-    private String googlebookid;
+    private String reply;
+    private String sender;
     @CreationTimestamp
     private Date time;
 }

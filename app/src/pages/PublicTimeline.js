@@ -3,11 +3,10 @@ import Layout from '../components/Layout';
 import RecipeReviewCard from '../components/TimelineEvent';
 import axios from 'axios';
 import FriendShipEventCard from "../components/FriendshipEventCard";
-// import Button from "@material-ui/core/Button";
-// import useSocket from  'use-socket.io-client';
 
 
-export default function PersonalTimeline(){
+
+export default function PublicTimeline(){
     // three elements: books progress, comment, rate
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -17,6 +16,7 @@ export default function PersonalTimeline(){
     const [bookinfo, setBookInfo] = useState(new Map());
     const name = sessionStorage.getItem("currentUser");
     const userid = sessionStorage.getItem("currentUserID");
+    const [relationshipid, setRelationshipId] = useState(""); // store all relationship id (friends id and user id)
 
     function getBookInfoByGoogleID(googlebookid) {
 
@@ -42,16 +42,16 @@ export default function PersonalTimeline(){
     // get more timeline event, 5 events for each time
     function fetchMoreEvent(event_idx) {
 
-        axios.get(`/api/personalTimeline?userid=${userid}&idx=${event_idx}`)
+        axios.get(`/api/publicTimeline?userids=${relationshipid}&idx=${event_idx}`)
             .then(res =>{
-                    const new_data = (event_data) ? event_data.concat(res.data) : res.data;
-                    setIsLoaded(true);
-                    setData(new_data);
-                    setEventIdx(event_idx + 3);
-                    setIsFetching(false);
-                    res.data.map((t, idx) => {
-                        getBookInfoByGoogleID(t.googlebookid);
-                    });
+                const new_data = (event_data) ? event_data.concat(res.data) : res.data;
+                setIsLoaded(true);
+                setData(new_data);
+                setEventIdx(event_idx + 3);
+                setIsFetching(false);
+                res.data.map((t, idx) => {
+                    getBookInfoByGoogleID(t.googlebookid);
+                });
             })
             .catch( error => {
                 setIsLoaded(true);
@@ -59,15 +59,46 @@ export default function PersonalTimeline(){
             });
     }
 
-    // load all timeline event from database
+    // get friendship when the page first render
     useEffect(async () => {
 
-        window.addEventListener('scroll', handleScroll);
-        if(!isFetching)
-            return;
-        await fetchMoreEvent(event_idx);
+        // query all friends' user id
+        axios.get(`api/relationship/friends/${userid}`)
+            .then(res =>{
 
-        return () => window.removeEventListener('scroll', handleScroll);
+                let userids = userid;
+                res.data.map((item) => {
+                    userids += "," + item.id;
+                });
+                console.log(userids);
+                setRelationshipId(userids);
+
+            })
+            .catch( error => {
+                setIsLoaded(true);
+                setError(error);
+            });
+
+        if(relationshipid) {
+            await fetchMoreEvent(event_idx);
+        }
+
+
+    }, [relationshipid]);
+
+    // load remaining 3 timeline events from database
+    useEffect(async () => {
+
+        //after we get all friends id, we start to fetch users' events
+        if(relationshipid) {
+            window.addEventListener('scroll', handleScroll);
+            if (!isFetching)
+                return;
+            await fetchMoreEvent(event_idx);
+
+            return () => window.removeEventListener('scroll', handleScroll);
+        }
+
     }, [isFetching]);
 
 
@@ -93,6 +124,7 @@ export default function PersonalTimeline(){
                         let author = "";
                         let thumbnail = "";
 
+                        // Event action for Friendship
                         if(timeline_event.action === 'Friendship') {
                             return (
                                 <FriendShipEventCard
@@ -102,6 +134,7 @@ export default function PersonalTimeline(){
                             );
                         }
 
+                        // Event action for books
                         if(bookinfo.has(timeline_event.googlebookid)) {
                             bookdescription = bookinfo.get(timeline_event.googlebookid).description;
                             author = bookinfo.get(timeline_event.googlebookid).author;
@@ -121,7 +154,7 @@ export default function PersonalTimeline(){
                                               image={thumbnail}
                                               id={timeline_event.id}
                                               key={idx}
-                                                />
+                            />
                         );
                     })}
                 </div>

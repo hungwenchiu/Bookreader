@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
@@ -27,7 +24,11 @@ public class Book {
     @NonNull
     private int totalPage;
     private String kind;
+    @Column(columnDefinition="varchar(500)")
     private String thumbnail;
+
+    @Column(columnDefinition="varchar(2000)")
+    private String description;
 
     public String getGoogleBookId() {
         return googleBookId;
@@ -57,6 +58,10 @@ public class Book {
         return thumbnail;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setAuthor(String author) {
         this.author = author;
     }
@@ -76,4 +81,9 @@ public class Book {
     public void setTotalPage(int totalPage) {
         this.totalPage = totalPage;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }

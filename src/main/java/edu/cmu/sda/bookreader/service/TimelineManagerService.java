@@ -21,7 +21,7 @@ public class TimelineManagerService {
     }
 
     // generate public or personal timeline event
-    public List<Event> getTimelineEvents(String name, int idx) {
-        return this.timelineStrategy.generateTimelineEvents(name, idx);
+    public List<Event> getTimelineEvents(String userid, int idx) {
+        return this.timelineStrategy.generateTimelineEvents(userid, idx);
     }
 }

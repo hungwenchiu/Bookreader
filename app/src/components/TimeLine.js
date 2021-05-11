@@ -47,7 +47,7 @@ export default function TimelineMenu() {
                 onClose={handleClose}
             >
                 <MenuItem onClick={handleClose}><Link href="/personalTimeline" color="inherit" underline="none">Personal Timeline</Link></MenuItem>
-                <MenuItem onClick={handleClose}>Public Timeline</MenuItem>
+                <MenuItem onClick={handleClose}><Link href="/publicTimeline" color="inherit" underline="none">Public Timeline</Link></MenuItem>
             </Menu>
         </div>
     );

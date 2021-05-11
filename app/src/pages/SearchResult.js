@@ -59,7 +59,7 @@ export default function SearchResult() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
           author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind,
-              thumbnail:thumbnailLink})
+              thumbnail:thumbnailLink, textSnippet: book.searchInfo.textSnippet})
       };
       fetch('/api/book', requestOptions)
           .then(response => {
