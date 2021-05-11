@@ -9,11 +9,9 @@ import parse from 'html-react-parser'
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import AddBookButtonGroup from '../components/AddBookButtonGroup';
-import Button from '@material-ui/core/Button';
 import Review from '../components/Review';
 import Rating from '@material-ui/lab/Rating';
 import ReviewPostDialog from '../components/ReviewPostDialog';
-import Button from "@material-ui/core/Button";
 
 const StyleSheet = makeStyles({
   container: {
@@ -125,22 +123,19 @@ export default function BookPage() {
           </Grid>
           <Grid item xs={12} >
             <Divider className={classes.divider} />
-          </Grid>
-          
-          <Grid item xs={10} >
             <Typography variant="h6" className={classes.title}>
               Reviews
             </Typography>
           </Grid>
           
           <Grid item xs={12} >
-          
+            <ReviewPostDialog bookInfo={book}></ReviewPostDialog>
+
             <List>
               {reviews.map((review) => (
                 <Review key={review.userId} userId={review.userId} content={review.content} rating={review.rating}/>
               ))}
             </List>
-            <ReviewPostDialog bookInfo={book}></ReviewPostDialog>
           </Grid>
           
         </Grid>
