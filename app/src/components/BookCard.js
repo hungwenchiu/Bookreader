@@ -8,6 +8,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Slider from '@material-ui/core/Slider';
+import TextField from '@material-ui/core/TextField';
 
 const marks = [
   {
@@ -44,11 +45,13 @@ const useStyles = makeStyles({
     display: 'flex'
   },
   button: {
+    width: 100,
+    height: 50
   },
   slider: {
     marginTop: 40,
     width: 400,
-  },
+  }
 })
 
 function valuetext(value) {
@@ -93,7 +96,13 @@ export default function BookCard(props) {
             </Grid>
 
             <Grid item xs={2} className={classes.button}>
-              <Button>addbook</Button>
+              <Button variant="contained" color="primary">
+                Remove
+              </Button>
+              <Button variant="contained" color="primary">
+                Add to Favorite
+              </Button>
+              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" style ={{width: '100%'}} inputStyle ={{width: '100%'}} />
             </Grid>
 
           </Grid>

@@ -28,7 +28,6 @@ export default function AddBookButtonGroup(props) {
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const addToBookshelf = (bookID) => {
-  console.log("reached here book id is "+bookID+" userId "+sessionStorage.getItem("currentUserID"));
   const bookshelfName = "WantToRead"
     axios.put(`/api/bookshelves/${bookshelfName}/books?bookID=${bookID}&userID=${sessionStorage.getItem("currentUserID")}`)
     .then(res =>{
