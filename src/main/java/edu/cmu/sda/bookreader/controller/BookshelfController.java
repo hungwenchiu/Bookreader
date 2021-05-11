@@ -9,12 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api")
@@ -22,7 +22,7 @@ import java.util.Set;
 @Component(value = "bookshelfController")
 @Slf4j
 public class BookshelfController {
-    @Qualifier("abstractBookService")
+    @Qualifier("abstractBookshelfService")
     @Autowired
     private AbstractBookshelfService bookshelfService;
 
@@ -40,9 +40,10 @@ public class BookshelfController {
 
     // add a new book to a bookshelf
     @RequestMapping(value = "/bookshelves/{name}/books", method = RequestMethod.PUT)
-    public AbstractBookshelf addBook(@PathVariable("name") String name, @RequestBody Map<String, String> json) {
-        return bookshelfService.addBook(name, json.get("bookID"), Long.parseLong(json.get("userID")));
+    public AbstractBookshelf addBook(@PathVariable("name") String name, @RequestParam(value="bookID") String bookID, @RequestParam(value="userID") long userID) {
+        return bookshelfService.addBook(name, bookID, userID);
     }
+
 
     // add a new book to a recommended bookshelf
     @RequestMapping(value = "/bookshelves/recommended/books", method = RequestMethod.PUT)
@@ -58,8 +59,8 @@ public class BookshelfController {
 
     // get all books in a bookshelf
     @RequestMapping("/bookshelves/{name}/books")
-    public List<Book> getBooksFromBookshelf(@PathVariable("name") String name, @RequestBody Map<String, String> json) {
-        return bookshelfService.getAllBooksInBookshelf(name, Long.parseLong(json.get("userID")));
+    public List<Book> getBooksFromBookshelf(@PathVariable("name") String name, @RequestParam(value="userID") long userID) {
+        return bookshelfService.getAllBooksInBookshelf(name, userID);
     }
 
     // get all bookshelves for a user

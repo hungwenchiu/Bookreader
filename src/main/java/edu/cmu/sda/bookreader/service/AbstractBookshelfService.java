@@ -1,9 +1,6 @@
 package edu.cmu.sda.bookreader.service;
 
-import edu.cmu.sda.bookreader.entity.AbstractBookshelf;
-import edu.cmu.sda.bookreader.entity.Book;
-import edu.cmu.sda.bookreader.entity.Bookshelf;
-import edu.cmu.sda.bookreader.entity.RecommendedBookshelf;
+import edu.cmu.sda.bookreader.entity.*;
 import edu.cmu.sda.bookreader.repository.BookRepository;
 import edu.cmu.sda.bookreader.repository.BookshelfRepository;
 import edu.cmu.sda.bookreader.repository.RecommendedBookshelfRepository;
@@ -16,11 +13,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Scope(value = "session")
-@Component(value = "abstractBookService")
+@Component(value = "abstractBookshelfService")
 public class AbstractBookshelfService {
     @Autowired
     private BookshelfRepository bookshelfRepository;
@@ -30,6 +26,9 @@ public class AbstractBookshelfService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private BookService bookService;
 
     @Autowired
     private BookProgressService progressService;
@@ -183,6 +182,7 @@ public class AbstractBookshelfService {
                     books.add(book);
                 }
             }
+            System.out.println(("before null bookshelves "+books));
             return books;
         }
         if (recommendedBookshelf != null) {
@@ -210,6 +210,7 @@ public class AbstractBookshelfService {
             }
         }
         if (name.equals("WantToRead")) {
+            System.out.println("reached the update progress section "+progressService);
             progressService.initializeBookProgressForUser(userID, newBookID);
         }
         return bookshelf;
@@ -257,6 +258,75 @@ public class AbstractBookshelfService {
             }
         }
         return bookshelf;
+    }
+
+    public void checkBookProgressToMoveBetweenBookshelves(long userID, String bookID) {
+        // find which bookshelf the book belongs to
+        List<String> bookshelfNames = this.getBookshelfName(userID, bookID);
+
+        // get book progress
+        int pagesFinished = progressService.getPagesFinished(userID, bookID);
+        int totalPages = bookService.getTotalPage(bookID);
+
+        // Condition1: if finishedPages is 0, then add book to WantToRead
+        if (pagesFinished == 0) {
+            if (bookshelfNames == null || bookshelfNames.size() == 0) {
+                // simple add the book
+                this.addBook("WantToRead", bookID, userID);
+            } else if (!bookshelfNames.contains("WantToRead")) {
+                // if book in regular bookshelves then move book
+                if (bookshelfNames.contains("Reading")) {
+                    this.moveBook("Reading", "WantToRead", bookID, userID);
+                } else if (bookshelfNames.contains("Read")) {
+                    this.moveBook("Read", "WantToRead", bookID, userID);
+                }
+
+                // if books in Recommended or Favorite bookshelf then add book instead of moving
+                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
+                    this.addBook("WantToRead", bookID, userID);
+                }
+            }
+        }
+
+        // Condition2: if finishedPages > 0 and finishedPages < totalPages, then add book to Reading
+        if (pagesFinished > 0 && pagesFinished < totalPages) {
+            if (bookshelfNames == null || bookshelfNames.size() == 0) {
+                // simply add the book
+                this.addBook("Reading", bookID, userID);
+            } else if (!bookshelfNames.contains("Reading")) {
+                // if book in regular bookshelves then move book
+                if (bookshelfNames.contains("Read")) {
+                    this.moveBook("Read", "Reading", bookID, userID);
+                } else if (bookshelfNames.contains("WantToRead")) {
+                    this.moveBook("WantToRead", "Reading", bookID, userID);
+                }
+
+                // if books in Recommended or Favorite bookshelf then add book instead of moving
+                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
+                    this.addBook("Reading", bookID, userID);
+                }
+            }
+        }
+
+        // Condition3: if finishedPages = totalPages, then add book to Read
+        if (pagesFinished == totalPages) {
+            if (bookshelfNames == null || bookshelfNames.size() == 0) {
+                // simply add the book
+                this.addBook("Reading", bookID, userID);
+            } else if (!bookshelfNames.contains("Read")) {
+                // if book in regular bookshelves then move book
+                if (bookshelfNames.contains("Reading")) {
+                    this.moveBook("Reading", "Read", bookID, userID);
+                } else if (bookshelfNames.contains("WantToRead")) {
+                    this.moveBook("WantToRead", "Read", bookID, userID);
+                }
+
+                // if books in Recommended or Favorite bookshelf then add book instead of moving
+                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
+                    this.addBook("Read", bookID, userID);
+                }
+            }
+        }
     }
 
     // move book to another regular bookshelf
