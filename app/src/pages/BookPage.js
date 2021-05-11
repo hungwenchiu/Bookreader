@@ -105,7 +105,7 @@ export default function BookPage() {
         <Grid container spacing={3} >
           <Grid item xs={3}>
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
-            <AddBookButtonGroup/>
+            <AddBookButtonGroup bookID = {id}/>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>

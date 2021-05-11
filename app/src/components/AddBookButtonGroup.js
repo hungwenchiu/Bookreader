@@ -10,8 +10,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
+import axios from 'axios';
 
-const options = ['Want to Read', 'Add to Favorate', 'Add to Reading', 'Add to Read'];
+const options = ['Want to Read', 'Add to Favorite', 'Add to Reading', 'Add to Read'];
 
 const useStyles = makeStyles({
   buttonGroup: {
@@ -26,11 +27,17 @@ export default function AddBookButtonGroup(props) {
   const anchorRef = useRef(null);
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const addToBookshelf = () => {
-
-
-
-  }
+  const addToBookshelf = (bookID) => {
+  const bookshelfName = "WantToRead"
+    axios.put(`/api/bookshelves/${bookshelfName}/books?bookID=${bookID}&userID=${sessionStorage.getItem("currentUserID")}`)
+    .then(res =>{
+        console.log('Inside add book');
+        console.log(res);
+    })
+    .catch( error => {
+        console.log(error);
+    });
+}
   
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -52,7 +59,7 @@ export default function AddBookButtonGroup(props) {
   return(
     <div>
       <ButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="split button" className={classes.buttonGroup}>
-        <Button onClick={addToBookshelf}>{options[selectedIndex]}</Button>
+        <Button onClick={addToBookshelf(props.bookID)}>{options[selectedIndex]}</Button>
         <Button
           color="primary"
           size="small"
