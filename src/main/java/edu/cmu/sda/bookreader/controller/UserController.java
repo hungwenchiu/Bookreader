@@ -1,6 +1,7 @@
 package edu.cmu.sda.bookreader.controller;
 
 import edu.cmu.sda.bookreader.entity.User;
+import edu.cmu.sda.bookreader.service.AbstractBookshelfService;
 import edu.cmu.sda.bookreader.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

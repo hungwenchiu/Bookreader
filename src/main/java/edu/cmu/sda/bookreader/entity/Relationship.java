@@ -36,4 +36,40 @@ public class Relationship {
     @NotNull
     @OneToOne
     private User actionUser;
+
+    public User getUserOne() {
+        return userOne;
+    }
+
+    public void setUserOne(User userOne) {
+        this.userOne = userOne;
+    }
+
+    public User getUserTwo() {
+        return userTwo;
+    }
+
+    public void setUserTwo(User userTwo) {
+        this.userTwo = userTwo;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public User getActionUser() {
+        return actionUser;
+    }
+
+    public void setActionUser(User actionUser) {
+        this.actionUser = actionUser;
+    }
+
+    public long getId() {
+        return id;
+    }
 }
