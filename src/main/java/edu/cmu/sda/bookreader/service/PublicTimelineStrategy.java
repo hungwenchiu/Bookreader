@@ -17,7 +17,7 @@ public class PublicTimelineStrategy implements TimelineStrategy{
     private EventRepository repository;
 
     @Override
-    public List<Event> generateTimelineEvents(String userids, int idx) {
+    public List<Event> generateTimelineEvents(String userids) {
         List<String> useridlist = new ArrayList<>();
 
         for(String uid: userids.split(",")) {
@@ -25,11 +25,21 @@ public class PublicTimelineStrategy implements TimelineStrategy{
         }
 
         List<Event> events = repository.findByMultipleUsers(useridlist);
-        List<Event> res = new ArrayList<>();
-        for(int i = idx; i < idx + 3 && i < events.size(); i++) {
-            res.add(events.get(i));
+
+        /*
+           remove the duplicate friendship when using publictimeline,
+           EX: if A and B are friends, we will have 2 events, 1 for A, 1 for B
+         */
+        for(int i = 0; i < events.size(); i++) {
+            String t = events.get(i).getAction();
+            if( i > 0 && (events.get(i).getAction().equals("Friendship"))) {
+                if((events.get(i - 1).getAction().equals("Friendship")) && (events.get(i - 1).getContent().equals(events.get(i).getContent()))) {
+                    events.remove(i);
+                    i--;
+                }
+            }
         }
-        return res;
+        return events;
     }
 
 

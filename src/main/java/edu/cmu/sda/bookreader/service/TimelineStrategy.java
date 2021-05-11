@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface TimelineStrategy {
-    List<Event> generateTimelineEvents(String userid, int idx);
+    List<Event> generateTimelineEvents(String userid);
 }
