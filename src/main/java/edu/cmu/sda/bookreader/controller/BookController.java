@@ -29,11 +29,19 @@ public class BookController {
 
         Book exist_book = service.getBookByGoogleBookId(String.valueOf(book.getGoogleBookId()));
 
+
         // insert if there are not duplicated records
         if(exist_book == null) {
+
+            // trim the length of the description if it excesses the limitation of the table
+            if(book.getDescription().length() > 2000)
+                book.setDescription(book.getDescription().substring(0, 1987) + "...Read more");
+
             return service.saveBook(book);
         } else {
-            System.out.println("exist_book: " + exist_book.getId());
+
+
+            System.out.println("exist_book: " + exist_book.getDescription().length());
             return null;
         }
 

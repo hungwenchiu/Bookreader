@@ -30,7 +30,7 @@ export default function ReviewPostDialog(props) {
         params.append("name", username);
         params.append("bookName", bookInfo.volumeInfo.title);
         params.append("action", "Review");
-        params.append("review", inputtxt);
+        params.append("content", inputtxt);
         params.append("googlebookid", bookInfo.id);
 
         axios.post(`/api/event`, params

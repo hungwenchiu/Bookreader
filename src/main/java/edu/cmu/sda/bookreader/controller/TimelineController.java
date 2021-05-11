@@ -5,6 +5,7 @@ import edu.cmu.sda.bookreader.entity.Event;
 import edu.cmu.sda.bookreader.service.CommentReplyService;
 import edu.cmu.sda.bookreader.service.PersonalTimelineStrategy;
 //import edu.cmu.sda.bookreader.service.Socketio;
+import edu.cmu.sda.bookreader.service.PublicTimelineStrategy;
 import edu.cmu.sda.bookreader.service.TimelineManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,15 +31,25 @@ public class TimelineController {
     @Autowired
     PersonalTimelineStrategy timeline;
 
+    @Qualifier("publicTimelineStrategy")
+    @Autowired
+    PublicTimelineStrategy publicTimeline;
+
     @Qualifier("commentReplyService")
     @Autowired
     CommentReplyService commentReplyService;
 
     @GetMapping("/personalTimeline")
-    public List<Event> getPersonalTimeline(@RequestParam(value="name") String name, @RequestParam(value="idx") int idx){
+    public List<Event> getPersonalTimeline(@RequestParam(value="userid") String userid, @RequestParam(value="idx") int idx){
 
         timelineManagerService.setTimelineStrategy(timeline); // set personal timeline behavior
-        return timelineManagerService.getTimelineEvents(name, idx); // generate personal timeline
+        return timelineManagerService.getTimelineEvents(userid, idx); // generate personal timeline
+    }
+
+    @GetMapping("/publicTimeline")
+    public List<Event> getPublicTimeline(@RequestParam(value="userids") String userids, @RequestParam(value="idx") int idx){
+        timelineManagerService.setTimelineStrategy(publicTimeline); // set personal timeline behavior
+        return timelineManagerService.getTimelineEvents(userids, idx); // generate personal timeline
     }
 
     @PostMapping("/reply")

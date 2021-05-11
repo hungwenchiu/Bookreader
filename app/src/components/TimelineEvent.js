@@ -114,7 +114,7 @@ export default function RecipeReviewCard(props) {
             .then(res =>{
                 if(res.data === userreply)
                     return;
-                console.log(res);
+                // console.log(res);
                 setUserReply(res.data);
 
             })

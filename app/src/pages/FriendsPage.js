@@ -56,6 +56,8 @@ const FriendsPage = () => {
             .then(res => {
                 setUpdate(!update)
             });
+        postEvent(currentUser.name, toUser.name, currentUser.id);
+        postEvent(currentUser.name, toUser.name, toUser.id);
     }
 
     function handleAcceptFriend(fromUser, toUser) {
@@ -71,6 +73,24 @@ const FriendsPage = () => {
         axios.delete(`/api/relationship`, {data: data})
             .then(res => {
                 setUpdate(!update)
+            });
+    }
+
+    // post friendship event!!
+    const postEvent = (currentUsername, toUsername, userid) => {
+
+        const params = new URLSearchParams();
+        params.append("userid", userid);
+        params.append("name", currentUsername);
+        params.append("bookName", null);
+        params.append("action", "Friendship");
+        params.append("content", `${currentUsername} and ${toUsername} are friends now.`);
+        params.append("googlebookid", null);
+
+        axios.post(`/api/event`, params
+        )
+            .then(res => {
+                console.log("post event - friendship success");
             });
     }
 

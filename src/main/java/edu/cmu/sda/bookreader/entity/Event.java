@@ -23,7 +23,7 @@ public class Event {
     private String bookName;
     private String action;
     @Column(columnDefinition="varchar(2000)")
-    private String review;
+    private String content;
     @Column(columnDefinition="varchar(500)")
     private String googlebookid;
     @CreationTimestamp
