@@ -9,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Slider from '@material-ui/core/Slider';
 import TextField from '@material-ui/core/TextField';
+import Box from "@material-ui/core/Box";
 
 const marks = [
   {
@@ -36,17 +37,26 @@ const marks = [
 const useStyles = makeStyles({
   root: {
     display: 'flex',
+    marginBottom: "3em",
+    alignItems: "center",
+    justifyContent: "center",
   },
   cover: {
+    display: "inline-block",
     width: 160,
     height: 220,
+    marginRight: "2em"
   },
   content: {
-    display: 'flex'
+    display: 'flex',
+    // width: 1000
   },
-  button: {
+  buttons: {
     width: 100,
     height: 50
+  },
+  button: {
+    marginTop: 10
   },
   slider: {
     marginTop: 40,
@@ -63,6 +73,13 @@ export default function BookCard(props) {
   const { image, title, author, progress } = props;
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
+  const handleChange = (event, newValue) => {
+    if (event.key === 'Enter') {
+        // update the progress
+        // move book to different bookshelf
+    }
+  }
+
   return(
     <Card className={classes.root}>
       <CardMedia
@@ -72,7 +89,7 @@ export default function BookCard(props) {
       />
       <div className={classes.details}>
         <CardContent className={classes.content}>
-          <Grid container spacing={3} >
+          <Grid container >
             <Grid item xs={10}>
               <Typography component="h5" variant="h5">
                 {title}
@@ -95,14 +112,14 @@ export default function BookCard(props) {
               />
             </Grid>
 
-            <Grid item xs={2} className={classes.button}>
-              <Button variant="contained" color="primary">
-                Remove
-              </Button>
-              <Button variant="contained" color="primary">
+            <Grid item xs={2} className={classes.buttons}>
+              <Button variant="contained" color="primary"  mt={1}>
                 Add to Favorite
               </Button>
-              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" style ={{width: '100%'}} inputStyle ={{width: '100%'}} />
+              <Button variant="contained" color="error" className={classes.button}>
+                Remove
+              </Button>
+              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" className={classes.button} onKeyDown={handleChange}/>
             </Grid>
 
           </Grid>

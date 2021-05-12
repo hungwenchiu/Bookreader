@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useState, useEffect} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
@@ -10,22 +10,22 @@ import List from '@material-ui/core/List';
 
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {children, value, index, ...other} = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`bookshelf-tabpanel-${index}`}
-      aria-labelledby={`bookshelf-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <div>
-          {children}
-        </div>
-      )}
-    </div>
+      <div
+          role="tabpanel"
+          hidden={value !== index}
+          id={`bookshelf-tabpanel-${index}`}
+          aria-labelledby={`bookshelf-tab-${index}`}
+          {...other}
+      >
+        {value === index && (
+            <div>
+              {children}
+            </div>
+        )}
+      </div>
   );
 }
 
@@ -58,8 +58,7 @@ const useStyles = makeStyles({
   content: {
     display: 'flex'
   },
-  button: {
-  },
+  button: {},
   slider: {
     marginTop: 40,
     width: 400,
@@ -69,61 +68,127 @@ const useStyles = makeStyles({
 export default function BookShelvesPage() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
-
   const [books, setBooks] = useState([])
-  
+  const [bookshelf, setBookshelfName] = useState({name: "WantToRead"});
+
+  function getBooksFromBookshelf() {
+    axios.get(`/api/bookshelves/${bookshelf.name}/books?userID=${sessionStorage.getItem("currentUserID")}`)
+        .then(async res => {
+          // process all books -> get the progress
+          // add progress to the book
+          let allBooks = res.data
+          console.log(allBooks)
+
+          for (let i = 0; i < allBooks.length; ++i) {
+            const data = await getProgress(allBooks[i])
+            allBooks[i]["progress"] = data;
+          }
+          setBooks(allBooks)
+        })
+        .catch(error => {
+          console.log(error);
+        });
+  }
+
   useEffect(() => {
-    // get books from a bookshelf
-    const bookshelfName = "WantToRead"
-    axios.get(`/api/bookshelves/${bookshelfName}/books?userID=${sessionStorage.getItem("currentUserID")}`)
-    .then(res =>{
-        setBooks(res.data);
-        console.log('Inside get books');
-        console.log(res);
-        console.log("books "+books);
-    })
-    .catch( error => {
-        console.log(error);
-    });
-  }, [])
+    getBooksFromBookshelf();
+  }, [bookshelf.name])
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setValue(newValue)
+    if (newValue === 0) {
+      setBookshelfName({name: "WantToRead"});
+    } else if (newValue === 1) {
+      setBookshelfName({name: "Reading"});
+    } else if (newValue === 2) {
+      setBookshelfName({name: "Read"});
+    } else if (newValue === 3) {
+      setBookshelfName({name: "Favorite"});
+    } else {
+      setBookshelfName({name: "Recommended"});
+    }
   };
 
-  return(
-  <Layout>
-    <div className={classes.container}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-      >
-        <Tab label="Want to Read" {...a11yProps(0)} />
-        <Tab label="Reading" {...a11yProps(1)} />
-        <Tab label="Read" {...a11yProps(2)} />
-        <Tab label="Favorite" {...a11yProps(3)} />
-      </Tabs>
-      <TabPanel value={value} index={0}>
+  async function getProgress(book) {
+    try {
+      const response = await axios.get(`/api/progress?userID=${sessionStorage.getItem("currentUserID")}&bookID=${book.googleBookId}`);
+      const data = await response.data;
+      return data;
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  return (
+      <Layout>
+        <div className={classes.container}>
+          <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              centered
+          >
+            <Tab label="Want to Read" {...a11yProps(0)} />
+            <Tab label="Reading" {...a11yProps(1)} />
+            <Tab label="Read" {...a11yProps(2)} />
+            <Tab label="Favorite" {...a11yProps(3)} />
+            <Tab label="Recommended" {...a11yProps(4)} />
+          </Tabs>
+          <TabPanel value={value} index={0}>
+            <List>
+              {
+                books.map((book) => (
+                    <BookCard image={book.thumbnail}
+                              title={book.title}
+                              author={book.author ? book.author : "not available"}
+                              progress={book.progress}
+                    />
+                ))
+              }
+            </List>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
           <List>
             {
-                books.map((book) => (
-                  <BookCard image = {book.volumeInfo?.imageLinks.thumbnail} title = {book.volumeInfo?.title} author = {book.volumeInfo?.authors ? book.volumeInfo?.authors[0] : "not available"} progress = {50}/>
-                ))
+              books.map((book) => (
+                  <BookCard image={book.thumbnail}
+                            title={book.title}
+                            author={book.author ? book.author : "not available"}
+                            progress={book.progress}
+                  />
+              ))
             }
           </List>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-      </TabPanel>
-          
-    </div>
-  </Layout>
-  ) 
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+          <List>
+            {
+              books.map((book) => (
+                  <BookCard image={book.thumbnail}
+                            title={book.title}
+                            author={book.author ? book.author : "not available"}
+                            progress={book.progress}
+                  />
+              ))
+            }
+          </List>
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+          <List>
+            {
+              books.map((book) => (
+                  <BookCard image={book.thumbnail}
+                            title={book.title}
+                            author={book.author ? book.author : "not available"}
+                            progress={book.progress}
+                  />
+              ))
+            }
+          </List>
+          </TabPanel>
+
+        </div>
+      </Layout>
+  )
 }
