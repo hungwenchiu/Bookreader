@@ -12,7 +12,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 
-const options = ['Want to Read', 'Add to Favorite', 'Add to Reading', 'Add to Read'];
+const options = ['Want to Read', 'Favorite'];
 
 const useStyles = makeStyles({
   buttonGroup: {
@@ -26,9 +26,10 @@ export default function AddBookButtonGroup(props) {
   const anchorRef = useRef(null);
   const {bookID} = props;
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  
+  const [bookshelfName, setBookshelfName] = React.useState("WantToRead");
+
   function addToBookshelf() {
-  const bookshelfName = "WantToRead"
+  // const bookshelfName = "WantToRead"
     axios.put(`/api/bookshelves/${bookshelfName}/books?bookID=${bookID}&userID=${sessionStorage.getItem("currentUserID")}`)
     .then(res =>{
         console.log('Inside add book');
@@ -53,6 +54,11 @@ export default function AddBookButtonGroup(props) {
 
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
+    if (index == 0) {
+        setBookshelfName("WantToRead");
+    } else {
+        setBookshelfName("Favorite");
+    }
     setOpen(false);
   }
 

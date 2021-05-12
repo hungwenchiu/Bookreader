@@ -142,17 +142,50 @@ export default function BookShelvesPage() {
                     <BookCard image={book.thumbnail}
                               title={book.title}
                               author={book.author ? book.author : "not available"}
-                              progress={book.progress}//{() => getProgress(book)}
+                              progress={book.progress}
                     />
                 ))
               }
             </List>
           </TabPanel>
           <TabPanel value={value} index={1}>
+          <List>
+            {
+              books.map((book) => (
+                  <BookCard image={book.thumbnail}
+                            title={book.title}
+                            author={book.author ? book.author : "not available"}
+                            progress={book.progress}
+                  />
+              ))
+            }
+          </List>
           </TabPanel>
           <TabPanel value={value} index={2}>
+          <List>
+            {
+              books.map((book) => (
+                  <BookCard image={book.thumbnail}
+                            title={book.title}
+                            author={book.author ? book.author : "not available"}
+                            progress={book.progress}
+                  />
+              ))
+            }
+          </List>
           </TabPanel>
           <TabPanel value={value} index={3}>
+          <List>
+            {
+              books.map((book) => (
+                  <BookCard image={book.thumbnail}
+                            title={book.title}
+                            author={book.author ? book.author : "not available"}
+                            progress={book.progress}
+                  />
+              ))
+            }
+          </List>
           </TabPanel>
 
         </div>
