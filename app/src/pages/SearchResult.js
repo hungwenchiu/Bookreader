@@ -41,34 +41,34 @@ export default function SearchResult() {
     });
   }, [])
 
-  function handleAddBook(book, event) {
-      event.preventDefault();
-      console.log(book.volumeInfo.title);
-      let firstAuthor = "";
-      if (book.volumeInfo.authors) {
-          firstAuthor = book.volumeInfo.authors[0]
-      }
+  // function handleAddBook(book, event) {
+  //     event.preventDefault();
+  //     console.log(book.volumeInfo.title);
+  //     let firstAuthor = "";
+  //     if (book.volumeInfo.authors) {
+  //         firstAuthor = book.volumeInfo.authors[0]
+  //     }
 
-      let thumbnailLink = "";
-      if (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
-          thumbnailLink = book.volumeInfo.imageLinks.thumbnail
-      }
+  //     let thumbnailLink = "";
+  //     if (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
+  //         thumbnailLink = book.volumeInfo.imageLinks.thumbnail
+  //     }
 
-      const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
-          author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind,
-              thumbnail:thumbnailLink, textSnippet: book.searchInfo.textSnippet})
-      };
-      fetch('/api/book', requestOptions)
-          .then(response => {
-              return response.json()
-          })
-          .then(data => {
-              console.log(data)
-          });
-  }
+  //     const requestOptions = {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
+  //         author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind,
+  //             thumbnail:thumbnailLink, textSnippet: book.searchInfo.textSnippet})
+  //     };
+  //     fetch('/api/book', requestOptions)
+  //         .then(response => {
+  //             return response.json()
+  //         })
+  //         .then(data => {
+  //             console.log(data)
+  //         });
+  // }
 
   return (
     <Layout>

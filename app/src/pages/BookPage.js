@@ -40,6 +40,8 @@ export default function BookPage() {
   const {id}  = useParams()
 
   useEffect(() => {
+    console.log("use effect")
+
     // get book information
     axios.get(`https://www.googleapis.com/books/v1/volumes/` + id + `?key=` + apiKey)
     .then(res => {
@@ -66,13 +68,12 @@ export default function BookPage() {
 
   // insert book to database
   function handleAddBook(book) {
-
     let firstAuthor = "";
     if (book.volumeInfo.authors) {
       firstAuthor = book.volumeInfo.authors[0]
     }
 
-    let thumbnailLink = "";
+    let thumbnailLink = altSrc;
     if (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
       thumbnailLink = book.volumeInfo.imageLinks.thumbnail
     }
@@ -105,7 +106,7 @@ export default function BookPage() {
         <Grid container spacing={3} >
           <Grid item xs={3}>
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
-            <AddBookButtonGroup bookID = {id}/>
+            <AddBookButtonGroup bookId = {id}/>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>
