@@ -112,7 +112,7 @@ export default function BookCard(props) {
               <Button variant="contained" color="error" className={classes.button}>
                 Remove
               </Button>
-              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" />
+              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" className={classes.button}/>
             </Grid>
 
           </Grid>
