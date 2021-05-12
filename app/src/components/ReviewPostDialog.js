@@ -35,23 +35,37 @@ export default function ReviewPostDialog(props) {
     if (newRating===0 || inputtxt==="0") {
       setAlertOpen(true);
     } else {
-      const params = new URLSearchParams();
-      params.append("userid", userid);
-      params.append("name", username);
-      params.append("bookName", bookInfo.volumeInfo.title);
-      params.append("action", "Review");
-      params.append("content", inputtxt);
-      params.append("googlebookid", bookInfo.id);
-      params.append("rating", newRating); // TODO - input the rating of the book
+      const eventParams = new URLSearchParams();
+      eventParams.append("userid", userid);
+      eventParams.append("name", username);
+      eventParams.append("bookName", bookInfo.volumeInfo.title);
+      eventParams.append("action", "Review");
+      eventParams.append("content", inputtxt);
+      eventParams.append("googlebookid", bookInfo.id);
+      eventParams.append("rating", newRating); // TODO - input the rating of the book
 
-      axios.post(`/api/event`, params
+      axios.post(`/api/event`, eventParams
       )
         .then(res => {
           console.log("post event success");
           handleClose();
         });
+      // reviewParams.append("googleBookId", bookInfo.id);
+      // reviewParams.append("userId", userid);
+      // reviewParams.append("content", inputtxt);
+      // reviewParams.append("rating", newRating);
+
+      axios.post(`/api/review`, {
+        googleBookId: bookInfo.id,
+        userId: userid,
+        content: inputtxt,
+        rating: newRating,
+      })
+        .then(res => {
+          console.log("post review success");
+          handleClose();
+        });
     }
-    
   }
 
   const handleClickOpen = () => {
@@ -61,6 +75,7 @@ export default function ReviewPostDialog(props) {
   const handleClose = () => {
     setOpen(false);
     setAlertOpen(false);
+    setNewRating(0);
   };
 
   return (

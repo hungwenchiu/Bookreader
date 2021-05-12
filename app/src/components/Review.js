@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Rating from '@material-ui/lab/Rating';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 const useStyles = makeStyles({
   
@@ -33,22 +34,23 @@ export default function Review(props) {
 
   return(
     <ListItem>
+      
       <ListItemAvatar>
         <Avatar alt={DefaultAvatar} src={DefaultAvatar} />
       </ListItemAvatar>
       <ListItemText
         primary={
-          <div>
-            <Typography variant="body1">{username}</Typography>
-            <Rating value={rating} precision={0.5} readOnly size="small" className={classes.rating} />
-          </div>
+          <Typography variant="body1">{username}</Typography>
         }
         secondary={
-          <Typography component="span" variant="body2">
+          <Typography variant="body2">
             {content}
           </Typography>
         }
-      />
+      >
+      </ListItemText>
+      <Rating value={rating} precision={0.5} readOnly size="small" className={classes.rating} />
+
     </ListItem>
   )
 }
