@@ -10,6 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Slider from '@material-ui/core/Slider';
 import TextField from '@material-ui/core/TextField';
 import Box from "@material-ui/core/Box";
+import axios from 'axios';
 
 const marks = [
   {
@@ -70,13 +71,33 @@ function valuetext(value) {
 
 export default function BookCard(props) {
   const classes = useStyles()
-  const { image, title, author, progress } = props;
+  const { image, title, author, progress, bookID } = props;
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
   const handleChange = (event, newValue) => {
     if (event.key === 'Enter') {
         // update the progress
+        const progressParams = new URLSearchParams();
+        progressParams.append("userID", sessionStorage.getItem("currentUserID"));
+        progressParams.append("bookID", bookID);
+        progressParams.append("pagesFinished",event.target.value);
+
+        axios.put(`/api/progress`, progressParams
+        )
+        .then(res => {
+          console.log("Updated pages finished");
+        });
+
         // move book to different bookshelf
+        const moveBookParams = new URLSearchParams();
+        moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+        moveBookParams.append("bookID", bookID);
+
+        axios.put(`/api/bookshelves`, progressParams
+        )
+        .then(res => {
+          console.log("Updated pages finished");
+        })
     }
   }
 

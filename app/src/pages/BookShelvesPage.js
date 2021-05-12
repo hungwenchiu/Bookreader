@@ -143,6 +143,7 @@ export default function BookShelvesPage() {
                               title={book.title}
                               author={book.author ? book.author : "not available"}
                               progress={book.progress}
+                              bookID={book.googleBookId}
                     />
                 ))
               }
