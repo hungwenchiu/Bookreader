@@ -62,6 +62,14 @@ export default function BookCard(props) {
   const classes = useStyles()
   const { image, title, author, progress } = props;
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
+
+  const handleChange = (event, newValue) => {
+    if (event.key === 'Enter') {
+        // update the progress
+        // move book to different bookshelf
+    }
+  }
+
   return(
     <Card className={classes.root}>
       <CardMedia
@@ -101,7 +109,7 @@ export default function BookCard(props) {
               <Button variant="contained" color="primary">
                 Add to Favorite
               </Button>
-              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" style ={{width: '100%'}} inputStyle ={{width: '100%'}} />
+              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" style ={{width: '100%'}} inputStyle ={{width: '100%'}} onKeyDown={handleChange} />
             </Grid>
 
           </Grid>
