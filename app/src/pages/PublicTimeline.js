@@ -26,7 +26,10 @@ export default function PublicTimeline(){
         //Topic: to update the page
         // if the user's friends post some new message
         socket.on("updateTimelinePage", (res) => {
-            console.log(res);
+            // console.log(res);
+            setRefreshPage(true);
+        });
+        socket.on("refreshReply", (res) => {
             setRefreshPage(true);
         });
     }, []);
@@ -42,7 +45,7 @@ export default function PublicTimeline(){
 
     function getBookInfoByGoogleID(googlebookid) {
 
-        console.log("googlebookid  ", googlebookid);
+        // console.log("googlebookid  ", googlebookid);
 
         if(bookinfo.has(googlebookid)) // googlebookid == null means other actions
             return;
@@ -60,7 +63,7 @@ export default function PublicTimeline(){
 
         axios.get(`/api/publicTimeline?userids=${relationshipid}`)
             .then(res =>{
-                console.log(res.data);
+                // console.log(res.data);
                 setIsLoaded(true);
                 setData(res.data);
                 res.data.map((t, idx) => {

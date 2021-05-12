@@ -110,15 +110,13 @@ export default function RecipeReviewCard(props) {
     const [updatePage, setUpdatePage] = React.useState(false);
     const userid = sessionStorage.getItem('currentUserID');
 
-    const ftechReply = (eventid) => {
+    const fetchReply = (eventid) => {
 
         axios.get(`/api/reply?eventid=${eventid}`)
             .then(res =>{
                 if(res.data === userreply)
                     return;
-                // console.log(res);
                 setUserReply(res.data);
-
             })
             .catch( error => {
             });
@@ -142,7 +140,11 @@ export default function RecipeReviewCard(props) {
 
     // for socket.io subsribe the a new topic to get realtime reply
     useEffect(() =>{
+
         socket.on("refreshReply", (res) => {
+            setUpdatePage(true);
+        });
+        socket.on("updateTimelinePage", (res) => {
             setUpdatePage(true);
         });
     }, []);
@@ -150,7 +152,7 @@ export default function RecipeReviewCard(props) {
     // refresh new reply when receive updatePage event from socket.io
     useEffect(() =>{
         if(updatePage) {
-            ftechReply(props.id);
+            fetchReply(props.id);
             setUpdatePage(false);
         }
     }, [updatePage]);
@@ -158,7 +160,7 @@ export default function RecipeReviewCard(props) {
 
 
     useEffect(() =>{
-        ftechReply(props.id);
+        fetchReply(props.id);
     }, []);
 
     const handleExpandClick = () => {

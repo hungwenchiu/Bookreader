@@ -52,10 +52,11 @@ export default function ReviewPostDialog(props) {
         params.append("userid", userid);
         params.append("name", username);
         params.append("bookName", bookInfo.volumeInfo.title);
-        params.append("action", "Review");
+        params.append("action", "Review"); // Action: Review, Progress, Read, Unread
         params.append("content", inputtxt);
         params.append("googlebookid", bookInfo.id);
         params.append("rating", null); // TODO - input the rating of the book
+        params.append("progress", null); // If your action is not progress, just input "null" here
 
         axios.post(`/api/event`, params)
             .then(async res => {

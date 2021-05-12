@@ -27,6 +27,7 @@ public class Event {
     @Column(columnDefinition="varchar(500)")
     private String googlebookid;
     private String rating;
+    private String progress;
     @CreationTimestamp
     private Date time;
 }
