@@ -3,6 +3,7 @@ import Layout from '../components/Layout';
 import RecipeReviewCard from '../components/TimelineEvent';
 import axios from 'axios';
 import FriendShipEventCard from "../components/FriendshipEventCard";
+import {initiateSocket, socket} from "../components/Socketio";
 
 
 
@@ -11,16 +12,40 @@ export default function PublicTimeline(){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [event_data, setData] = useState(null);
-    // const [event_idx, setEventIdx] = useState(0);
-    // const [isFetching, setIsFetching] = useState(true);
+    const [refreshPage, setRefreshPage] = useState(false);
     const [bookinfo, setBookInfo] = useState(new Map());
     const name = sessionStorage.getItem("currentUser");
     const userid = sessionStorage.getItem("currentUserID");
     const [relationshipid, setRelationshipId] = useState(null); // store all relationship id (friends id and user id)
 
+
+    // for socket.io connection and set subcriptions
+    useEffect(() => {
+        initiateSocket(userid);
+
+        //Topic: to update the page
+        // if the user's friends post some new message
+        socket.on("updateTimelinePage", (res) => {
+            // console.log(res);
+            setRefreshPage(true);
+        });
+        socket.on("refreshReply", (res) => {
+            setRefreshPage(true);
+        });
+    }, []);
+
+    // refresh the page if refreshPage turns true
+    useEffect(() => {
+       if(refreshPage) {
+           fetchEvent();
+           setRefreshPage(false);
+       }
+    }, [refreshPage]);
+
+
     function getBookInfoByGoogleID(googlebookid) {
 
-        console.log("googlebookid  ", googlebookid);
+        // console.log("googlebookid  ", googlebookid);
 
         if(bookinfo.has(googlebookid)) // googlebookid == null means other actions
             return;
@@ -34,24 +59,16 @@ export default function PublicTimeline(){
             });
     }
 
-    // function handleScroll() {
-    //     if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
-    //     setIsFetching(true);
-    // }
-
-    // get more timeline event, 5 events for each time
     function fetchEvent() {
 
         axios.get(`/api/publicTimeline?userids=${relationshipid}`)
             .then(res =>{
-                const new_data = (event_data) ? event_data.concat(res.data) : res.data;
+                // console.log(res.data);
                 setIsLoaded(true);
-                setData(new_data);
+                setData(res.data);
                 res.data.map((t, idx) => {
-                    console.log(typeof t.googlebookid);
-                    if(t.googlebookid !== "null")
-                    {
-                        console.log("go to getBookInfoByGoogleID");
+                    if(t.googlebookid !== "null") {
+                        // console.log("go to getBookInfoByGoogleID");
                         getBookInfoByGoogleID(t.googlebookid);
                     }
                 });
@@ -65,7 +82,7 @@ export default function PublicTimeline(){
     function getRelationshipId() {
 
         // query all friends' user id
-        axios.get(`api/relationship/friends/${userid}`)
+        axios.get(`/api/relationship/friends/${userid}`)
             .then(res =>{
 
                 let userids = userid;
