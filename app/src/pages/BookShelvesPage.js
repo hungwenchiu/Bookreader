@@ -72,24 +72,61 @@ export default function BookShelvesPage() {
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
   const [books, setBooks] = useState([])
-  useEffect(() => {
-    // get books from a bookshelf
-    const bookshelfName = "WantToRead"
-    axios.get(`/api/bookshelves/${bookshelfName}/books?userID=${sessionStorage.getItem("currentUserID")}`)
+  const [progress, setProgress] = useState(0);
+  const [bookshelf, setBookshelfName] = useState({name: "WantToRead"});
+  const [update, setUpdate] = useState(false);
+
+  function getBooksFromBookshelf() {
+    axios.get(`/api/bookshelves/${bookshelf.name}/books?userID=${sessionStorage.getItem("currentUserID")}`)
     .then(res =>{
-        setBooks(res.data);
-        console.log('Inside get books');
-        console.log(res);
-        console.log("books "+books);
-    })
+        // process all books -> get the progress
+        // add progress to the book
+//         let allBooks = []
+//        res.data.map((book) => (
+//            axios.get(`/api/progress?userID=${sessionStorage.getItem("currentUserID")}&bookID=${book.googleBookId}`)
+//                .then(res =>{
+//                    book.progress = res.data;
+//                    allBooks.push(book);
+//                    console.log(allBooks.length);
+//                    setBooks(allBooks);
+//                })
+//        ))
+     })
     .catch( error => {
         console.log(error);
     });
-  }, [])
+  }
+
+  useEffect(() => {
+    getBooksFromBookshelf();
+  }, [bookshelf.name])
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setValue(newValue)
+    if (newValue === 0) {
+        setBookshelfName({name: "WantToRead"});
+      } else if (newValue === 1) {
+         setBookshelfName({name: "Reading"});
+      } else if (newValue === 2) {
+         setBookshelfName({name: "Read"});
+      } else if (newValue === 3) {
+         setBookshelfName({name: "Favorite"});
+      } else {
+         setBookshelfName({name: "Recommended"});
+      }
   };
+
+  const getProgress = (book) => {
+    axios.get(`/api/progress?userID=${sessionStorage.getItem("currentUserID")}&bookID=${book.googleBookId}`)
+        .then(res =>{
+            setProgress(res.data);
+            console.log("PROGRESS BEFORE RETURNING "+res.data);
+            return res.data;
+        })
+        .catch( error => {
+            console.log(error);
+        });
+  }
 
   return(
   <Layout>
@@ -105,12 +142,17 @@ export default function BookShelvesPage() {
         <Tab label="Reading" {...a11yProps(1)} />
         <Tab label="Read" {...a11yProps(2)} />
         <Tab label="Favorite" {...a11yProps(3)} />
+        <Tab label="Recommended" {...a11yProps(4)} />
       </Tabs>
       <TabPanel value={value} index={0}>
           <List>
             {
                 books.map((book) => (
-                  <BookCard image = {book.volumeInfo?.imageLinks.thumbnail} title = {book.volumeInfo?.title} author = {book.volumeInfo?.authors ? book.volumeInfo?.authors[0] : "not available"} progress = {50}/>
+                    <BookCard image = {book.thumbnail}
+                             title = {book.title}
+                             author = {book.author ? book.author : "not available"}
+                             progress = {book.progress}//{() => getProgress(book)}
+                    />
                 ))
             }
           </List>
@@ -124,5 +166,5 @@ export default function BookShelvesPage() {
           
     </div>
   </Layout>
-  ) 
+  )
 }

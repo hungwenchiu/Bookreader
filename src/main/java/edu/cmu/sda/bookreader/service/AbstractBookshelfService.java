@@ -182,7 +182,6 @@ public class AbstractBookshelfService {
                     books.add(book);
                 }
             }
-            System.out.println(("before null bookshelves "+books));
             return books;
         }
         if (recommendedBookshelf != null) {

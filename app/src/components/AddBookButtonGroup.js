@@ -22,12 +22,12 @@ const useStyles = makeStyles({
 
 export default function AddBookButtonGroup(props) {
   const classes = useStyles()
-  // const {  } = props;
   const [open, setOpen] = useState(false)
   const anchorRef = useRef(null);
-
+  const {bookID} = props;
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const addToBookshelf = (bookID) => {
+  
+  function addToBookshelf() {
   const bookshelfName = "WantToRead"
     axios.put(`/api/bookshelves/${bookshelfName}/books?bookID=${bookID}&userID=${sessionStorage.getItem("currentUserID")}`)
     .then(res =>{
@@ -59,7 +59,7 @@ export default function AddBookButtonGroup(props) {
   return(
     <div>
       <ButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="split button" className={classes.buttonGroup}>
-        <Button onClick={addToBookshelf(props.bookID)}>{options[selectedIndex]}</Button>
+        <Button onClick={addToBookshelf}>{options[selectedIndex]}</Button>
         <Button
           color="primary"
           size="small"

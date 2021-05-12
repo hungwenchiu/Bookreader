@@ -41,7 +41,8 @@ public class BookProgressController {
 
     // calculate book progress
     @RequestMapping(value = "/progress", method = RequestMethod.GET)
-    public int getProgress(@RequestBody Map<String, String> json) {
-        return bookProgressService.calculateProgress(Long.parseLong(json.get("userID")), json.get("bookID"));
+    public int getProgress(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
+        System.out.println("reached the book progress controller userID "+userID+" bookID "+bookID);
+        return bookProgressService.calculateProgress(userID, bookID);
     }
 }
