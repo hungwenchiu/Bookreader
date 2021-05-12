@@ -6,82 +6,120 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Rating from '@material-ui/lab/Rating';
+import Alert from '@material-ui/lab/Alert';
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
 import axios from "axios";
 
 export default function ReviewPostDialog(props) {
 
-    const username = sessionStorage.getItem("currentUser");
-    const userid = sessionStorage.getItem("currentUserID");
+  const username = sessionStorage.getItem("currentUser");
+  const userid = sessionStorage.getItem("currentUserID");
 
-    const {bookInfo} = props;
-    const [open, setOpen] = React.useState(false);
-    const [inputtxt, setInputTxt] = React.useState("");
+  const { bookInfo } = props;
+  const [open, setOpen] = React.useState(false);
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [inputtxt, setInputTxt] = React.useState("");
+  const [newRating, setNewRating] = React.useState(0);
 
-    // get value of input text
-    const getTxt = (event) => {
-        const { value } = event.target;
-        setInputTxt(value);
-    }
+  // get value of input text
+  const getTxt = (event) => {
+    const { value } = event.target;
+    setInputTxt(value);
+  }
 
-    // call API and insert to event table
-    const postEvent = () => {
+  // call API and insert to event table
+  const postEvent = () => {
+    if (newRating===0 || inputtxt==="0") {
+      setAlertOpen(true);
+    } else {
+      const params = new URLSearchParams();
+      params.append("userid", userid);
+      params.append("name", username);
+      params.append("bookName", bookInfo.volumeInfo.title);
+      params.append("action", "Review");
+      params.append("content", inputtxt);
+      params.append("googlebookid", bookInfo.id);
+      params.append("rating", newRating); // TODO - input the rating of the book
 
-        const params = new URLSearchParams();
-        params.append("userid", userid);
-        params.append("name", username);
-        params.append("bookName", bookInfo.volumeInfo.title);
-        params.append("action", "Review");
-        params.append("content", inputtxt);
-        params.append("googlebookid", bookInfo.id);
-        params.append("rating", null); // TODO - input the rating of the book
-
-        axios.post(`/api/event`, params
-        )
+      axios.post(`/api/event`, params
+      )
         .then(res => {
-            console.log("post event success");
-            handleClose();
+          console.log("post event success");
+          handleClose();
         });
     }
+    
+  }
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+  const handleClose = () => {
+    setOpen(false);
+    setAlertOpen(false);
+  };
 
-    return (
-        <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Post Review
-            </Button>
-                <Dialog maxWidth={'lg'} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Review</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Please write down your review
-                        </DialogContentText>
-                        <TextField style={{width: "30vw"}}
-                            id="outlined-multiline-static"
-                            multiline
-                            rows={4}
-                            variant="outlined"
-                            autoFocus={true}
-                            size={'medium'}
-                            onChange={getTxt}
-                        />
+  return (
+    <div>
+      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+        Post Review
+      </Button>
+      <Dialog maxWidth={'lg'} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Review</DialogTitle>
+        <Collapse in={alertOpen}>
+          <Alert
+            severity="error"
+            action={
+              <IconButton
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setAlertOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            Rating or review is empty!
+          </Alert>
+        </Collapse>
+        <DialogContent>
+          <Rating
+            value={newRating}
+            precision={0.5}
+            onChange={(event, newValue) => {
+              setNewRating(newValue)
+            }}
+          />
 
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={postEvent} color="primary">
-                            Post
-                        </Button>
-                        <Button onClick={handleClose} color="secondary">
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-        </div>
-    );
+          <DialogContentText>
+            Please write down your review
+          </DialogContentText>
+          <TextField style={{ width: "30vw" }}
+            id="outlined-multiline-static"
+            multiline
+            rows={4}
+            variant="outlined"
+            autoFocus={true}
+            size={'medium'}
+            onChange={getTxt}
+          />
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={postEvent} color="primary">
+            Post
+          </Button>
+          <Button onClick={handleClose} color="secondary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }

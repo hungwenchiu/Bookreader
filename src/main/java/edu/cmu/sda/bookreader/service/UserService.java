@@ -20,13 +20,19 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private AbstractBookshelfService bookshelfService;
+
+
     /**
      * save a new user to db
      * @param user user to be saved
      * @return the saved user with id
      */
     public User saveUser(User user) {
-        return repository.save(user);
+        User newUser = repository.save(user);
+        bookshelfService.initializeBookshelves(newUser.getId());
+        return newUser;
     }
 
     /**
