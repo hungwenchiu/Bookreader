@@ -46,7 +46,6 @@ export default function BookPage() {
     axios.get(`https://www.googleapis.com/books/v1/volumes/` + id + `?key=` + apiKey)
     .then(res => {
       setBook(res.data)
-      console.log(res.data)
       res.data.volumeInfo.description = res.data.volumeInfo.description ? res.data.volumeInfo.description : "No Description...";
       setDescription(res.data.volumeInfo.description)
       handleAddBook(res.data) // when user click the book and see the detail, I will insert the book in DB
@@ -54,7 +53,6 @@ export default function BookPage() {
 
     axios.get(`/api/review/book/`+id)
     .then(res => {
-      console.log("review: ", res.data)
       setReviews(res.data)
       const avgRating = calculateRating(res.data)
       setRating(avgRating)
@@ -106,7 +104,7 @@ export default function BookPage() {
         <Grid container spacing={3} >
           <Grid item xs={3}>
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
-            <AddBookButtonGroup bookId = {id}/>
+            <AddBookButtonGroup bookID = {id}/>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>
