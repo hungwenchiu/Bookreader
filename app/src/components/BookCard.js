@@ -82,6 +82,20 @@ export default function BookCard(props) {
   const { image, title, author, progress, currentBookshelf, bookID} = props;
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
+  const moveToRead = (event, newValue) => {
+      // move book to different bookshelf
+      const moveBookParams = new URLSearchParams();
+      moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+      moveBookParams.append("bookID", bookID);
+      moveBookParams.append("newBookshelf", "Reading");
+
+      axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
+      .then(res => {
+        console.log("Moved to Reading successfully.");
+      })
+
+  }
+
   const handleChange = (event, newValue) => {
     if (event.key === 'Enter') {
         // update the progress
@@ -159,7 +173,7 @@ export default function BookCard(props) {
 
                   {
                     currentBookshelf != "Reading" &&
-                    <Button variant="contained" color="primary" className={classes.button}>Start Reading</Button>
+                    <Button variant="contained" color="primary" className={classes.button} onClick={moveToRead}>Start Reading</Button>
                   }
 
                   <Button variant="contained" className={classes.button}>

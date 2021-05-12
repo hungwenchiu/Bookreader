@@ -94,12 +94,12 @@ public class BookshelfController {
     }
 
     // move book from a bookshelf
-//    @RequestMapping(value = "/bookshelves/{name}", method = RequestMethod.PUT)
-//    public String moveBook(@PathVariable("name") String currentBookshelf, @RequestBody Map<String, String> json) {
-//        return bookshelfService.moveBook(currentBookshelf, json.get("newBookshelfID"), json.get("bookID"), Long.parseLong(json.get("userID")));
-//    }
+    @RequestMapping(value = "/bookshelves/{name}", method = RequestMethod.PUT)
+    public String moveBook(@PathVariable("name") String currentBookshelf,@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID, @RequestParam(value="newBookshelf") String newBookshelf) {
+        return bookshelfService.moveBook(currentBookshelf, newBookshelf, bookID, userID);
+    }
 
-    // move book from bookshelf
+    // move book from bookshelf based on progress
     @RequestMapping(value = "/bookshelves", method = RequestMethod.PUT)
     public String moveBook(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
         return bookshelfService.checkBookProgressToMoveBetweenBookshelves(userID, bookID);
