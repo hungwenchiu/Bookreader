@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import axios from "axios";
+import {initiateSocket, sendMessage, socket} from "./Socketio";
 
 export default function ReviewPostDialog(props) {
 
@@ -16,6 +17,27 @@ export default function ReviewPostDialog(props) {
     const {bookInfo} = props;
     const [open, setOpen] = React.useState(false);
     const [inputtxt, setInputTxt] = React.useState("");
+
+    // for socket io connection and set subcriptions
+    useEffect(() => {
+        initiateSocket(userid);
+    }, []);
+
+    // send real time event to socketio
+    const sendEventToSocket = (eventName) => {
+
+        axios.get(`/api/relationship/friends/${userid}`)
+            .then(res =>{
+
+                let userids = userid;
+                res.data.map((item) => {
+                    userids += "," + item.id;
+                });
+                sendMessage( eventName, userids);
+            })
+            .catch( error => {
+            });
+    }
 
     // get value of input text
     const getTxt = (event) => {
@@ -35,12 +57,15 @@ export default function ReviewPostDialog(props) {
         params.append("googlebookid", bookInfo.id);
         params.append("rating", null); // TODO - input the rating of the book
 
-        axios.post(`/api/event`, params
-        )
-        .then(res => {
-            console.log("post event success");
-            handleClose();
+        axios.post(`/api/event`, params)
+            .then(async res => {
+                console.log("post event success");
+
+                await sendEventToSocket("newPost");
+                // send update page message to socket i
+                handleClose();
         });
+
     }
 
     const handleClickOpen = () => {

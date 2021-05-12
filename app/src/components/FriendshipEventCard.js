@@ -12,6 +12,7 @@ const useStyles = makeStyles({
         maxHeight:"20%",
         margin: "20px auto",
         boxShadow: "0px 10px 11px 2px #ccc",
+        textAlign:"center",
     },
     bullet: {
         display: 'inline-block',
@@ -38,7 +39,7 @@ export default function FriendShipEventCard(props) {
 
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} variant="outlined">
             <CardContent>
                 <Typography variant="h5" component="h2">
                     {props.content}
