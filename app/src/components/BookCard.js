@@ -72,7 +72,6 @@ export default function BookCard(props) {
   const classes = useStyles()
   const { image, title, author, progress } = props;
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
-    console.log(image+" "+" "+title+" "+author+" "+progress);
   return(
     <Card className={classes.root}>
       <CardMedia
@@ -81,7 +80,6 @@ export default function BookCard(props) {
         alt={altSrc}
       />
       <div className={classes.details}>
-      <div>test: {progress}</div>
         <CardContent className={classes.content}>
           <Grid container >
             <Grid item xs={10}>
