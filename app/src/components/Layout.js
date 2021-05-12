@@ -46,7 +46,7 @@ export default function Layout (props) {
           <div className={classes.navs}>
             <Typography className={classes.root}>
               <Link href="/home" color="inherit" underline="none">Recommendation</Link>
-              <Link href="/bookshelves" color="inherit" underline="none">BookShelves</Link>
+              <Link href="/bookshelves" color="inherit" underline="none">Bookshelves</Link>
               <Link href="/friends" color="inherit" underline="none">Friends</Link>
               <Link href="/searchPage" color="inherit" underline="none">Search</Link>
             </Typography>

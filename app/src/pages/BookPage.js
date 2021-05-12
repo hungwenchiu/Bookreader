@@ -12,7 +12,6 @@ import AddBookButtonGroup from '../components/AddBookButtonGroup';
 import Review from '../components/Review';
 import Rating from '@material-ui/lab/Rating';
 import ReviewPostDialog from '../components/ReviewPostDialog';
-import Button from "@material-ui/core/Button";
 
 const StyleSheet = makeStyles({
   container: {
@@ -41,11 +40,12 @@ export default function BookPage() {
   const {id}  = useParams()
 
   useEffect(() => {
+    console.log("use effect")
+
     // get book information
     axios.get(`https://www.googleapis.com/books/v1/volumes/` + id + `?key=` + apiKey)
     .then(res => {
       setBook(res.data)
-      console.log(res.data)
       res.data.volumeInfo.description = res.data.volumeInfo.description ? res.data.volumeInfo.description : "No Description...";
       setDescription(res.data.volumeInfo.description)
       handleAddBook(res.data) // when user click the book and see the detail, I will insert the book in DB
@@ -53,7 +53,6 @@ export default function BookPage() {
 
     axios.get(`/api/review/book/`+id)
     .then(res => {
-      console.log("review: ", res.data)
       setReviews(res.data)
       const avgRating = calculateRating(res.data)
       setRating(avgRating)
@@ -67,13 +66,12 @@ export default function BookPage() {
 
   // insert book to database
   function handleAddBook(book) {
-
     let firstAuthor = "";
     if (book.volumeInfo.authors) {
       firstAuthor = book.volumeInfo.authors[0]
     }
 
-    let thumbnailLink = "";
+    let thumbnailLink = altSrc;
     if (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
       thumbnailLink = book.volumeInfo.imageLinks.thumbnail
     }
@@ -106,7 +104,7 @@ export default function BookPage() {
         <Grid container spacing={3} >
           <Grid item xs={3}>
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
-            <AddBookButtonGroup/>
+            <AddBookButtonGroup bookID = {id}/>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>
@@ -120,19 +118,23 @@ export default function BookPage() {
             <Typography variant="body1" gutterBottom>
               {parse(description)}
             </Typography>
+
           </Grid>
-          
           <Grid item xs={12} >
             <Divider className={classes.divider} />
             <Typography variant="h6" className={classes.title}>
               Reviews
             </Typography>
+          </Grid>
+          
+          <Grid item xs={12} >
+            <ReviewPostDialog bookInfo={book}></ReviewPostDialog>
+
             <List>
               {reviews.map((review) => (
-                <Review key="review.userId" userId={review.userId} content={review.content} rating={review.rating}/>
+                <Review key={review.userId} userId={review.userId} content={review.content} rating={review.rating}/>
               ))}
             </List>
-            <ReviewPostDialog bookInfo={book}></ReviewPostDialog>
           </Grid>
           
         </Grid>

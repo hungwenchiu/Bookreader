@@ -10,8 +10,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
+import axios from 'axios';
 
-const options = ['Want to Read', 'Add to Favorate', 'Add to Reading', 'Add to Read'];
+const options = ['Want to Read', 'Favorite'];
 
 const useStyles = makeStyles({
   buttonGroup: {
@@ -21,16 +22,23 @@ const useStyles = makeStyles({
 
 export default function AddBookButtonGroup(props) {
   const classes = useStyles()
-  // const {  } = props;
   const [open, setOpen] = useState(false)
   const anchorRef = useRef(null);
-
+  const {bookID} = props;
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const addToBookshelf = () => {
+  const [bookshelfName, setBookshelfName] = React.useState("WantToRead");
 
-
-
-  }
+  function addToBookshelf() {
+  // const bookshelfName = "WantToRead"
+    axios.put(`/api/bookshelves/${bookshelfName}/books?bookID=${bookID}&userID=${sessionStorage.getItem("currentUserID")}`)
+    .then(res =>{
+        console.log('Inside add book');
+        console.log(res);
+    })
+    .catch( error => {
+        console.log(error);
+    });
+}
   
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -46,6 +54,11 @@ export default function AddBookButtonGroup(props) {
 
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
+    if (index == 0) {
+        setBookshelfName("WantToRead");
+    } else {
+        setBookshelfName("Favorite");
+    }
     setOpen(false);
   }
 
