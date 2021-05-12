@@ -40,16 +40,16 @@ public class TimelineController {
     CommentReplyService commentReplyService;
 
     @GetMapping("/personalTimeline")
-    public List<Event> getPersonalTimeline(@RequestParam(value="userid") String userid, @RequestParam(value="idx") int idx){
+    public List<Event> getPersonalTimeline(@RequestParam(value="userid") String userid){
 
         timelineManagerService.setTimelineStrategy(timeline); // set personal timeline behavior
-        return timelineManagerService.getTimelineEvents(userid, idx); // generate personal timeline
+        return timelineManagerService.getTimelineEvents(userid); // generate personal timeline
     }
 
     @GetMapping("/publicTimeline")
-    public List<Event> getPublicTimeline(@RequestParam(value="userids") String userids, @RequestParam(value="idx") int idx){
+    public List<Event> getPublicTimeline(@RequestParam(value="userids") String userids){
         timelineManagerService.setTimelineStrategy(publicTimeline); // set personal timeline behavior
-        return timelineManagerService.getTimelineEvents(userids, idx); // generate personal timeline
+        return timelineManagerService.getTimelineEvents(userids); // generate personal timeline
     }
 
     @PostMapping("/reply")
