@@ -140,12 +140,8 @@ export default function BookShelvesPage() {
             <List>
               {
                 books.map((book) => (
-                    <BookCard image={book.thumbnail}
-                              title={book.title}
-                              author={book.author ? book.author : "not available"}
-                              progress={book.progress}
+                    <BookCard book={book}
                               currentBookshelf={bookshelf.name}
-                              bookID={book.googleBookId}
                               updateFunc={setUpdate}
                               update={update}
                     />
@@ -157,11 +153,10 @@ export default function BookShelvesPage() {
           <List>
             {
               books.map((book) => (
-                  <BookCard image={book.thumbnail}
-                            title={book.title}
-                            author={book.author ? book.author : "not available"}
-                            progress={book.progress}
+                  <BookCard book={book}
                             currentBookshelf={bookshelf.name}
+                            updateFunc={setUpdate}
+                            update={update}
                   />
               ))
             }
@@ -171,11 +166,10 @@ export default function BookShelvesPage() {
           <List>
             {
               books.map((book) => (
-                  <BookCard image={book.thumbnail}
-                            title={book.title}
-                            author={book.author ? book.author : "not available"}
-                            progress={book.progress}
+                  <BookCard book={book}
                             currentBookshelf={bookshelf.name}
+                            updateFunc={setUpdate}
+                            update={update}
                   />
               ))
             }
@@ -185,11 +179,10 @@ export default function BookShelvesPage() {
           <List>
             {
               books.map((book) => (
-                  <BookCard image={book.thumbnail}
-                            title={book.title}
-                            author={book.author ? book.author : "not available"}
-                            progress={book.progress}
+                  <BookCard book={book}
                             currentBookshelf={bookshelf.name}
+                            updateFunc={setUpdate}
+                            update={update}
                   />
               ))
             }
