@@ -38,8 +38,10 @@ const marks = [
 const useStyles = makeStyles({
   root: {
     display: 'flex',
-    marginBottom: "3em",
-    alignItems: "center",
+    marginTop: "1.5em",
+    paddingTop: "1em",
+    paddingBottom: "1em",
+    marginBottom: "1.5em",
     justifyContent: "center",
   },
   cover: {
@@ -49,19 +51,25 @@ const useStyles = makeStyles({
     marginRight: "2em"
   },
   content: {
-    display: 'flex',
-    // width: 1000
+    display: 'flex'
   },
   buttons: {
     width: 100,
     height: 50
   },
   button: {
-    marginTop: 10
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft:40,
+    width: "13em"
   },
   slider: {
     marginTop: 40,
     width: 400,
+  },
+  description: {
+    flexGrow: 1,
+    textAlign: 'center'
   }
 })
 
@@ -71,7 +79,7 @@ function valuetext(value) {
 
 export default function BookCard(props) {
   const classes = useStyles()
-  const { image, title, author, progress, bookID } = props;
+  const { image, title, author, progress, currentBookshelf, bookID} = props;
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
   const handleChange = (event, newValue) => {
@@ -102,51 +110,73 @@ export default function BookCard(props) {
   }
 
   return(
-    <Card className={classes.root}>
-      <CardMedia
-        className={classes.cover}
-        image={image}
-        alt={altSrc}
-      />
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Grid container >
-            <Grid item xs={10}>
-              <Typography component="h5" variant="h5">
-                {title}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {author}
-              </Typography>
+      <div key={bookID}>
+        <Card className={classes.root}>
+          <CardMedia
+            className={classes.cover}
+            image={image}
+            alt={altSrc}
+          />
+          <div className={classes.details}>
+            <CardContent className={classes.content}>
+              <Grid container >
+                <Grid item xs={10}>
+                  <Typography component="h5" variant="h5">
+                    {title}
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    {author}
+                  </Typography>
 
-              <Typography id="current-progress" gutterBottom>
-                Current Progress
-              </Typography>
-              <Slider 
-                defaultValue={progress}
-                getAriaValueText={valuetext}
-                aria-labelledby="current-progress"
-                step={1}
-                marks={marks}
-                valueLabelDisplay="on"
-                className={classes.slider}
-              />
-            </Grid>
+                  <Box m={3} />
+                  {
+                    currentBookshelf == "Reading" &&
+                    (<Slider
+                        defaultValue={progress}
+                        getAriaValueText={valuetext}
+                        aria-labelledby="current-progress"
+                        step={1}
+                        marks={marks}
+                        valueLabelDisplay="on"
+                        className={classes.slider}
+                        disabled={true}
+                    />)
+                  }
+                  {
+                    currentBookshelf == "Reading" &&
+                    <Typography id="current-progress" color="textSecondary" className={classes.description}>
+                      Current Progress
+                    </Typography>
+                  }
+                </Grid>
 
-            <Grid item xs={2} className={classes.buttons}>
-              <Button variant="contained" color="primary"  mt={1}>
-                Add to Favorite
-              </Button>
-              <Button variant="contained" color="error" className={classes.button}>
-                Remove
-              </Button>
-              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" className={classes.button} onKeyDown={handleChange}/>
-            </Grid>
+                <Grid item xs={2} className={classes.buttons}>
 
-          </Grid>
-        </CardContent>
+                  {
+                    currentBookshelf != "Favorite" &&
+                    <Button variant="contained" color="primary" className={classes.button}>Favorite</Button>
+                  }
+
+                  {
+                    currentBookshelf != "Reading" &&
+                    <Button variant="contained" color="primary" className={classes.button}>Start Reading</Button>
+                  }
+
+                  <Button variant="contained" className={classes.button}>
+                    Remove
+                  </Button>
+                  {
+                    currentBookshelf == "Reading" &&
+                    <TextField id="outlined-basic" label="Pages Finished" variant="outlined" className={classes.button}
+                               onKeyDown={handleChange}/>
+                  }
+                </Grid>
+
+              </Grid>
+            </CardContent>
+          </div>
+        </Card>
       </div>
-    </Card>
   )
 }
 

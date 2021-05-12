@@ -143,6 +143,7 @@ export default function BookShelvesPage() {
                               title={book.title}
                               author={book.author ? book.author : "not available"}
                               progress={book.progress}
+                              currentBookshelf={bookshelf.name}
                               bookID={book.googleBookId}
                     />
                 ))
@@ -157,6 +158,7 @@ export default function BookShelvesPage() {
                             title={book.title}
                             author={book.author ? book.author : "not available"}
                             progress={book.progress}
+                            currentBookshelf={bookshelf.name}
                   />
               ))
             }
@@ -170,6 +172,7 @@ export default function BookShelvesPage() {
                             title={book.title}
                             author={book.author ? book.author : "not available"}
                             progress={book.progress}
+                            currentBookshelf={bookshelf.name}
                   />
               ))
             }
@@ -183,6 +186,7 @@ export default function BookShelvesPage() {
                             title={book.title}
                             author={book.author ? book.author : "not available"}
                             progress={book.progress}
+                            currentBookshelf={bookshelf.name}
                   />
               ))
             }
