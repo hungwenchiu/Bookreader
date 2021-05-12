@@ -9,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Slider from '@material-ui/core/Slider';
 import TextField from '@material-ui/core/TextField';
+import Box from "@material-ui/core/Box";
 
 const marks = [
   {
@@ -36,17 +37,26 @@ const marks = [
 const useStyles = makeStyles({
   root: {
     display: 'flex',
+    marginBottom: "3em",
+    alignItems: "center",
+    justifyContent: "center",
   },
   cover: {
+    display: "inline-block",
     width: 160,
     height: 220,
+    marginRight: "2em"
   },
   content: {
-    display: 'flex'
+    display: 'flex',
+    // width: 1000
   },
-  button: {
+  buttons: {
     width: 100,
     height: 50
+  },
+  button: {
+    marginTop: 10
   },
   slider: {
     marginTop: 40,
@@ -73,7 +83,7 @@ export default function BookCard(props) {
       <div className={classes.details}>
       <div>test: {progress}</div>
         <CardContent className={classes.content}>
-          <Grid container spacing={3} >
+          <Grid container >
             <Grid item xs={10}>
               <Typography component="h5" variant="h5">
                 {title}
@@ -96,14 +106,15 @@ export default function BookCard(props) {
               />
             </Grid>
 
-            <Grid item xs={2} className={classes.button}>
-              <Button variant="contained" color="primary">
-                Remove
-              </Button>
-              <Button variant="contained" color="primary">
+            <Grid item xs={2} className={classes.buttons}>
+              <Button variant="contained" color="primary"  mt={1}>
                 Add to Favorite
               </Button>
-              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" style ={{width: '100%'}} inputStyle ={{width: '100%'}} />
+              <Box component="span" m={1} />
+              <Button variant="contained" color="error" className={classes.button}>
+                Remove
+              </Button>
+              <TextField id="outlined-basic" label="Pages Finished" variant="outlined" />
             </Grid>
 
           </Grid>
