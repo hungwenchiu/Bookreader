@@ -186,7 +186,7 @@ export default function BookCard(props) {
                   {
                     currentBookshelf == "Reading" &&
                     <TextField id="outlined-basic" label="Pages Finished" variant="outlined" className={classes.button}
-                               onKeyDown={handleChange}/>
+                               style ={{width: '11em'}} onKeyDown={handleChange}/>
                   }
                 </Grid>
 
