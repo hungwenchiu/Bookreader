@@ -54,7 +54,7 @@ export default function ReviewPostDialog(props) {
 
   // call API and insert to event table
   const postEvent = () => {
-    if (newRating===0 || inputtxt==="0") {
+    if (newRating===0 || inputtxt==="") {
       setAlertOpen(true);
     } else {
       const eventParams = new URLSearchParams();
@@ -65,7 +65,7 @@ export default function ReviewPostDialog(props) {
       eventParams.append("content", inputtxt);
       eventParams.append("googlebookid", bookInfo.id);
       eventParams.append("rating", newRating); // TODO - input the rating of the book
-      params.append("progress", null); // If your action is not progress, just input "null" here
+      eventParams.append("progress", null); // If your action is not progress, just input "null" here
 
       axios.post(`/api/event`, eventParams
       )
