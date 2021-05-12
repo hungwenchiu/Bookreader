@@ -50,10 +50,6 @@ export default function ReviewPostDialog(props) {
           console.log("post event success");
           handleClose();
         });
-      // reviewParams.append("googleBookId", bookInfo.id);
-      // reviewParams.append("userId", userid);
-      // reviewParams.append("content", inputtxt);
-      // reviewParams.append("rating", newRating);
 
       axios.post(`/api/review`, {
         googleBookId: bookInfo.id,
