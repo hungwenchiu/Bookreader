@@ -31,10 +31,12 @@ public class BookProgressService {
 
     // update Progress for a book for a user
     public BookProgress updateBookProgressForUser(Long userID, String bookID, int pagesFinished) {
+        System.out.println("REACHED PROGRESS SERVICE "+pagesFinished);
         BookProgress currentBookProgress = bookProgressRepository.getBookProgressForUserByBook(userID, bookID);
         if (currentBookProgress != null) {
             currentBookProgress.setPagesFinished(pagesFinished);
-
+            System.out.println("REACHED PROGRESS SERVICE "+pagesFinished);
+            System.out.println(bookProgressRepository);
             bookProgressRepository.save(currentBookProgress);
             // this.moveBook(pagesFinished, userID, bookID);
             return currentBookProgress;

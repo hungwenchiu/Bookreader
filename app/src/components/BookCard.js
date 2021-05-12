@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
@@ -79,7 +79,12 @@ function valuetext(value) {
 
 export default function BookCard(props) {
   const classes = useStyles()
-  const { image, title, author, progress, currentBookshelf, bookID} = props;
+  const { image, title, author, progress, currentBookshelf, bookID, updateFunc, update} = props;
+
+  const [progressNum, setProgressNum] = useState(progress)
+  console.log(progressNum)
+
+
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
   const moveToRead = (event, newValue) => {
@@ -93,7 +98,7 @@ export default function BookCard(props) {
       .then(res => {
         console.log("Moved to Reading successfully.");
       })
-
+      props.updateFunc(!update);
   }
 
   const handleChange = (event, newValue) => {
@@ -104,22 +109,21 @@ export default function BookCard(props) {
         progressParams.append("bookID", bookID);
         progressParams.append("pagesFinished",event.target.value);
 
-        axios.put(`/api/progress`, progressParams
-        )
+        axios.put(`/api/progress`, progressParams)
         .then(res => {
-          console.log("Updated pages finished");
+          console.log("Updated pages finished "+res.data);
         });
 
-        // move book to different bookshelf
-        const moveBookParams = new URLSearchParams();
-        moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-        moveBookParams.append("bookID", bookID);
+        // // move book to different bookshelf
+        // const moveBookParams = new URLSearchParams();
+        // moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+        // moveBookParams.append("bookID", bookID);
 
-        axios.put(`/api/bookshelves`, progressParams
-        )
-        .then(res => {
-          console.log("Updated pages finished");
-        })
+        // axios.put(`/api/bookshelves`, progressParams
+        // )
+        // .then(res => {
+        //   console.log("Updated pages finished");
+        // })
     }
   }
 
@@ -146,7 +150,7 @@ export default function BookCard(props) {
                   {
                     currentBookshelf == "Reading" &&
                     (<Slider
-                        defaultValue={progress}
+                        defaultValue={progressNum}
                         getAriaValueText={valuetext}
                         aria-labelledby="current-progress"
                         step={1}

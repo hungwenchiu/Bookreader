@@ -70,6 +70,7 @@ export default function BookShelvesPage() {
   const [value, setValue] = React.useState(0);
   const [books, setBooks] = useState([])
   const [bookshelf, setBookshelfName] = useState({name: "WantToRead"});
+  const [update, setUpdate] = useState(false)
 
   function getBooksFromBookshelf() {
     axios.get(`/api/bookshelves/${bookshelf.name}/books?userID=${sessionStorage.getItem("currentUserID")}`)
@@ -92,7 +93,7 @@ export default function BookShelvesPage() {
 
   useEffect(() => {
     getBooksFromBookshelf();
-  }, [bookshelf.name])
+  }, [bookshelf.name, update])
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -145,6 +146,8 @@ export default function BookShelvesPage() {
                               progress={book.progress}
                               currentBookshelf={bookshelf.name}
                               bookID={book.googleBookId}
+                              updateFunc={setUpdate}
+                              update={update}
                     />
                 ))
               }
