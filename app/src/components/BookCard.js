@@ -182,6 +182,7 @@ export default function BookCard(props) {
     const handleChange = (event, newValue) => {
         if (event.key === 'Enter') {
             // update the progress
+            var progressPercentage = 0;
             const progressParams = new URLSearchParams();
             progressParams.append("userID", sessionStorage.getItem("currentUserID"));
             progressParams.append("bookID", bookInfo.book.googleBookId);
@@ -190,6 +191,7 @@ export default function BookCard(props) {
             axios.put(`/api/progress`, progressParams)
                 .then(res => {
                     console.log("Updated pages finished ");
+                    progressPercentage = res.data;
                     console.log(res.data);
                     setProgressNum(res.data);
                 });
@@ -205,8 +207,6 @@ export default function BookCard(props) {
                     props.updateFunc(!update);
                 })
 
-        }
-
         // post event to timeline
         const eventParams = new URLSearchParams();
         eventParams.append("userid", sessionStorage.getItem("currentUserID"));
@@ -215,12 +215,14 @@ export default function BookCard(props) {
         eventParams.append("action", "Progress");
         eventParams.append("content", "I Updated my reading progress!");
         eventParams.append("googlebookid", bookInfo.book.googleBookId);
-        eventParams.append("progress", event.target.value); // If your action is not progress, just input "null" here
+        eventParams.append("progress", progressPercentage); // If your action is not progress, just input "null" here
         axios.post(`/api/event`, eventParams)
           .then(res => {
             console.log("post event success");
             sendEventToSocket("newPost");
           })
+
+        }
 
   }
 
