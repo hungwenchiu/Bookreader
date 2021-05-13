@@ -166,29 +166,3 @@ const handleClose = (value) => {
     </Layout>
   )
 }
-
-
-//
-// const [open, setOpen] = React.useState(false);
-// const [selectedValue, setSelectedValue] = React.useState(friends[0]);
-// const [allFriends, setAllFriends ] = React.useState([]);
-// const currentUserId = sessionStorage.getItem('currentUserID');
-//
-// const handleClickOpen = () => {
-//   setOpen(true);
-// };
-//
-// const handleClose = (value) => {
-//   setOpen(false);
-//   setSelectedValue(value);
-// };
-//
-// return (
-//     <div>
-//       <br />
-//       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-//         Recommend Book
-//       </Button>
-//       <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
-//     </div>
-// );
