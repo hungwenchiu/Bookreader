@@ -32,8 +32,8 @@ public class SystemCountService {
             case "Read":
                 existing.setReadCount(existing.getReadCount() + amount);
                 break;
-            case "Favourite":
-                existing.setFavouriteCount(existing.getFavouriteCount() + amount);
+            case "Favorite":
+                existing.setFavoriteCount(existing.getFavoriteCount() + amount);
                 break;
             case "WantToRead":
                 existing.setWantToReadCount(existing.getWantToReadCount() + amount);
@@ -60,8 +60,8 @@ public class SystemCountService {
         return repository.findTop10ByOrderByReadCountDesc();
     }
 
-    public List<SystemCount> getTop10Favourite() {
-        return repository.findTop10ByOrderByFavouriteCountDesc();
+    public List<SystemCount> getTop10Favorite() {
+        return repository.findTop10ByOrderByFavoriteCountDesc();
     }
 
     public List<SystemCount> getTop10WantToRead() {

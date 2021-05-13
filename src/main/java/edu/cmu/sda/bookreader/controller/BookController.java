@@ -69,10 +69,10 @@ public class BookController {
     }
 
 
-    @GetMapping("/books/{name}")
-    public List<Book> findBookByTitle(@PathVariable String name) {
-        return service.getBookByTitle(name);
-    }
+//    @GetMapping("/books/{name}")
+//    public List<Book> findBookByTitle(@PathVariable String name) {
+//        return service.getBookByTitle(name);
+//    }
 
     /**
      * update book with the given book object
