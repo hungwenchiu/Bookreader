@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 
 export default function RecommendBook(props) {
     const classes = useStyles();
-    const {onClose, selectedValue, open} = props;
+    const {onClose, selectedValue, open, book} = props;
     const currentUserId = sessionStorage.getItem('currentUserID');
     const [allFriends, setAllFriends] = React.useState([]);
 
@@ -44,12 +44,16 @@ export default function RecommendBook(props) {
         onClose(selectedValue);
     };
 
-    const handleListItemClick = (value) => {
-        axios.put(`/bookshelves/recommended/books`)
+    const handleListItemClick = (friend) => {
+    const params = new URLSearchParams();
+    params.append("recommenderID", sessionStorage.getItem("currentUserID"));
+    params.append("userID", friend.id);
+    params.append("bookID", book.id);
+    axios.put(`/bookshelves/recommended/books`, params)
             .then(res => {
-                setAllFriends(res.data);
+                console.log(res.data);
             });
-        onClose(value);
+        onClose(friend);
     };
 
     // findFriends();

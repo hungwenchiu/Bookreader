@@ -127,7 +127,7 @@ const handleClose = (value) => {
               <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                 Recommend Book
               </Button>
-              <RecommendBook selectedValue={selectedValue} open={open} onClose={handleClose} />
+              <RecommendBook selectedValue={selectedValue} open={open} onClose={handleClose} book={book}/>
             </div>
           </Grid>
           <Grid item xs={9}>
