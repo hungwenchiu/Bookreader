@@ -125,6 +125,25 @@ export default function RecipeReviewCard(props) {
     const [userreply, setUserReply] = React.useState(null);
     const [updatePage, setUpdatePage] = React.useState(false);
     const userid = sessionStorage.getItem('currentUserID');
+    let statement = "";
+    let reviewComment = "";
+    let ratingComp = "";
+
+    if(props.action === "Reading") {
+        statement = "starts reading the book.";
+    }
+    else if(props.action === "Favorite") {
+        statement = "moves the book to my favorite bookshelf.";
+    }
+    else if(props.action === "Review") {
+        statement = "posts a review and rating:";
+
+        reviewComment = <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
+                            {props.comment}
+                        </Typography>;
+        ratingComp = <Rating className={classes.startIcon} name="read-only" value={props.rate} precision={0.5} readOnly />;
+
+    }
 
     const fetchReply = (eventid) => {
 
@@ -223,8 +242,8 @@ export default function RecipeReviewCard(props) {
         setInputTxt("");
     } // user reply
 
-    // console.log(" props.id   ", props.id, "  props.bookname: ", props.bookname , userreply);
     return (
+
         <Card className={classes.root} variant="outlined">
             <CardHeader
                 avatar={
@@ -254,18 +273,12 @@ export default function RecipeReviewCard(props) {
             </div>
             <Divider className={classes.divider}/>
             <CardContent className={classes.cardContent}>
-                <Typography variant="h6" gutterBottom> {`${props.username} posts a review and rating:`}
-                    <Rating className={classes.startIcon} name="read-only" value={props.rate} precision={0.5} readOnly />
+                <Typography variant="h6" gutterBottom> {`${props.username} ${statement}`}
+                    {ratingComp}
                 </Typography>
-                <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
-                    {props.comment}
-                </Typography>
-
+                {reviewComment}
             </CardContent>
             <CardActions disableSpacing>
-                {/*<IconButton aria-label="share">*/}
-                {/*    <ShareIcon/>*/}
-                {/*</IconButton>*/}
                 <IconButton
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,

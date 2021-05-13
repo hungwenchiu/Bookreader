@@ -28,7 +28,7 @@ const BorderLinearProgress = withStyles((theme) => ({
         marginTop: "10px",
         marginBottom: "10px",
         margin: "0 0",
-        width: "100%",
+        width: "290px",
         height: "20px",
         borderRadius: 5,
         boxShadow: "0 5px 5px 0 #ccc",

@@ -25,20 +25,8 @@ export const TimelineAction = (timeline_event, bookinfo) => {
         thumbnail =  bookinfo.get(timeline_event.googlebookid).thumbnail;
     }
 
-    if(timeline_event.action === "Review") {
 
-        return (<RecipeReviewCard username={timeline_event.name}
-                                  bookname={timeline_event.bookName}
-                                  comment={timeline_event.content}
-                                  author={author}
-                                  bookdescription={bookdescription}
-                                  rate={timeline_event.rating}
-                                  time={timeline_event.time}
-                                  image={thumbnail}
-                                  id={timeline_event.id}
-        />);
-    }
-    else if(timeline_event.action === "Progress") {
+    if(timeline_event.action === "Progress") {
 
         return (<TimelineProgressCard username={timeline_event.name}
                                   bookname={timeline_event.bookName}
@@ -46,6 +34,20 @@ export const TimelineAction = (timeline_event, bookinfo) => {
                                   author={author}
                                   bookdescription={bookdescription}
                                   progress={timeline_event.progress}
+                                  time={timeline_event.time}
+                                  image={thumbnail}
+                                  id={timeline_event.id}
+        />);
+    }
+    else {  // for "Review" "Reading" "favorite"
+
+        return (<RecipeReviewCard username={timeline_event.name}
+                                  bookname={timeline_event.bookName}
+                                  comment={timeline_event.content}
+                                  author={author}
+                                  action={timeline_event.action}
+                                  bookdescription={bookdescription}
+                                  rate={timeline_event.rating}
                                   time={timeline_event.time}
                                   image={thumbnail}
                                   id={timeline_event.id}

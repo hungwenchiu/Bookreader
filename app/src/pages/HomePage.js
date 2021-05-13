@@ -4,6 +4,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import axios from 'axios';
 import Typography from '@material-ui/core/Typography';
 import RecommendList from '../components/RecommendList'
+import {initiateSocket, sendMessage, socket} from "../components/Socketio";
 
 const useStyles = makeStyles({
   container: {
@@ -15,6 +16,12 @@ const useStyles = makeStyles({
 
 export default function HomePage() {
   const classes = useStyles()
+  const currentUserId = sessionStorage.getItem("currentUserID");
+
+  useEffect(() => {
+    initiateSocket(currentUserId);
+    sendMessage("newComer", currentUserId);
+  }, []);
 
   return (
     <Layout>
