@@ -25,15 +25,28 @@ const useStyles = makeStyles({
 export default function RecommendList(Props) {
   const classes = useStyles() 
   const { type } = Props
-  const [bookIds, setBookIds] = useState([])
+  const [books, setBooks] = useState([])
 
   useEffect(() => {
     axios.get(`/api/systemCount/top10/`+type)
     .then(res => {
-      setBookIds(res.data)
       console.log(res.data)
+      const promises = []
+      res.data.forEach(element => {
+        promises.push(getBook(element.googleBookId))
+      });
+      Promise.all(promises).then(allBooks => {
+        console.log(allBooks)
+      })
     })
   }, [])
+
+  async function getBook(bookId) {
+    await axios.get(`/api/book/`+bookId).then(res =>{
+      return res.data
+    })
+    
+  }
 
   return(
     <GridList className={classes.gridList} cols={2.5}>

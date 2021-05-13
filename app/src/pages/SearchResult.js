@@ -25,19 +25,18 @@ const StyleSheet = makeStyles((theme) => ({
 
 export default function SearchResult() {
   const classes = StyleSheet()
-
+  let query = new URLSearchParams(useLocation().search);
+  let keyword = query.get("keyword")
   const [result, setResult] = useState([]);
   const apiKey = "AIzaSyAu1E-pEKMYEw14bjqcdQDsEybKHIaZfaY";
   const maxResult = 10;
-  let query = new URLSearchParams(useLocation().search);
-  let book = query.get("keyword");
 
   useEffect(() => {
-    axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key="+apiKey+"&maxResults="+maxResult)
+    axios.get("https://www.googleapis.com/books/v1/volumes?q="+keyword+"&key="+apiKey+"&maxResults="+maxResult)
     .then(res => {
         setResult(res.data.items);
         console.log(res.data.items);
-        console.log(book);
+        console.log(keyword);
     });
   }, [])
 

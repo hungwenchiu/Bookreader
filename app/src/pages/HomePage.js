@@ -2,9 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Layout from '../components/Layout'
 import {makeStyles} from '@material-ui/core/styles';
 import axios from 'axios';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
+import Typography from '@material-ui/core/Typography';
 import RecommendList from '../components/RecommendList'
 
 const useStyles = makeStyles({
@@ -21,7 +19,14 @@ export default function HomePage() {
   return (
     <Layout>
       <div className={classes.container}>
+        <Typography variant="h4">Top Want to Read</Typography>
         <RecommendList type="wantToRead" />
+        <Typography variant="h4">Top Favorite</Typography>
+        <RecommendList type="favorite" />
+        <Typography variant="h4">Top Reading</Typography>
+        <RecommendList type="reading" />
+        <Typography variant="h4">Top Read</Typography>
+        <RecommendList type="read" />
       </div>
 
     </Layout> 
