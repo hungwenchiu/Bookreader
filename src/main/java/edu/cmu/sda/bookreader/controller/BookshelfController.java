@@ -59,8 +59,8 @@ public class BookshelfController {
 
     // add a new book to a recommended bookshelf
     @RequestMapping(value = "/bookshelves/recommended/books", method = RequestMethod.PUT)
-    public RecommendedBookshelf addRecommendedBook(@RequestBody Map<String, String> json) {
-        return bookshelfService.addRecommendedBook(Long.parseLong(json.get("userID")), Long.parseLong(json.get("recommenderID")), json.get("bookID"));
+    public RecommendedBookshelf addRecommendedBook(@RequestParam(value="userID") long userID, @RequestParam(value="recommenderID") long recommenderID, @RequestParam(value="bookID") String bookID) {
+        return bookshelfService.addRecommendedBook(userID, recommenderID, bookID);
     }
 
     // get a particular book from a particular bookshelf

@@ -10,6 +10,13 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import {
     useLocation
 } from "react-router-dom";
+import Link from "@material-ui/core/Link";
+import {Card, CardActionArea, CardActions} from "@material-ui/core";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import logo from "../assets/logo-small.png"
 
 const StyleSheet = makeStyles((theme) => ({
   root: {
@@ -80,7 +87,7 @@ export default function SearchResult() {
         {result.map((book) => (
           <GridListTile key={book.id}>
               <a href={"/book/"+book.id}>
-                <img src={book.volumeInfo.imageLinks === undefined? "" : `${book.volumeInfo.imageLinks.thumbnail}`} />
+                <img src={book.volumeInfo.imageLinks === undefined? logo : `${book.volumeInfo.imageLinks.thumbnail}`} />
               </a>
             <GridListTileBar
               title={book.volumeInfo.title}
@@ -90,6 +97,37 @@ export default function SearchResult() {
               subtitle={<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
             />
           </GridListTile>
+            // <Card style={{ maxWidth: 400, margin: 15 }}>
+            //     <CardActionArea>
+            //         <div
+            //             style={{
+            //                 display: "flex",
+            //                 alignItem: "center",
+            //                 justifyContent: "center"
+            //             }}
+            //         >
+            //             <Link href={"/book/" + book.id} color="inherit">
+            //                 <CardMedia
+            //                     style={{
+            //                         width: "auto",
+            //                         maxHeight: "200px"
+            //                     }}
+            //                     component="img"
+            //                     image={book.volumeInfo?.imageLinks?.thumbnail ? book.volumeInfo?.imageLinks?.thumbnail : logo}
+            //                     title={book.volumeInfo.title}
+            //                 />
+            //             </Link>
+            //         </div>
+            //         <CardContent>
+            //             <Typography gutterBottom variant="headline" component="h2">
+            //                 {book.volumeInfo.title}
+            //             </Typography>
+            //             <Typography component="p">
+            //                 {<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
+            //             </Typography>
+            //         </CardContent>
+            //     </CardActionArea>
+            // </Card>
         ))}
         </GridList>
       </div>
