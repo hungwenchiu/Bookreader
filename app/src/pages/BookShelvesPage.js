@@ -48,9 +48,6 @@ const useStyles = makeStyles({
     marginRight: '15%',
     marginTop: '1%',
   },
-  root: {
-    display: 'flex',
-  },
   cover: {
     width: 160,
     height: 220,
