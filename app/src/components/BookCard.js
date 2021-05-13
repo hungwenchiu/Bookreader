@@ -79,7 +79,7 @@ function valuetext(value) {
 
 export default function BookCard(props) {
   const classes = useStyles()
-  const { bookInfo, currentBookshelf, updateFunc, update} = props;s
+  const { bookInfo, currentBookshelf, updateFunc, update} = props;
   const [progressNum, setProgressNum] = useState(bookInfo.progress)
   console.log(bookInfo)
 
@@ -96,8 +96,8 @@ export default function BookCard(props) {
       axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
       .then(res => {
         console.log("Moved to Reading successfully.");
+        props.updateFunc(!update);
       })
-      props.updateFunc(!update);
   }
 
   const addToFavorite = () => {
@@ -109,6 +109,7 @@ export default function BookCard(props) {
     axios.put('/api/bookshelves/Favorite/books', moveBookParams)
         .then(res => {
           console.log("Moved to Favorite successfully.");
+          props.updateFunc(!update);
         })
   }
 
@@ -130,13 +131,14 @@ export default function BookCard(props) {
         // move book to different bookshelf
          const moveBookParams = new URLSearchParams();
          moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-         moveBookParams.append("bookID", bookID);
+         moveBookParams.append("bookID", bookInfo.book.googleBookId);
 
          axios.put(`/api/bookshelves`, moveBookParams)
          .then(res => {
            console.log("Moved book successfully.");
+           props.updateFunc(!update);
          })
-         props.updateFunc(!update);
+
     }
   }
 
