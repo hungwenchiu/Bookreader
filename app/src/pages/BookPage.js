@@ -47,7 +47,6 @@ export default function BookPage() {
   const currentUserId = sessionStorage.getItem('currentUserID');
 
   useEffect(() => {
-    console.log("use effect")
 
     // get book information
     axios.get(`https://www.googleapis.com/books/v1/volumes/` + id + `?key=` + apiKey)

@@ -45,11 +45,11 @@ export default function RecommendBook(props) {
     };
 
     const handleListItemClick = (friend) => {
-    const params = new URLSearchParams();
-    params.append("recommenderID", sessionStorage.getItem("currentUserID"));
-    params.append("userID", friend.id);
-    params.append("bookID", book.id);
-    axios.put(`/bookshelves/recommended/books`, params)
+        const params = new URLSearchParams();
+        params.append("recommenderID", sessionStorage.getItem("currentUserID"));
+        params.append("userID", friend.id);
+        params.append("bookID", book.id);
+        axios.put(`/api/bookshelves/recommended/books`, params)
             .then(res => {
                 console.log(res.data);
             });
@@ -81,29 +81,3 @@ RecommendBook.propTypes = {
     open: PropTypes.bool.isRequired,
     selectedValue: PropTypes.string.isRequired,
 };
-
-// export default function SimpleDialogDemo() {
-//   const [open, setOpen] = React.useState(false);
-//   const [selectedValue, setSelectedValue] = React.useState(friends[0]);
-//   const [allFriends, setAllFriends ] = React.useState([]);
-//   const currentUserId = sessionStorage.getItem('currentUserID');
-//
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-//
-//   const handleClose = (value) => {
-//     setOpen(false);
-//     setSelectedValue(value);
-//   };
-//
-//   return (
-//     <div>
-//       <br />
-//       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-//         Recommend Book
-//       </Button>
-//       <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
-//     </div>
-//   );
-// }
