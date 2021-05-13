@@ -123,7 +123,7 @@ export default function BookCard(props) {
         eventParams.append("userid", sessionStorage.getItem("currentUserID"));
         eventParams.append("name", sessionStorage.getItem("currentUser"));
         eventParams.append("bookName", bookInfo.book.title);
-        eventParams.append("action", "Progress");
+        eventParams.append("action", "Reading");
         eventParams.append("content", "I started reading a book!");
         eventParams.append("googlebookid", bookInfo.book.googleBookId);
         eventParams.append("progress", null); // If your action is not progress, just input "null" here

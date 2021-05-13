@@ -12,6 +12,7 @@ import AddBookButtonGroup from '../components/AddBookButtonGroup';
 import Review from '../components/Review';
 import Rating from '@material-ui/lab/Rating';
 import ReviewPostDialog from '../components/ReviewPostDialog';
+import RecommendBook from '../components/RecommendBook'
 
 const StyleSheet = makeStyles({
   container: {
@@ -91,7 +92,7 @@ export default function BookPage() {
     };
     fetch('/api/book', requestOptions)
         .then(response => {
-          return response.json()
+          return response.json();
         })
         .then(data => {
           console.log(data)
@@ -105,6 +106,7 @@ export default function BookPage() {
           <Grid item xs={3}>
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
             <AddBookButtonGroup bookID = {id}/>
+            <RecommendBook/>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>
