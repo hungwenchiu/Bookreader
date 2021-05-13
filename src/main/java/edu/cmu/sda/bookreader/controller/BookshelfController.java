@@ -132,7 +132,12 @@ public class BookshelfController {
         return bookshelfService.moveBook(currentBookshelf, newBookshelf, bookID, userID);
     }
 
-    // move book from bookshelf based on progress
+    /**
+     * move book from bookshelf based on progress
+     * @param userID
+     * @param bookID
+     * @return
+     */
     @RequestMapping(value = "/bookshelves", method = RequestMethod.PUT)
     public String moveBook(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
         systemCountService.updateSystemCount(bookID, "Read", 1);
@@ -145,9 +150,9 @@ public class BookshelfController {
      * @param bookID
      * @return
      */
-    @RequestMapping(value = "/bookshelves/{name}/", method = RequestMethod.DELETE)
-    public void deleteBook(@PathVariable("name") String name, @RequestParam(value="bookID") String bookID, @RequestParam(value="userID") long userID) {
-        systemCountService.updateSystemCount(bookID, name, -1);
-        bookshelfService.removeBook(userID, name, bookID);
+    @RequestMapping(value = "/bookshelves/{name}/remove", method = RequestMethod.PUT)
+    public AbstractBookshelf deleteBook(@PathVariable("name") String bookshelfName,@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
+        systemCountService.updateSystemCount(bookID, bookshelfName, -1);
+        return bookshelfService.removeBook(userID, bookshelfName, bookID);
     }
 }

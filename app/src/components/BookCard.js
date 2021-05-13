@@ -87,18 +87,18 @@ export default function BookCard(props) {
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
   const moveToRead = () => {
-      // move book to different bookshelf
-      const moveBookParams = new URLSearchParams();
-      moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-      moveBookParams.append("bookID", bookInfo.book.googleBookId);
-      moveBookParams.append("newBookshelf", "Reading");
+        // move book to different bookshelf
+        const moveBookParams = new URLSearchParams();
+        moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+        moveBookParams.append("bookID", bookInfo.book.googleBookId);
+        moveBookParams.append("newBookshelf", "Reading");
 
-      axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
-      .then(res => {
-        console.log("Moved to Reading successfully.");
-        props.updateFunc(!update);
-      })
-  }
+        axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
+        .then(res => {
+          console.log("Moved to Reading successfully.");
+          props.updateFunc(!update);
+        })
+   }
 
   const addToFavorite = () => {
     // move book to different bookshelf
@@ -115,17 +115,17 @@ export default function BookCard(props) {
   }
 
   const removeFromBookshelf = () => {
-    // move book to different bookshelf
-    const moveBookParams = new URLSearchParams();
-    moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-    moveBookParams.append("bookID", bookInfo.book.googleBookId);
+        // move book to different bookshelf
+        const removeBookParams = new URLSearchParams();
+        removeBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+        removeBookParams.append("bookID", bookInfo.book.googleBookId);
 
-    axios.delete('/api/bookshelves/' + currentBookshelf, {data: moveBookParams})
+        axios.put('/api/bookshelves/' + currentBookshelf + '/remove', removeBookParams)
         .then(res => {
-          console.log("remove book from bookshelf successfully.");
+          console.log("Removed book successfully.");
+          props.updateFunc(!update);
         })
-    props.updateFunc(!update);
-  }
+    }
 
   const handleChange = (event, newValue) => {
     if (event.key === 'Enter') {
