@@ -84,7 +84,7 @@ const FriendsPage = () => {
         params.append("name", currentUsername);
         params.append("bookName", null);
         params.append("action", "Friendship");
-        params.append("content", `${currentUsername} and ${toUsername} are friends now.`);
+        params.append("content", `${currentUsername} and ${toUsername} become friends.`);
         params.append("googlebookid", null);
 
         axios.post(`/api/event`, params

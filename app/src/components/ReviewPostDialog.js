@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import axios from "axios";
+import {initiateSocket, sendMessage, socket} from "./Socketio";
 
 export default function ReviewPostDialog(props) {
 
@@ -24,15 +25,36 @@ export default function ReviewPostDialog(props) {
   const [inputtxt, setInputTxt] = React.useState("");
   const [newRating, setNewRating] = React.useState(0);
 
-  // get value of input text
-  const getTxt = (event) => {
-    const { value } = event.target;
-    setInputTxt(value);
-  }
+    // for socket io connection and set subcriptions
+    useEffect(() => {
+        initiateSocket(userid);
+    }, []);
+
+    // send real time event to socketio
+    const sendEventToSocket = (eventName) => {
+
+        axios.get(`/api/relationship/friends/${userid}`)
+            .then(res =>{
+
+                let userids = userid;
+                res.data.map((item) => {
+                    userids += "," + item.id;
+                });
+                sendMessage( eventName, userids);
+            })
+            .catch( error => {
+            });
+    }
+
+    // get value of input text
+    const getTxt = (event) => {
+        const { value } = event.target;
+        setInputTxt(value);
+    }
 
   // call API and insert to event table
   const postEvent = () => {
-    if (newRating===0 || inputtxt==="0") {
+    if (newRating===0 || inputtxt==="") {
       setAlertOpen(true);
     } else {
       const eventParams = new URLSearchParams();
@@ -43,17 +65,15 @@ export default function ReviewPostDialog(props) {
       eventParams.append("content", inputtxt);
       eventParams.append("googlebookid", bookInfo.id);
       eventParams.append("rating", newRating); // TODO - input the rating of the book
+      eventParams.append("progress", null); // If your action is not progress, just input "null" here
 
       axios.post(`/api/event`, eventParams
       )
         .then(res => {
           console.log("post event success");
+          sendEventToSocket("newPost");
           handleClose();
         });
-      // reviewParams.append("googleBookId", bookInfo.id);
-      // reviewParams.append("userId", userid);
-      // reviewParams.append("content", inputtxt);
-      // reviewParams.append("rating", newRating);
 
       axios.post(`/api/review`, {
         googleBookId: bookInfo.id,
@@ -65,6 +85,7 @@ export default function ReviewPostDialog(props) {
           console.log("post review success");
           handleClose();
         });
+
     }
   }
 

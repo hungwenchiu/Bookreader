@@ -1,21 +1,12 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect,useState} from 'react';
 import Layout from '../components/Layout';
 import RecipeReviewCard from '../components/TimelineEvent';
 import axios from 'axios';
 import FriendShipEventCard from "../components/FriendshipEventCard";
-import {makeStyles} from "@material-ui/core/styles";
-
-// const useStyles = makeStyles((theme) => ({
-//
-//     root: {
-//         backgroundColor:"#CCBF97",
-//     }
-//
-// }));
+import {initiateSocket, subscribe} from '../components/Socketio';
 
 export default function PersonalTimeline(){
 
-    // const classes = useStyles();
     // three elements: books progress, comment, rate
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -24,8 +15,6 @@ export default function PersonalTimeline(){
     const [bookinfo, setBookInfo] = useState(new Map());
     const name = sessionStorage.getItem("currentUser");
     const userid = sessionStorage.getItem("currentUserID");
-
-
 
     function getBookInfoByGoogleID(googlebookid) {
 
@@ -43,15 +32,13 @@ export default function PersonalTimeline(){
             });
     }
 
-
-
     function fetchEvent() {
 
         axios.get(`/api/personalTimeline?userid=${userid}`)
             .then(res =>{
-                    const new_data = (event_data) ? event_data.concat(res.data) : res.data;
+                    // const new_data = (event_data) ? event_data.concat(res.data) : ;
                     setIsLoaded(true);
-                    setData(new_data);
+                    setData(res.data);
                     res.data.map((t, idx) => {
                         getBookInfoByGoogleID(t.googlebookid);
                     });
@@ -63,9 +50,15 @@ export default function PersonalTimeline(){
     }
 
     // load all timeline event from database
-    useEffect(async () => {
-        await fetchEvent();
+    useEffect(() => {
+        fetchEvent();
     }, []);
+
+    // initial socket
+    useEffect(() => {
+        initiateSocket(userid);
+    }, []);
+
 
 
     if(error) {
@@ -127,3 +120,4 @@ export default function PersonalTimeline(){
     }
 
 }
+

@@ -24,6 +24,7 @@ import ReplyCard from "./ReplyCard";
 import parse from 'html-react-parser';
 import Slider from "@material-ui/core/Slider";
 import Grid from "@material-ui/core/Grid";
+import {sendMessage, socket} from "./Socketio";
 
 const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
 
@@ -106,27 +107,60 @@ export default function RecipeReviewCard(props) {
     const [expanded, setExpanded] = React.useState(false);
     const [input_txt, setInputTxt] = React.useState("");
     const [userreply, setUserReply] = React.useState(null);
+    const [updatePage, setUpdatePage] = React.useState(false);
+    const userid = sessionStorage.getItem('currentUserID');
 
-
-    const ftechReply = (eventid) => {
+    const fetchReply = (eventid) => {
 
         axios.get(`/api/reply?eventid=${eventid}`)
             .then(res =>{
                 if(res.data === userreply)
                     return;
-                // console.log(res);
                 setUserReply(res.data);
-
             })
             .catch( error => {
             });
     }
 
-    // setInterval(ftechReply, 5000);
+    // send real time event to socketio
+    const sendEventToSocket = (eventName) => {
+
+        axios.get(`/api/relationship/friends/${userid}`)
+            .then(res =>{
+
+            let userids = userid;
+            res.data.map((item) => {
+                userids += "," + item.id;
+            });
+            sendMessage( eventName, userids);
+        })
+        .catch( error => {
+        });
+    }
+
+    // for socket.io subsribe the a new topic to get realtime reply
+    useEffect(() =>{
+
+        socket.on("refreshReply", (res) => {
+            setUpdatePage(true);
+        });
+        socket.on("updateTimelinePage", (res) => {
+            setUpdatePage(true);
+        });
+    }, []);
+
+    // refresh new reply when receive updatePage event from socket.io
+    useEffect(() =>{
+        if(updatePage) {
+            fetchReply(props.id);
+            setUpdatePage(false);
+        }
+    }, [updatePage]);
+
 
 
     useEffect(() =>{
-        ftechReply(props.id);
+        fetchReply(props.id);
     }, []);
 
     const handleExpandClick = () => {
@@ -175,13 +209,14 @@ export default function RecipeReviewCard(props) {
                 sender: currentUser.name,
             }
         }).then(() => {
-            ftechReply(props.id);
+            sendEventToSocket("newReply");
+            // ftechReply(props.id);
         });
         setInputTxt("");
     } // user reply
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} variant="outlined">
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
