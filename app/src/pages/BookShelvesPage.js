@@ -162,6 +162,9 @@ export default function BookShelvesPage() {
                             author={book.author ? book.author : "not available"}
                             progress={book.progress}
                             currentBookshelf={bookshelf.name}
+                            bookID={book.googleBookId}
+                            updateFunc={setUpdate}
+                            update={update}
                   />
               ))
             }

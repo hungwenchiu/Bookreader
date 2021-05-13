@@ -80,11 +80,7 @@ function valuetext(value) {
 export default function BookCard(props) {
   const classes = useStyles()
   const { image, title, author, progress, currentBookshelf, bookID, updateFunc, update} = props;
-
   const [progressNum, setProgressNum] = useState(progress)
-  console.log(progressNum)
-
-
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
   const moveToRead = (event, newValue) => {
@@ -111,19 +107,21 @@ export default function BookCard(props) {
 
         axios.put(`/api/progress`, progressParams)
         .then(res => {
-          console.log("Updated pages finished "+res.data);
+          console.log("Updated pages finished ");
+          console.log(res.data);
+          setProgressNum(res.data);
         });
 
-        // // move book to different bookshelf
-        // const moveBookParams = new URLSearchParams();
-        // moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-        // moveBookParams.append("bookID", bookID);
+        // move book to different bookshelf
+         const moveBookParams = new URLSearchParams();
+         moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+         moveBookParams.append("bookID", bookID);
 
-        // axios.put(`/api/bookshelves`, progressParams
-        // )
-        // .then(res => {
-        //   console.log("Updated pages finished");
-        // })
+         axios.put(`/api/bookshelves`, moveBookParams)
+         .then(res => {
+           console.log("Moved book successfully.");
+         })
+         props.updateFunc(!update);
     }
   }
 
@@ -150,14 +148,14 @@ export default function BookCard(props) {
                   {
                     currentBookshelf == "Reading" &&
                     (<Slider
-                        defaultValue={progressNum}
-                        getAriaValueText={valuetext}
-                        aria-labelledby="current-progress"
-                        step={1}
-                        marks={marks}
-                        valueLabelDisplay="on"
-                        className={classes.slider}
-                        disabled={true}
+                         defaultValue={0}
+                         getAriaValueText={valuetext}
+                         aria-labelledby="current-progress"
+                         step={1}
+                         marks={marks}
+                         valueLabelDisplay="on"
+                         className={classes.slider}
+                         value={progressNum}
                     />)
                   }
                   {
