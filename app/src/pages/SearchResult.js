@@ -38,7 +38,7 @@ export default function SearchResult() {
         console.log(res.data.items);
         console.log(keyword);
     });
-  }, [])
+  }, [keyword])
 
   // function handleAddBook(book, event) {
   //     event.preventDefault();
