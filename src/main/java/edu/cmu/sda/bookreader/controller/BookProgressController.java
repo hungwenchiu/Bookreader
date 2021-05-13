@@ -29,8 +29,7 @@ public class BookProgressController {
 
     // update book progress
     @RequestMapping(value = "/progress", method = RequestMethod.PUT)
-    public BookProgress updateProgress(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID, @RequestParam(value="pagesFinished") int pagesFinished) {
-        System.out.println("REACHED PROGRESS CONTROLLER");
+    public int updateProgress(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID, @RequestParam(value="pagesFinished") int pagesFinished) {
         return bookProgressService.updateBookProgressForUser(userID, bookID, pagesFinished);
     }
 

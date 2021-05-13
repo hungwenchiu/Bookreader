@@ -80,7 +80,6 @@ function valuetext(value) {
 export default function BookCard(props) {
   const classes = useStyles()
   const { bookInfo, currentBookshelf, updateFunc, update} = props;
-
   const [progressNum, setProgressNum] = useState(bookInfo.progress)
   console.log(bookInfo)
 
@@ -97,8 +96,8 @@ export default function BookCard(props) {
       axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
       .then(res => {
         console.log("Moved to Reading successfully.");
+        props.updateFunc(!update);
       })
-      props.updateFunc(!update);
   }
 
   const addToFavorite = () => {
@@ -110,6 +109,7 @@ export default function BookCard(props) {
     axios.put('/api/bookshelves/Favorite/books', moveBookParams)
         .then(res => {
           console.log("Moved to Favorite successfully.");
+          props.updateFunc(!update);
         })
     props.updateFunc(!update);
   }
@@ -137,19 +137,22 @@ export default function BookCard(props) {
 
         axios.put(`/api/progress`, progressParams)
         .then(res => {
-          console.log("Updated pages finished "+res.data);
+          console.log("Updated pages finished ");
+          console.log(res.data);
+          setProgressNum(res.data);
         });
 
-        // // move book to different bookshelf
-        // const moveBookParams = new URLSearchParams();
-        // moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-        // moveBookParams.append("bookID", bookInfo.book.googleBookId);
+        // move book to different bookshelf
+         const moveBookParams = new URLSearchParams();
+         moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+         moveBookParams.append("bookID", bookInfo.book.googleBookId);
 
-        // axios.put(`/api/bookshelves`, progressParams
-        // )
-        // .then(res => {
-        //   console.log("Updated pages finished");
-        // })
+         axios.put(`/api/bookshelves`, moveBookParams)
+         .then(res => {
+           console.log("Moved book successfully.");
+           props.updateFunc(!update);
+         })
+
     }
   }
 
@@ -184,6 +187,7 @@ export default function BookCard(props) {
                         valueLabelDisplay="on"
                         className={classes.slider}
                         disabled={true}
+                        value={progressNum}
                     />)
                   }
                   {
