@@ -209,7 +209,6 @@ public class AbstractBookshelfService {
             }
         }
         if (name.equals("WantToRead")) {
-            System.out.println("reached the update progress section "+progressService);
             progressService.initializeBookProgressForUser(userID, newBookID);
         }
         return bookshelf;
