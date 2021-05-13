@@ -79,15 +79,18 @@ function valuetext(value) {
 
 export default function BookCard(props) {
   const classes = useStyles()
-  const { image, title, author, progress, currentBookshelf, bookID, updateFunc, update} = props;
-  const [progressNum, setProgressNum] = useState(progress)
+  const { bookInfo, currentBookshelf, updateFunc, update} = props;s
+  const [progressNum, setProgressNum] = useState(bookInfo.progress)
+  console.log(bookInfo)
+
+
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
 
-  const moveToRead = (event, newValue) => {
+  const moveToRead = () => {
       // move book to different bookshelf
       const moveBookParams = new URLSearchParams();
       moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-      moveBookParams.append("bookID", bookID);
+      moveBookParams.append("bookID", bookInfo.book.googleBookId);
       moveBookParams.append("newBookshelf", "Reading");
 
       axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
@@ -97,12 +100,24 @@ export default function BookCard(props) {
       props.updateFunc(!update);
   }
 
+  const addToFavorite = () => {
+    // move book to different bookshelf
+    const moveBookParams = new URLSearchParams();
+    moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+    moveBookParams.append("bookID", bookInfo.book.googleBookId);
+
+    axios.put('/api/bookshelves/Favorite/books', moveBookParams)
+        .then(res => {
+          console.log("Moved to Favorite successfully.");
+        })
+  }
+
   const handleChange = (event, newValue) => {
     if (event.key === 'Enter') {
         // update the progress
         const progressParams = new URLSearchParams();
         progressParams.append("userID", sessionStorage.getItem("currentUserID"));
-        progressParams.append("bookID", bookID);
+        progressParams.append("bookID", bookInfo.book.googleBookId);
         progressParams.append("pagesFinished",event.target.value);
 
         axios.put(`/api/progress`, progressParams)
@@ -126,11 +141,11 @@ export default function BookCard(props) {
   }
 
   return(
-      <div key={bookID}>
+      <div key={bookInfo.book.googleBookId}>
         <Card className={classes.root}>
           <CardMedia
             className={classes.cover}
-            image={image}
+            image={bookInfo.book.thumbnail}
             alt={altSrc}
           />
           <div className={classes.details}>
@@ -138,24 +153,25 @@ export default function BookCard(props) {
               <Grid container >
                 <Grid item xs={10}>
                   <Typography component="h5" variant="h5">
-                    {title}
+                    {bookInfo.book.title}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    {author}
+                    {bookInfo.book.author ? bookInfo.book.author : "not available"}
                   </Typography>
 
                   <Box m={3} />
                   {
                     currentBookshelf == "Reading" &&
                     (<Slider
-                         defaultValue={0}
-                         getAriaValueText={valuetext}
-                         aria-labelledby="current-progress"
-                         step={1}
-                         marks={marks}
-                         valueLabelDisplay="on"
-                         className={classes.slider}
-                         value={progressNum}
+                        defaultValue={bookInfo.progress}
+                        getAriaValueText={valuetext}
+                        aria-labelledby="current-progress"
+                        step={1}
+                        marks={marks}
+                        valueLabelDisplay="on"
+                        className={classes.slider}
+                        disabled={true}
+                        value={progressNum}
                     />)
                   }
                   {
@@ -170,7 +186,7 @@ export default function BookCard(props) {
 
                   {
                     currentBookshelf != "Favorite" &&
-                    <Button variant="contained" color="primary" className={classes.button}>Favorite</Button>
+                    <Button variant="contained" color="primary" className={classes.button} onClick={addToFavorite}>Favorite</Button>
                   }
 
                   {
@@ -184,7 +200,7 @@ export default function BookCard(props) {
                   {
                     currentBookshelf == "Reading" &&
                     <TextField id="outlined-basic" label="Pages Finished" variant="outlined" className={classes.button}
-                               onKeyDown={handleChange}/>
+                               style ={{width: '11em'}} onKeyDown={handleChange}/>
                   }
                 </Grid>
 
@@ -197,8 +213,8 @@ export default function BookCard(props) {
 }
 
 BookCard.propTypes = {
-  image: PropTypes.any.isRequired, 
-  title: PropTypes.any.isRequired, 
-  author: PropTypes.any.isRequired,
-  progress:PropTypes.any.isRequired,
+  bookInfo: PropTypes.any.isRequired,
+  currentBookshelf: PropTypes.any.isRequired,
+  updateFunc: PropTypes.any.isRequired,
+  update: PropTypes.any.isRequired,
 };
