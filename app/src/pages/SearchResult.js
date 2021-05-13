@@ -24,13 +24,10 @@ const StyleSheet = makeStyles((theme) => ({
     marginRight: '4%',
     marginTop: '2%'
   },
-  gridList: {
-    
-  },
   titleBar: {
     background:
       'linear-gradient(to top, rgba(0,0,0, 0.7) 0%, rgba(0,0,0, 0.3) 70%, rgba(0,0,0, 0) 100%)',
-  },
+    },
 }))
 
 export default function SearchResult() {
