@@ -79,10 +79,10 @@ function valuetext(value) {
 
 export default function BookCard(props) {
   const classes = useStyles()
-  const { book, currentBookshelf, updateFunc, update} = props;
+  const { bookInfo, currentBookshelf, updateFunc, update} = props;
 
-  const [progressNum, setProgressNum] = useState(book.progress)
-  console.log(book.title)
+  const [progressNum, setProgressNum] = useState(bookInfo.progress)
+  console.log(bookInfo)
 
 
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
@@ -91,7 +91,7 @@ export default function BookCard(props) {
       // move book to different bookshelf
       const moveBookParams = new URLSearchParams();
       moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-      moveBookParams.append("bookID", book.googleBookId);
+      moveBookParams.append("bookID", bookInfo.book.googleBookId);
       moveBookParams.append("newBookshelf", "Reading");
 
       axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
@@ -105,7 +105,7 @@ export default function BookCard(props) {
     // move book to different bookshelf
     const moveBookParams = new URLSearchParams();
     moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-    moveBookParams.append("bookID", book.googleBookId);
+    moveBookParams.append("bookID", bookInfo.book.googleBookId);
 
     axios.put('/api/bookshelves/Favorite/books', moveBookParams)
         .then(res => {
@@ -118,7 +118,7 @@ export default function BookCard(props) {
         // update the progress
         const progressParams = new URLSearchParams();
         progressParams.append("userID", sessionStorage.getItem("currentUserID"));
-        progressParams.append("bookID", book.googleBookId);
+        progressParams.append("bookID", bookInfo.book.googleBookId);
         progressParams.append("pagesFinished",event.target.value);
 
         axios.put(`/api/progress`, progressParams)
@@ -129,7 +129,7 @@ export default function BookCard(props) {
         // // move book to different bookshelf
         // const moveBookParams = new URLSearchParams();
         // moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-        // moveBookParams.append("bookID", book.googleBookId);
+        // moveBookParams.append("bookID", bookInfo.book.googleBookId);
 
         // axios.put(`/api/bookshelves`, progressParams
         // )
@@ -140,11 +140,11 @@ export default function BookCard(props) {
   }
 
   return(
-      <div key={book.googleBookId}>
+      <div key={bookInfo.book.googleBookId}>
         <Card className={classes.root}>
           <CardMedia
             className={classes.cover}
-            image={book.thumbnail}
+            image={bookInfo.book.thumbnail}
             alt={altSrc}
           />
           <div className={classes.details}>
@@ -152,17 +152,17 @@ export default function BookCard(props) {
               <Grid container >
                 <Grid item xs={10}>
                   <Typography component="h5" variant="h5">
-                    {book.title}
+                    {bookInfo.book.title}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    {book.author ? book.author : "not available"}
+                    {bookInfo.book.author ? bookInfo.book.author : "not available"}
                   </Typography>
 
                   <Box m={3} />
                   {
                     currentBookshelf == "Reading" &&
                     (<Slider
-                        defaultValue={progressNum}
+                        defaultValue={bookInfo.progress}
                         getAriaValueText={valuetext}
                         aria-labelledby="current-progress"
                         step={1}
@@ -211,7 +211,7 @@ export default function BookCard(props) {
 }
 
 BookCard.propTypes = {
-  book: PropTypes.any.isRequired,
+  bookInfo: PropTypes.any.isRequired,
   currentBookshelf: PropTypes.any.isRequired,
   updateFunc: PropTypes.any.isRequired,
   update: PropTypes.any.isRequired,

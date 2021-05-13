@@ -73,18 +73,11 @@ export default function BookShelvesPage() {
   const [update, setUpdate] = useState(false)
 
   function getBooksFromBookshelf() {
-    axios.get(`/api/bookshelves/${bookshelf.name}/books?userID=${sessionStorage.getItem("currentUserID")}`)
+    axios.get(`/api/bookshelves/${bookshelf.name}/books/info?userID=${sessionStorage.getItem("currentUserID")}`)
         .then(async res => {
           // process all books -> get the progress
           // add progress to the book
-          let allBooks = res.data
-          console.log(allBooks)
-
-          for (let i = 0; i < allBooks.length; ++i) {
-            const data = await getProgress(allBooks[i])
-            allBooks[i]["progress"] = data;
-          }
-          setBooks(allBooks)
+          setBooks(res.data)
         })
         .catch(error => {
           console.log(error);
@@ -140,7 +133,7 @@ export default function BookShelvesPage() {
             <List>
               {
                 books.map((book) => (
-                    <BookCard book={book}
+                    <BookCard bookInfo={book}
                               currentBookshelf={bookshelf.name}
                               updateFunc={setUpdate}
                               update={update}
@@ -153,7 +146,7 @@ export default function BookShelvesPage() {
           <List>
             {
               books.map((book) => (
-                  <BookCard book={book}
+                  <BookCard bookInfo={book}
                             currentBookshelf={bookshelf.name}
                             updateFunc={setUpdate}
                             update={update}
@@ -166,7 +159,7 @@ export default function BookShelvesPage() {
           <List>
             {
               books.map((book) => (
-                  <BookCard book={book}
+                  <BookCard bookInfo={book}
                             currentBookshelf={bookshelf.name}
                             updateFunc={setUpdate}
                             update={update}
@@ -179,7 +172,7 @@ export default function BookShelvesPage() {
           <List>
             {
               books.map((book) => (
-                  <BookCard book={book}
+                  <BookCard bookInfo={book}
                             currentBookshelf={bookshelf.name}
                             updateFunc={setUpdate}
                             update={update}

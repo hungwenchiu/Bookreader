@@ -376,4 +376,17 @@ public class AbstractBookshelfService {
         }
         return bookshelfNames;
     }
+
+
+    /**
+     * check if the given book is in the bookshelf with bookshelfName for user with userId
+     * @param bookshelfName
+     * @param bookId
+     * @param userId
+     * @return
+     */
+    public boolean isInBookshelf(String bookshelfName, String bookId, long userId) {
+        Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(bookshelfName, userId);
+        return bookshelf.getBooks().contains(bookId);
+    }
 }
