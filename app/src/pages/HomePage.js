@@ -1,13 +1,53 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Layout from '../components/Layout'
+import {makeStyles} from '@material-ui/core/styles';
+import axios from 'axios';
+import Typography from '@material-ui/core/Typography';
+import RecommendList from '../components/RecommendList'
+import {initiateSocket, sendMessage, socket} from "../components/Socketio";
 
-const HomePage = () => (
-  <Layout>
-    <div>
-        // For reference to get user, needs to be removed
-        current user is : {sessionStorage.getItem("currentUser")}
-    </div>
-  </Layout>
-)
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginLeft: '15%',
+    marginRight: '15%',
+  },
+  divider: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  titles: {
+    marginTop: 20,
+    marginBottom: 20,
+  }
+}))
 
-export default HomePage;
+export default function HomePage() {
+  const classes = useStyles()
+  const currentUserId = sessionStorage.getItem("currentUserID");
+
+  useEffect(() => {
+    initiateSocket(currentUserId);
+    sendMessage("newComer", currentUserId);
+  }, []);
+
+  return (
+    <Layout>
+      <div className={classes.container}>
+        <Typography variant="h5" className={classes.titles}>Top Want to Read</Typography>
+        <RecommendList type="wantToRead" />
+
+        <Typography variant="h5" className={classes.titles}>Top Favorite</Typography>
+        <RecommendList type="favorite" />
+
+        <Typography variant="h5" className={classes.titles}>Top Reading</Typography>
+        <RecommendList type="reading" />
+
+        <Typography variant="h5" className={classes.titles}>Top Read</Typography>
+        <RecommendList type="read" />
+      </div>
+
+    </Layout> 
+  )
+}
+
+

@@ -9,13 +9,6 @@ export const disconnectSocket = () => {
     if(socket) socket.disconnect();
 }
 
-// subscribe topic
-// export const subscribe = (topic) => {
-//     if (!socket) return(true);
-//     socket.on(topic, msg => {
-//         console.log(msg);
-//     });
-// }
 export const sendMessage = (topic, message) => {
     if (socket)  {
         socket.emit(topic, { msgContent: message });

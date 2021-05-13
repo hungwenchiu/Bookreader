@@ -27,7 +27,7 @@ public class SystemCountController {
     /**
      * update SystemCount's counting by type
      * @param googleBookId: googleBookId of the book count to be updated
-     * @param type: the type of count to be incremented: reading, read, favourite or wantToRead
+     * @param type: the type of count to be incremented: reading, read, favorite or wantToRead
      * @return updated SystemCount
      */
     @PutMapping("/systemCount/{googleBookId}/{type}")
@@ -56,8 +56,8 @@ public class SystemCountController {
             case "read":
                 res = service.getTop10Read();
                 break;
-            case "favourite":
-                res = service.getTop10Favourite();
+            case "favorite":
+                res = service.getTop10Favorite();
                 break;
             case "wantToRead":
                 res = service.getTop10WantToRead();

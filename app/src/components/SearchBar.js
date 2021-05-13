@@ -70,7 +70,7 @@ export default function SearchBar() {
   function handleSearch(event) {
       event.preventDefault();
       console.log(book);
-      history.push(`searchResult?keyword=${book}`)
+      history.push(`/searchresult?keyword=${book}`)
   }
   return(
     <div className={classes.search}>
