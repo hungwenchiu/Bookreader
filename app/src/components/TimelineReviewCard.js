@@ -92,6 +92,10 @@ const useStyles = makeStyles((theme) => ({
     replyBtn: {
         marginLeft: "10px",
         float:"right",
+        backgroundColor:"#2196f3",
+        '&:hover': {
+            backgroundColor:"#64b5f6",
+        }
     },
     slider: {
         marginTop: 40,

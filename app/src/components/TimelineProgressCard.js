@@ -90,19 +90,22 @@ const useStyles = makeStyles((theme) => ({
     replyBtn: {
         marginLeft: "10px",
         float:"right",
+        backgroundColor:"#2196f3",
+        '&:hover': {
+            backgroundColor:"#64b5f6",
+        }
     },
     slider: {
         marginTop: 40,
         width: 400,
     },
     cardContent: {
-        height: "60px",
         padding: "0 0 0 2%",
     },
     reviewContent: {
-        height: "100%",
         width:"100%",
         overflow:"auto",
+        marginLeft: "3em",
     },
     divider: {
         margin: "20px",
@@ -255,10 +258,10 @@ export default function TimelineProgressCard(props) {
             </div>
             <Divider className={classes.divider}/>
             <CardContent className={classes.cardContent}>
-                <Typography variant="h6" gutterBottom> {`${props.username} has progress update`} </Typography>
-                <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
-                    {props.comment}
-                </Typography>
+                <Typography variant="h6" color="textSecondary" gutterBottom> {`${props.username} has progress update`} </Typography>
+                {/*<Typography className={classes.reviewContent} variant="body1" gutterBottom>*/}
+                {/*    {props.comment}*/}
+                {/*</Typography>*/}
             </CardContent>
             <CardActions disableSpacing>
                 {/*<IconButton aria-label="share">*/}
@@ -294,7 +297,7 @@ export default function TimelineProgressCard(props) {
                     })}
                     <div className={classes.replyField}>
                         <Input className={classes.replyTxt} placeholder="Write Comment..." inputProps={{ 'aria-label': 'description' }} value={input_txt} onChange={getTxt} onKeyDown={inputKeyDown}/>
-                        <Button className={[classes.button, classes.replyBtn]} variant="contained"  color="primary" onClick={sendReply}>
+                        <Button className={[classes.button, classes.replyBtn]} variant="contained"  color="secondary" onClick={sendReply}>
                             Reply
                             <SendIcon/>
                         </Button>
