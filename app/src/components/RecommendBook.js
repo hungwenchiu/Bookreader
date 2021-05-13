@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
@@ -12,102 +12,125 @@ import Dialog from '@material-ui/core/Dialog';
 import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
-import { blue } from '@material-ui/core/colors';
+import {blue} from '@material-ui/core/colors';
 import axios from "axios";
 
 // const users = ['username@gmail.com', 'user02@gmail.com'];
-var friends = [];
+// let friends = [];
 
 const useStyles = makeStyles({
-  avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
-  },
+    avatar: {
+        backgroundColor: blue[100],
+        color: blue[600],
+    },
 });
 
-function SimpleDialog(props) {
-  const classes = useStyles();
-  const { onClose, selectedValue, open } = props;
-  const currentUserId = sessionStorage.getItem('currentUserID');
+export default function SimpleDialog(props) {
+    const classes = useStyles();
+    const {onClose} = props;
+    const currentUserId = sessionStorage.getItem('currentUserID');
+    const [allFriends, setAllFriends] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(allFriends[0]);
 
-  const findFriends = () => {
-      friends = [];
+    // const findFriends = () => {
+    //     // fetch all friends for a user
+    //     axios.get(`/api/relationship/friends/${currentUserId}`)
+    //         .then(res => {
+    //             setAllFriends(res.data)
+    //             console.log(res.data);
+    //         });
+    // };
 
-      // fetch all friends for a user
-      axios.get(`/api/relationship/friends/${currentUserId}`)
-      .then(res => {
-          res.data.map((friend) => (
-            friends.push(friend)
-          ))
-          console.log(friends);
-      });
-};
+    useEffect(() => {
+        axios.get(`/api/relationship/friends/${currentUserId}`)
+            .then(res => {
+                setAllFriends(res.data)
+                console.log(res.data);
+            });
+    }, [])
 
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
+    const handleClose = () => {
+        onClose(selectedValue);
+    };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
+    const handleListItemClick = (value) => {
+        onClose(value);
+    };
 
-  findFriends();
-  return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Recommend Book to a Friend</DialogTitle>
-      <List>
-        {friends.map((friend) => (
-          <ListItem button onClick={() => handleListItemClick(friend)} key={friend}>
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={friend.name} />
-          </ListItem>
-        ))}
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-        <ListItem autoFocus button onClick={() => handleListItemClick('addAccount')}>
-          <ListItemAvatar>
-            <Avatar>
-              <AddIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Add account" />
-        </ListItem>
-      </List>
-    </Dialog>
-  );
+    // findFriends();
+    return (
+        <div>
+            <div>
+                // <br/>
+                // <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                // Recommend Book
+                // </Button>
+                // <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose}/>
+                //
+            </div>
+            <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+                <DialogTitle id="simple-dialog-title">Recommend Book to a Friend</DialogTitle>
+                <List>
+                    {allFriends.map((friend) => (
+                        <ListItem button onClick={() => handleListItemClick(friend)} key={friend}>
+                            <ListItemAvatar>
+                                <Avatar className={classes.avatar}>
+                                    <PersonIcon/>
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={friend.name}/>
+                        </ListItem>
+                    ))}
+
+                    <ListItem autoFocus button onClick={() => handleListItemClick('addAccount')}>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <AddIcon/>
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary="Add account"/>
+                    </ListItem>
+                </List>
+            </Dialog>
+        </div>
+
+    );
 }
 
 SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selectedValue: PropTypes.string.isRequired,
 };
 
-export default function SimpleDialogDemo() {
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(friends[0]);
-  const [allFriends, setAllFriends ] = React.useState([]);
-  const currentUserId = sessionStorage.getItem('currentUserID');
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
-
-  return (
-    <div>
-      <br />
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Recommend Book
-      </Button>
-      <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
-    </div>
-  );
-}
+// function SimpleDialogDemo() {
+//   const [open, setOpen] = React.useState(false);
+//   const [selectedValue, setSelectedValue] = React.useState(friends[0]);
+//   const [allFriends, setAllFriends ] = React.useState([]);
+//   const currentUserId = sessionStorage.getItem('currentUserID');
+//
+//   const handleClickOpen = () => {
+//     setOpen(true);
+//   };
+//
+//   const handleClose = (value) => {
+//     setOpen(false);
+//     setSelectedValue(value);
+//   };
+//
+//   return (
+//     <div>
+//       <br />
+//       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+//         Recommend Book
+//       </Button>
+//       <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
+//     </div>
+//   );
+// }
