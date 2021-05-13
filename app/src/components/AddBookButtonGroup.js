@@ -16,7 +16,7 @@ const options = ['Want to Read', 'Favorite'];
 
 const useStyles = makeStyles({
   buttonGroup: {
-    marginTop: '30px'
+    marginTop: '15px'
   },
 })
 
