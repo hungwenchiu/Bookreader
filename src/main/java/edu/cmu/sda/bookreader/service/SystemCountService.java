@@ -20,23 +20,23 @@ public class SystemCountService {
         return repository.save(systemCount);
     }
 
-    public SystemCount updateSystemCount(String googleBookId, String type) {
+    public SystemCount updateSystemCount(String googleBookId, String type, int amount) {
         SystemCount existing = repository.findByGoogleBookId(googleBookId);
         if (existing == null) {
             existing = new SystemCount(googleBookId);
         }
         switch (type) {
-            case "reading":
-                existing.setReadingCount(existing.getReadingCount() + 1);
+            case "Reading":
+                existing.setReadingCount(existing.getReadingCount() + amount);
                 break;
-            case "read":
-                existing.setReadCount(existing.getReadCount() + 1);
+            case "Read":
+                existing.setReadCount(existing.getReadCount() + amount);
                 break;
-            case "favourite":
-                existing.setFavouriteCount(existing.getFavouriteCount() + 1);
+            case "Favourite":
+                existing.setFavouriteCount(existing.getFavouriteCount() + amount);
                 break;
-            case "wantToRead":
-                existing.setWantToReadCount(existing.getWantToReadCount() + 1);
+            case "WantToRead":
+                existing.setWantToReadCount(existing.getWantToReadCount() + amount);
                 break;
         }
         return repository.save(existing);

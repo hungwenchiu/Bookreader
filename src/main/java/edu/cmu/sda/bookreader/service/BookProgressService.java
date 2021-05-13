@@ -30,16 +30,14 @@ public class BookProgressService {
     }
 
     // update Progress for a book for a user
-    public BookProgress updateBookProgressForUser(Long userID, String bookID, int pagesFinished) {
+    public int updateBookProgressForUser(Long userID, String bookID, int pagesFinished) {
         BookProgress currentBookProgress = bookProgressRepository.getBookProgressForUserByBook(userID, bookID);
         if (currentBookProgress != null) {
             currentBookProgress.setPagesFinished(pagesFinished);
-
             bookProgressRepository.save(currentBookProgress);
-            // this.moveBook(pagesFinished, userID, bookID);
-            return currentBookProgress;
+            return this.calculateProgress(userID, bookID);
         }
-        return null;
+        return 0;
     }
 
     // get book progress
@@ -67,76 +65,4 @@ public class BookProgressService {
         }
         return 0;
     }
-
-    // check progress and move between bookshelf
-//    public void moveBook(int PagesFinished, long userID, String bookID) {
-//        System.out.println("reached move book in book progress.... ");
-//        System.out.println("bookshelf service "+bookshelfService+"  book progress service "+bookProgressRepository+" book service "+bookService);
-//        // find which bookshelf the book belongs to
-//        List<String> bookshelfNames = bookshelfService.getBookshelfName(userID, bookID);
-//
-//        // get book progress
-//        BookProgress progress = bookProgressRepository.getBookProgressForUserByBook(userID, bookID);
-//        int totalPages = bookService.getTotalPage(bookID);
-//
-//        // Condition1: if finishedPages is 0, then add book to WantToRead
-//        if (progress.getPagesFinished() == 0) {
-//            if (bookshelfNames == null || bookshelfNames.size() == 0) {
-//                // simple add the book
-//                bookshelfService.addBook("WantToRead", bookID, userID);
-//            } else if (!bookshelfNames.contains("WantToRead")) {
-//                // if book in regular bookshelves then move book
-//                if (bookshelfNames.contains("Reading")) {
-//                    bookshelfService.moveBook("Reading", "WantToRead", bookID, userID);
-//                } else if (bookshelfNames.contains("Read")) {
-//                    bookshelfService.moveBook("Read", "WantToRead", bookID, userID);
-//                }
-//
-//                // if books in Recommended or Favorite bookshelf then add book instead of moving
-//                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
-//                    bookshelfService.addBook("WantToRead", bookID, userID);
-//                }
-//            }
-//        }
-//
-//        // Condition2: if finishedPages > 0 and finishedPages < totalPages, then add book to Reading
-//        if (progress.getPagesFinished() > 0 && progress.getPagesFinished() < totalPages) {
-//            if (bookshelfNames == null || bookshelfNames.size() == 0) {
-//                // simply add the book
-//                bookshelfService.addBook("Reading", bookID, userID);
-//            } else if (!bookshelfNames.contains("Reading")) {
-//                // if book in regular bookshelves then move book
-//                if (bookshelfNames.contains("Read")) {
-//                    bookshelfService.moveBook("Read", "Reading", bookID, userID);
-//                } else if (bookshelfNames.contains("WantToRead")) {
-//                    bookshelfService.moveBook("WantToRead", "Reading", bookID, userID);
-//                }
-//
-//                // if books in Recommended or Favorite bookshelf then add book instead of moving
-//                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
-//                    bookshelfService.addBook("Reading", bookID, userID);
-//                }
-//            }
-//        }
-//
-//        // Condition3: if finishedPages = totalPages, then add book to Read
-//        if (progress.getPagesFinished() == totalPages) {
-//            if (bookshelfNames == null || bookshelfNames.size() == 0) {
-//                // simply add the book
-//                bookshelfService.addBook("Reading", bookID, userID);
-//            } else if (!bookshelfNames.contains("Read")) {
-//                // if book in regular bookshelves then move book
-//                if (bookshelfNames.contains("Reading")) {
-//                    bookshelfService.moveBook("Reading", "Read", bookID, userID);
-//                } else if (bookshelfNames.contains("WantToRead")) {
-//                    bookshelfService.moveBook("WantToRead", "Read", bookID, userID);
-//                }
-//
-//                // if books in Recommended or Favorite bookshelf then add book instead of moving
-//                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
-//                    bookshelfService.addBook("Read", bookID, userID);
-//                }
-//            }
-//        }
-//    }
 }

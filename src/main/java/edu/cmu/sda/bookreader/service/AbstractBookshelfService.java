@@ -259,7 +259,7 @@ public class AbstractBookshelfService {
         return bookshelf;
     }
 
-    public void checkBookProgressToMoveBetweenBookshelves(long userID, String bookID) {
+    public String checkBookProgressToMoveBetweenBookshelves(long userID, String bookID) {
         // find which bookshelf the book belongs to
         List<String> bookshelfNames = this.getBookshelfName(userID, bookID);
 
@@ -268,50 +268,55 @@ public class AbstractBookshelfService {
         int totalPages = bookService.getTotalPage(bookID);
 
         // Condition1: if finishedPages is 0, then add book to WantToRead
-        if (pagesFinished == 0) {
-            if (bookshelfNames == null || bookshelfNames.size() == 0) {
-                // simple add the book
-                this.addBook("WantToRead", bookID, userID);
-            } else if (!bookshelfNames.contains("WantToRead")) {
-                // if book in regular bookshelves then move book
-                if (bookshelfNames.contains("Reading")) {
-                    this.moveBook("Reading", "WantToRead", bookID, userID);
-                } else if (bookshelfNames.contains("Read")) {
-                    this.moveBook("Read", "WantToRead", bookID, userID);
-                }
-
-                // if books in Recommended or Favorite bookshelf then add book instead of moving
-                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
-                    this.addBook("WantToRead", bookID, userID);
-                }
-            }
-        }
+//        if (pagesFinished == 0) {
+//            if (bookshelfNames == null || bookshelfNames.size() == 0) {
+//                // simple add the book
+//                this.addBook("WantToRead", bookID, userID);
+//                return "Added to WantToRead";
+//            } else if (!bookshelfNames.contains("WantToRead")) {
+//                // if book in regular bookshelves then move book
+//                if (bookshelfNames.contains("Reading")) {
+//                    this.moveBook("Reading", "WantToRead", bookID, userID);
+//                } else if (bookshelfNames.contains("Read")) {
+//                    this.moveBook("Read", "WantToRead", bookID, userID);
+//                }
+//
+//                // if books in Recommended or Favorite bookshelf then add book instead of moving
+//                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
+//                    this.addBook("WantToRead", bookID, userID);
+//                }
+//                return "Successfully moved the book.";
+//            }
+//        }
 
         // Condition2: if finishedPages > 0 and finishedPages < totalPages, then add book to Reading
-        if (pagesFinished > 0 && pagesFinished < totalPages) {
-            if (bookshelfNames == null || bookshelfNames.size() == 0) {
-                // simply add the book
-                this.addBook("Reading", bookID, userID);
-            } else if (!bookshelfNames.contains("Reading")) {
-                // if book in regular bookshelves then move book
-                if (bookshelfNames.contains("Read")) {
-                    this.moveBook("Read", "Reading", bookID, userID);
-                } else if (bookshelfNames.contains("WantToRead")) {
-                    this.moveBook("WantToRead", "Reading", bookID, userID);
-                }
-
-                // if books in Recommended or Favorite bookshelf then add book instead of moving
-                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
-                    this.addBook("Reading", bookID, userID);
-                }
-            }
-        }
+//        if (pagesFinished >= 0 && pagesFinished < totalPages) {
+//            if (bookshelfNames == null || bookshelfNames.size() == 0) {
+//                // simply add the book
+//                this.addBook("Reading", bookID, userID);
+//                return "Added to Reading.";
+//            } else if (!bookshelfNames.contains("Reading")) {
+//                // if book in regular bookshelves then move book
+//                if (bookshelfNames.contains("Read")) {
+//                    this.moveBook("Read", "Reading", bookID, userID);
+//                } else if (bookshelfNames.contains("WantToRead")) {
+//                    this.moveBook("WantToRead", "Reading", bookID, userID);
+//                }
+//
+//                // if books in Recommended or Favorite bookshelf then add book instead of moving
+//                if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
+//                    this.addBook("Reading", bookID, userID);
+//                }
+//                return "Successfully moved the book.";
+//            }
+//        }
 
         // Condition3: if finishedPages = totalPages, then add book to Read
-        if (pagesFinished == totalPages) {
+        if (pagesFinished >= totalPages) {
             if (bookshelfNames == null || bookshelfNames.size() == 0) {
                 // simply add the book
                 this.addBook("Reading", bookID, userID);
+                return "Added to Reading.";
             } else if (!bookshelfNames.contains("Read")) {
                 // if book in regular bookshelves then move book
                 if (bookshelfNames.contains("Reading")) {
@@ -324,8 +329,11 @@ public class AbstractBookshelfService {
                 if (bookshelfNames.contains("Recommended") || bookshelfNames.contains("Favorite")) {
                     this.addBook("Read", bookID, userID);
                 }
+                return "Successfully moved the book.";
             }
         }
+
+        return "Could not move the book successfully.";
     }
 
     // move book to another regular bookshelf
@@ -367,5 +375,18 @@ public class AbstractBookshelfService {
             }
         }
         return bookshelfNames;
+    }
+
+
+    /**
+     * check if the given book is in the bookshelf with bookshelfName for user with userId
+     * @param bookshelfName
+     * @param bookId
+     * @param userId
+     * @return
+     */
+    public boolean isInBookshelf(String bookshelfName, String bookId, long userId) {
+        Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(bookshelfName, userId);
+        return bookshelf.getBooks().contains(bookId);
     }
 }
