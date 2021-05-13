@@ -6,6 +6,7 @@ import edu.cmu.sda.bookreader.entity.Bookshelf;
 import edu.cmu.sda.bookreader.entity.RecommendedBookshelf;
 import edu.cmu.sda.bookreader.service.AbstractBookshelfService;
 import edu.cmu.sda.bookreader.service.BookProgressService;
+import edu.cmu.sda.bookreader.service.SystemCountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +33,10 @@ public class BookshelfController {
     @Autowired
     private BookProgressService bookProgressService;
 
+    @Qualifier("systemCountService")
+    @Autowired
+    private SystemCountService systemCountService;
+
     // add a new bookshelf
     @RequestMapping(value = "/bookshelves", method = RequestMethod.POST)
     public AbstractBookshelf addBookshelf(@RequestBody AbstractBookshelf bookshelf) {
@@ -47,6 +52,7 @@ public class BookshelfController {
     // add a new book to a bookshelf
     @RequestMapping(value = "/bookshelves/{name}/books", method = RequestMethod.PUT)
     public AbstractBookshelf addBook(@PathVariable("name") String name, @RequestParam(value="bookID") String bookID, @RequestParam(value="userID") long userID) {
+        systemCountService.updateSystemCount(bookID, name, 1);
         return bookshelfService.addBook(name, bookID, userID);
     }
 
@@ -121,12 +127,27 @@ public class BookshelfController {
     // move book from a bookshelf
     @RequestMapping(value = "/bookshelves/{name}", method = RequestMethod.PUT)
     public String moveBook(@PathVariable("name") String currentBookshelf,@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID, @RequestParam(value="newBookshelf") String newBookshelf) {
+        systemCountService.updateSystemCount(bookID, newBookshelf, 1);
+        systemCountService.updateSystemCount(bookID, currentBookshelf, -1);
         return bookshelfService.moveBook(currentBookshelf, newBookshelf, bookID, userID);
     }
 
     // move book from bookshelf based on progress
     @RequestMapping(value = "/bookshelves", method = RequestMethod.PUT)
     public String moveBook(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
+        systemCountService.updateSystemCount(bookID, "Read", 1);
         return bookshelfService.checkBookProgressToMoveBetweenBookshelves(userID, bookID);
+    }
+
+    /**
+     * remove book from bookshelf
+     * @param userID
+     * @param bookID
+     * @return
+     */
+    @RequestMapping(value = "/bookshelves/{name}/", method = RequestMethod.DELETE)
+    public void deleteBook(@PathVariable("name") String name, @RequestParam(value="bookID") String bookID, @RequestParam(value="userID") long userID) {
+        systemCountService.updateSystemCount(bookID, name, -1);
+        bookshelfService.removeBook(userID, name, bookID);
     }
 }
