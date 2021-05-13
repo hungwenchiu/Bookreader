@@ -51,6 +51,7 @@ export const TimelineAction = (timeline_event, bookinfo) => {
                                   time={timeline_event.time}
                                   image={thumbnail}
                                   id={timeline_event.id}
+                                  googleBookId={timeline_event.googlebookid}
         />);
     }
 

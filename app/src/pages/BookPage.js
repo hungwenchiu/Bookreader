@@ -121,7 +121,7 @@ const handleClose = (value) => {
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} width="180" height="270" />
             <div>
               <br />
-              <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+              <Button variant="contained" color="primary" onClick={handleClickOpen}>
                 Recommend Book
               </Button>
               <RecommendBook selectedValue={selectedValue} open={open} onClose={handleClose} book={book}/>

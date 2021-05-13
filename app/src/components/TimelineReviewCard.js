@@ -22,8 +22,7 @@ import {Send} from "@material-ui/icons";
 import axios from "axios";
 import ReplyCard from "./ReplyCard";
 import parse from 'html-react-parser';
-import Slider from "@material-ui/core/Slider";
-import Grid from "@material-ui/core/Grid";
+import Link from "@material-ui/core/Link";
 import {sendMessage, socket} from "./Socketio";
 import Divider from "@material-ui/core/Divider";
 
@@ -103,18 +102,16 @@ const useStyles = makeStyles((theme) => ({
         padding: "0 0 0 2%",
     },
     reviewContent: {
-        height: "100%",
         width:"100%",
         overflow:"auto",
+        marginLeft: "3em",
     },
     divider: {
         margin: "20px",
         height: "2px",
-
-
     },
     startIcon: {
-        marginLeft:"10px",
+        marginLeft:"1.9em",
     }
 }));
 
@@ -131,20 +128,20 @@ export default function RecipeReviewCard(props) {
 
     if(props.action === "Reading") {
         statement = "starts reading";
-        reviewComment = <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
+        reviewComment = <Typography className={classes.reviewContent} variant="body1" gutterBottom>
             {props.comment}
         </Typography>;
     }
     else if(props.action === "Favorite") {
         statement = "moves a book";
-        reviewComment = <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
+        reviewComment = <Typography className={classes.reviewContent} variant="body1" gutterBottom>
             {props.comment}
         </Typography>;
     }
     else if(props.action === "Review") {
-        statement = "posts a review and rating:";
+        statement = "posts a review:";
 
-        reviewComment = <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
+        reviewComment = <Typography className={classes.reviewContent} variant="body1" gutterBottom>
                             {props.comment}
                         </Typography>;
         ratingComp = <Rating className={classes.startIcon} name="read-only" value={props.rate} precision={0.5} readOnly />;
@@ -261,13 +258,21 @@ export default function RecipeReviewCard(props) {
                 subheader={convertTime()}
             />
             <div className={classes.bookContainer}>
+              <Link href={"/book/" + props.googleBookId} color="inherit">
+
                 <CardMedia className={classes.media} title={props.title}>
+                  
                     <img className={classes.bookImg} src={props.image}/>
+
                 </CardMedia>
+              </Link>
                 <div className={classes.bookInfo}>
+                  <Link href={"/book/" + props.googleBookId} color="inherit">
+
                     <Typography variant="h6" gutterBottom>
                         {props.bookname}
                     </Typography>
+                  </Link>
                     <Typography variant="h6" color="secondary" gutterBottom>
                         {props.author}
                     </Typography>
@@ -279,10 +284,11 @@ export default function RecipeReviewCard(props) {
             </div>
             <Divider className={classes.divider}/>
             <CardContent className={classes.cardContent}>
-                <Typography variant="h6" gutterBottom> {`${props.username} ${statement}`}
-                    {ratingComp}
+                <Typography variant="h6" color="textSecondary" gutterBottom> 
+                    {`${props.username} ${statement}`}
                 </Typography>
                 {reviewComment}
+                {ratingComp}
             </CardContent>
             <CardActions disableSpacing>
                 <IconButton

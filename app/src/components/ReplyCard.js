@@ -24,6 +24,9 @@ const useStyles = makeStyles({
     pos: {
         marginBottom: 12,
     },
+    replyContext: {
+        marginLeft:"1.5em",
+    },
 });
 
 export default function ReplyCard(props) {
@@ -36,10 +39,10 @@ export default function ReplyCard(props) {
                 <Typography className={classes.title} color="textSecondary" style={{color:""}} gutterBottom>
                     {props.sender} says:
                 </Typography>
-                <Typography variant="body2" component="p">
+                <Typography className={classes.replyContext} variant="body1">
                     {props.reply}
                 </Typography>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                <Typography className={[classes.replyContext, classes.title]} color="textSecondary">
                     {props.time}
                 </Typography>
             </CardContent>

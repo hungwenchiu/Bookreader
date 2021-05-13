@@ -11,32 +11,38 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Rating from '@material-ui/lab/Rating';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import axios from 'axios'
+import {blue} from "@material-ui/core/colors";
 
 const useStyles = makeStyles({
-  
+  avatar: {
+    backgroundColor: blue[500],
+  },
 })
 
 export default function Review(props) {
   const {userId, content, rating} = props
-  const [username, setUsername] = useState("username")
+  const [username, setUsername] = useState("")
   const classes = useStyles()
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
   const value = 2.5
   
-  // useEffect(() => {
-  //   // get user information
-  //   axios.get(`/api/user/`+id)
-  //   .then(res => {
-  //     setUsername(res.data.name)
-  //   })
-  // }, [])
+  useEffect(() => {
+    // get user information
+    axios.get(`/api/user/`+userId)
+    .then(res => {
+      console.log(res.data)
+      setUsername(res.data.name)
+    })
+  }, [])
 
   return(
     <ListItem>
       
       <ListItemAvatar>
-        <Avatar alt={DefaultAvatar} src={DefaultAvatar} />
+          <Avatar className={classes.avatar}>
+              {username.charAt(0).toUpperCase()}
+          </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={
