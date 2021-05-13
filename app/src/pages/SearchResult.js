@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import Layout from '../components/Layout'
 import GridList from '@material-ui/core/GridList';
-import logo from '../assets/logo.png'
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import {
@@ -17,6 +16,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import logo from "../assets/logo-small.png"
 
 const StyleSheet = makeStyles((theme) => ({
   root: {
@@ -27,28 +27,28 @@ const StyleSheet = makeStyles((theme) => ({
   gridList: {
     
   },
+  titleBar: {
+    background:
+      'linear-gradient(to top, rgba(0,0,0, 0.7) 0%, rgba(0,0,0, 0.3) 70%, rgba(0,0,0, 0) 100%)',
+  },
 }))
 
 export default function SearchResult() {
   const classes = StyleSheet()
-    const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
+  let query = new URLSearchParams(useLocation().search);
+  let keyword = query.get("keyword")
   const [result, setResult] = useState([]);
   const apiKey = "AIzaSyAu1E-pEKMYEw14bjqcdQDsEybKHIaZfaY";
   const maxResult = 20;
-  let query = new URLSearchParams(useLocation().search);
-  let book = query.get("keyword");
 
   useEffect(() => {
-    axios.get("https://www.googleapis.com/books/v1/volumes?q="+book+"&key="+apiKey+"&maxResults="+maxResult)
+    axios.get("https://www.googleapis.com/books/v1/volumes?q="+keyword+"&key="+apiKey+"&maxResults="+maxResult)
     .then(res => {
         setResult(res.data.items);
         console.log(res.data.items);
-        res.data.items.map((test) => {
-            console.log(test.volumeInfo);
-        })
+        console.log(keyword);
     });
-  }, [book])
-
+  }, [keyword])
 
   // function handleAddBook(book, event) {
   //     event.preventDefault();
@@ -83,48 +83,51 @@ export default function SearchResult() {
     <Layout>
       <div className={classes.root}>
 
-        <GridList cellHeight='auto' cols={7} spacing={20} className={classes.gridList}>
+        <GridList cellHeight='auto' cols={8} spacing={20} className={classes.gridList}>
         {result.map((book) => (
-            <Card style={{ maxWidth: 400, margin: 15 }}>
-                <CardActionArea>
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItem: "center",
-                            justifyContent: "center"
-                        }}
-                    >
-                        <Link href={"/book/" + book.id} color="inherit">
-                            <CardMedia
-                                style={{
-                                    width: "auto",
-                                    maxHeight: "200px"
-                                }}
-                                component="img"
-                                image={book.volumeInfo?.imageLinks?.thumbnail ? book.volumeInfo?.imageLinks?.thumbnail : logo}
-                                title={book.volumeInfo.title}
-                            />
-                        </Link>
-                    </div>
-                    <CardContent>
-                        <Typography gutterBottom variant="headline" component="h2">
-                            {book.volumeInfo.title}
-                        </Typography>
-                        <Typography component="p">
-                            {<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
-          // <GridListTile key={book.id}>
-          //     <Link href={"/book/"+book.id}>
-          //         <img src={book.volumeInfo?.imageLinks?.thumbnail ? book.volumeInfo?.imageLinks?.thumbnail : logo} />
-          //     </Link>
-          //   <GridListTileBar
-          //     title={book.volumeInfo.title}
-          //     subtitle={<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
-          //   />
-          // </GridListTile>
+          <GridListTile key={book.id}>
+              <a href={"/book/"+book.id}>
+                <img src={book.volumeInfo.imageLinks === undefined? logo : `${book.volumeInfo.imageLinks.thumbnail}`} />
+              </a>
+            <GridListTileBar
+              title={book.volumeInfo.title}
+              classes={{
+                root: classes.titleBar,
+              }}
+              subtitle={<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
+            />
+          </GridListTile>
+            // <Card style={{ maxWidth: 400, margin: 15 }}>
+            //     <CardActionArea>
+            //         <div
+            //             style={{
+            //                 display: "flex",
+            //                 alignItem: "center",
+            //                 justifyContent: "center"
+            //             }}
+            //         >
+            //             <Link href={"/book/" + book.id} color="inherit">
+            //                 <CardMedia
+            //                     style={{
+            //                         width: "auto",
+            //                         maxHeight: "200px"
+            //                     }}
+            //                     component="img"
+            //                     image={book.volumeInfo?.imageLinks?.thumbnail ? book.volumeInfo?.imageLinks?.thumbnail : logo}
+            //                     title={book.volumeInfo.title}
+            //                 />
+            //             </Link>
+            //         </div>
+            //         <CardContent>
+            //             <Typography gutterBottom variant="headline" component="h2">
+            //                 {book.volumeInfo.title}
+            //             </Typography>
+            //             <Typography component="p">
+            //                 {<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
+            //             </Typography>
+            //         </CardContent>
+            //     </CardActionArea>
+            // </Card>
         ))}
         </GridList>
       </div>
