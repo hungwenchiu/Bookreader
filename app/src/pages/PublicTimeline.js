@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import Layout from '../components/Layout';
-import RecipeReviewCard from '../components/TimelineEvent';
+import RecipeReviewCard from '../components/TimelineReviewCard';
 import axios from 'axios';
 import FriendShipEventCard from "../components/FriendshipEventCard";
 import {initiateSocket, socket} from "../components/Socketio";
+import {TimelineAction} from "../components/TimelineAction";
 
 
 
@@ -103,7 +104,7 @@ export default function PublicTimeline(){
     useEffect(() => {
 
         getRelationshipId();
-        console.log(relationshipid);
+        // console.log(relationshipid);
         if(relationshipid) {
             fetchEvent();
         }
@@ -128,42 +129,10 @@ export default function PublicTimeline(){
                     {/*<InfiniteScroll next={} hasMore={} loader={} dataLength={}*/}
                     {event_data && event_data.map((timeline_event, idx) => {
 
-                        let bookdescription = "";
-                        let author = "";
-                        let thumbnail = "";
-
-                        // Event action for Friendship
-                        if(timeline_event.action === 'Friendship') {
-                            return (
-                                <FriendShipEventCard
-                                    time={timeline_event.time}
-                                    content={timeline_event.content}
-                                />
-                            );
-                        }
-
-                        // Event action for books
-                        if(bookinfo.has(timeline_event.googlebookid)) {
-                            bookdescription = bookinfo.get(timeline_event.googlebookid).description;
-                            author = bookinfo.get(timeline_event.googlebookid).author;
-                            thumbnail =  bookinfo.get(timeline_event.googlebookid).thumbnail;
-                        }
-
                         return (
-                            <RecipeReviewCard username={timeline_event.name}
-                                              bookname={timeline_event.bookName}
-                                              action={"User Action: " + timeline_event.action}
-                                              comment={timeline_event.content}
-                                              author={author}
-                                              bookdescription={bookdescription}
-                                              rate={5}
-                                              progress={20}
-                                              time={timeline_event.time}
-                                              image={thumbnail}
-                                              id={timeline_event.id}
-                                              key={idx}
-                            />
+                            TimelineAction(timeline_event, bookinfo)
                         );
+
                     })}
                 </div>
             </Layout>
