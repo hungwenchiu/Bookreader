@@ -11,6 +11,7 @@ import Slider from '@material-ui/core/Slider';
 import TextField from '@material-ui/core/TextField';
 import Box from "@material-ui/core/Box";
 import axios from 'axios';
+import {initiateSocket, sendMessage, socket} from "./Socketio";
 
 const marks = [
   {
@@ -85,6 +86,24 @@ export default function BookCard(props) {
 
 
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
+  // for socket io connection and set subcriptions
+  useEffect(() => {
+      initiateSocket(sessionStorage.getItem("currentUserID"));
+  }, []);
+
+  const sendEventToSocket = (eventName) => {
+      const userid = sessionStorage.getItem("currentUserID")
+      axios.get(`/api/relationship/friends/${userid}`)
+          .then(res =>{
+              let userids = userid;
+              res.data.map((item) => {
+                  userids += "," + item.id;
+              });
+              sendMessage( eventName, userids);
+          })
+          .catch( error => {
+          });
+  }
 
   const moveToRead = () => {
         // move book to different bookshelf
@@ -98,6 +117,22 @@ export default function BookCard(props) {
           console.log("Moved to Reading successfully.");
           props.updateFunc(!update);
         })
+
+        // post event to timeline
+        const eventParams = new URLSearchParams();
+        eventParams.append("userid", sessionStorage.getItem("currentUserID"));
+        eventParams.append("name", sessionStorage.getItem("currentUser"));
+        eventParams.append("bookName", bookInfo.book.title);
+        eventParams.append("action", "Progress");
+        eventParams.append("content", "I started reading a book!");
+        eventParams.append("googlebookid", bookInfo.book.googleBookId);
+        eventParams.append("progress", null); // If your action is not progress, just input "null" here
+        axios.post(`/api/event`, eventParams
+        )
+          .then(res => {
+            console.log("post event success");
+            sendEventToSocket("newPost");
+          });
    }
 
   const addToFavorite = () => {
@@ -111,7 +146,22 @@ export default function BookCard(props) {
           console.log("Moved to Favorite successfully.");
           props.updateFunc(!update);
         })
-    props.updateFunc(!update);
+
+        // post event to timeline
+        const eventParams = new URLSearchParams();
+        eventParams.append("userid", sessionStorage.getItem("currentUserID"));
+        eventParams.append("name", sessionStorage.getItem("currentUser"));
+        eventParams.append("bookName", bookInfo.book.title);
+        eventParams.append("action", "Favorite");
+        eventParams.append("content", "I marked book as favorite!");
+        eventParams.append("googlebookid", bookInfo.book.googleBookId);
+        eventParams.append("progress", null); // If your action is not progress, just input "null" here
+        axios.post(`/api/event`, eventParams
+        )
+          .then(res => {
+            console.log("post event success");
+            sendEventToSocket("newPost");
+          });
   }
 
   const removeFromBookshelf = () => {
@@ -153,6 +203,21 @@ export default function BookCard(props) {
            props.updateFunc(!update);
          })
 
+        // post event to timeline
+        const eventParams = new URLSearchParams();
+        eventParams.append("userid", sessionStorage.getItem("currentUserID"));
+        eventParams.append("name", sessionStorage.getItem("currentUser"));
+        eventParams.append("bookName", bookInfo.book.title);
+        eventParams.append("action", "Progress");
+        eventParams.append("content", "I Updated my reading progress!");
+        eventParams.append("googlebookid", bookInfo.book.googleBookId);
+        eventParams.append("progress", event.target.value); // If your action is not progress, just input "null" here
+        axios.post(`/api/event`, eventParams
+        )
+          .then(res => {
+            console.log("post event success");
+            sendEventToSocket("newPost");
+          });
     }
   }
 
