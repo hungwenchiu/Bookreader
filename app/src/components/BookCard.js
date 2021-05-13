@@ -87,7 +87,7 @@ export default function BookCard(props) {
 
 
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
-  // for socket io connection and set subcriptions
+  // for socket io connection and set subscriptions
   useEffect(() => {
       initiateSocket(sessionStorage.getItem("currentUserID"));
   }, []);
@@ -105,6 +105,21 @@ export default function BookCard(props) {
           .catch( error => {
           });
   }
+    const postEventOnTimeline = (action, progress) => {
+        const eventParams = new URLSearchParams();
+        eventParams.append("userid", sessionStorage.getItem("currentUserID"));
+        eventParams.append("name", sessionStorage.getItem("currentUser"));
+        eventParams.append("bookName", bookInfo.book.title);
+        eventParams.append("action", action);
+        eventParams.append("content", "");
+        eventParams.append("googlebookid", bookInfo.book.googleBookId);
+        eventParams.append("progress", progress);
+        axios.post(`/api/event`, eventParams)
+          .then(res => {
+            console.log("post event success");
+            sendEventToSocket("newPost");
+          })
+    }
 
     const moveToRead = () => {
         // move book to different bookshelf
@@ -118,23 +133,8 @@ export default function BookCard(props) {
                 console.log("Moved to Reading successfully.");
                 props.updateFunc(!update);
             })
-
-
         // post event to timeline
-        const eventParams = new URLSearchParams();
-        eventParams.append("userid", sessionStorage.getItem("currentUserID"));
-        eventParams.append("name", sessionStorage.getItem("currentUser"));
-        eventParams.append("bookName", bookInfo.book.title);
-        eventParams.append("action", "Reading");
-        eventParams.append("content", "I started reading a book!");
-        eventParams.append("googlebookid", bookInfo.book.googleBookId);
-        eventParams.append("progress", null); // If your action is not progress, just input "null" here
-        axios.post(`/api/event`, eventParams
-        )
-          .then(res => {
-            console.log("post event success");
-            sendEventToSocket("newPost");
-          });
+        postEventOnTimeline("Reading", null);
    }
 
     const addToFavorite = () => {
@@ -150,20 +150,7 @@ export default function BookCard(props) {
         })
 
         // post event to timeline
-        const eventParams = new URLSearchParams();
-        eventParams.append("userid", sessionStorage.getItem("currentUserID"));
-        eventParams.append("name", sessionStorage.getItem("currentUser"));
-        eventParams.append("bookName", bookInfo.book.title);
-        eventParams.append("action", "Favorite");
-        eventParams.append("content", "I marked book as favorite!");
-        eventParams.append("googlebookid", bookInfo.book.googleBookId);
-        eventParams.append("progress", null); // If your action is not progress, just input "null" here
-        axios.post(`/api/event`, eventParams
-        )
-          .then(res => {
-            console.log("post event success");
-            sendEventToSocket("newPost");
-          });
+        postEventOnTimeline("Favorite", null);
   }
 
     const removeFromBookshelf = () => {
@@ -182,7 +169,6 @@ export default function BookCard(props) {
     const handleChange = (event, newValue) => {
         if (event.key === 'Enter') {
             // update the progress
-            var progressPercentage = 0;
             const progressParams = new URLSearchParams();
             progressParams.append("userID", sessionStorage.getItem("currentUserID"));
             progressParams.append("bookID", bookInfo.book.googleBookId);
@@ -191,7 +177,7 @@ export default function BookCard(props) {
             axios.put(`/api/progress`, progressParams)
                 .then(res => {
                     console.log("Updated pages finished ");
-                    progressPercentage = res.data;
+                    postEventOnTimeline("Progress", res.data);
                     console.log(res.data);
                     setProgressNum(res.data);
                 });
@@ -206,22 +192,6 @@ export default function BookCard(props) {
                     console.log("Moved book successfully.");
                     props.updateFunc(!update);
                 })
-
-        // post event to timeline
-        const eventParams = new URLSearchParams();
-        eventParams.append("userid", sessionStorage.getItem("currentUserID"));
-        eventParams.append("name", sessionStorage.getItem("currentUser"));
-        eventParams.append("bookName", bookInfo.book.title);
-        eventParams.append("action", "Progress");
-        eventParams.append("content", "I Updated my reading progress!");
-        eventParams.append("googlebookid", bookInfo.book.googleBookId);
-        eventParams.append("progress", progressPercentage); // If your action is not progress, just input "null" here
-        axios.post(`/api/event`, eventParams)
-          .then(res => {
-            console.log("post event success");
-            sendEventToSocket("newPost");
-          })
-
         }
 
   }

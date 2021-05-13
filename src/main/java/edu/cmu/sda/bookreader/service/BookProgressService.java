@@ -61,6 +61,7 @@ public class BookProgressService {
 
         if (totalPage > 0) {
             int percentage = (int) (pagesFinished * 100 / totalPage);
+            percentage = percentage > 100 ? 100 : percentage;
             return percentage;
         }
         return 0;
