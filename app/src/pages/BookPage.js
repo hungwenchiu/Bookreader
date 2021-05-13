@@ -12,6 +12,8 @@ import AddBookButtonGroup from '../components/AddBookButtonGroup';
 import Review from '../components/Review';
 import Rating from '@material-ui/lab/Rating';
 import ReviewPostDialog from '../components/ReviewPostDialog';
+import RecommendBook from '../components/RecommendBook'
+import Button from "@material-ui/core/Button";
 
 const StyleSheet = makeStyles({
   container: {
@@ -39,8 +41,12 @@ export default function BookPage() {
   const [rating, setRating] = useState(0)
   const {id}  = useParams()
 
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState({});
+  const [allFriends, setAllFriends ] = React.useState([]);
+  const currentUserId = sessionStorage.getItem('currentUserID');
+
   useEffect(() => {
-    console.log("use effect")
 
     // get book information
     axios.get(`https://www.googleapis.com/books/v1/volumes/` + id + `?key=` + apiKey)
@@ -63,6 +69,15 @@ export default function BookPage() {
     const avgRating = reviews.reduce((total, next) => total + next.rating, 0) / reviews.length
     return avgRating
   }
+
+  const handleClickOpen = () => {
+  setOpen(true);
+};
+
+const handleClose = (value) => {
+  setOpen(false);
+  setSelectedValue(value);
+};
 
   // insert book to database
   function handleAddBook(book) {
@@ -91,7 +106,7 @@ export default function BookPage() {
     };
     fetch('/api/book', requestOptions)
         .then(response => {
-          return response.json()
+          return response.json();
         })
         .then(data => {
           console.log(data)
@@ -103,8 +118,16 @@ export default function BookPage() {
       <div className={classes.container}>
         <Grid container spacing={3} >
           <Grid item xs={3}>
-            <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
+            <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} width="180" height="270" />
             <AddBookButtonGroup bookID = {id}/>
+            {/*<RecommendBook/>*/}
+            <div>
+              <br />
+              <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                Recommend Book
+              </Button>
+              <RecommendBook selectedValue={selectedValue} open={open} onClose={handleClose} book={book}/>
+            </div>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>
