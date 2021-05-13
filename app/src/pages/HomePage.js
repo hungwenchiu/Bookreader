@@ -1,13 +1,36 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Layout from '../components/Layout'
+import {makeStyles} from '@material-ui/core/styles';
+import axios from 'axios';
+import Typography from '@material-ui/core/Typography';
+import RecommendList from '../components/RecommendList'
 
-const HomePage = () => (
-  <Layout>
-    <div>
-        // For reference to get user, needs to be removed
-        current user is : {sessionStorage.getItem("currentUser")}
-    </div>
-  </Layout>
-)
+const useStyles = makeStyles({
+  container: {
+    marginLeft: '15%',
+    marginRight: '15%',
+    marginTop: '1%',
+  },
+})
 
-export default HomePage;
+export default function HomePage() {
+  const classes = useStyles()
+
+  return (
+    <Layout>
+      <div className={classes.container}>
+        <Typography variant="h4">Top Want to Read</Typography>
+        <RecommendList type="wantToRead" />
+        <Typography variant="h4">Top Favorite</Typography>
+        <RecommendList type="favorite" />
+        <Typography variant="h4">Top Reading</Typography>
+        <RecommendList type="reading" />
+        <Typography variant="h4">Top Read</Typography>
+        <RecommendList type="read" />
+      </div>
+
+    </Layout> 
+  )
+}
+
+

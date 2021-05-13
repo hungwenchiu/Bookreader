@@ -9,7 +9,7 @@ public interface SystemCountRepository extends JpaRepository<SystemCount, Long> 
     SystemCount findById (long Id);
     SystemCount findByGoogleBookId (String googleBookId);
     List<SystemCount> findTop10ByOrderByReadingCountDesc();
-    List<SystemCount> findTop10ByOrderByFavouriteCountDesc();
+    List<SystemCount> findTop10ByOrderByFavoriteCountDesc();
     List<SystemCount> findTop10ByOrderByReadCountDesc();
     List<SystemCount> findTop10ByOrderByWantToReadCountDesc();
 }

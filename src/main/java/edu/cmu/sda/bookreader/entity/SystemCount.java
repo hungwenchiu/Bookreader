@@ -21,7 +21,7 @@ public class SystemCount {
     @Column(columnDefinition = "integer default 0")
     private int readingCount;
     @Column(columnDefinition = "integer default 0")
-    private int favouriteCount;
+    private int favoriteCount;
     @Column(columnDefinition = "integer default 0")
     private int readCount;
     @Column(columnDefinition = "integer default 0")
@@ -33,7 +33,7 @@ public class SystemCount {
 
     public int getReadingCount() { return this.readingCount; }
 
-    public int getFavouriteCount() { return this.favouriteCount; }
+    public int getFavoriteCount() { return this.favoriteCount; }
 
     public int getReadCount() { return this.readCount; }
 
@@ -45,5 +45,5 @@ public class SystemCount {
 
     public void setReading(int count) { this.readingCount = count; }
 
-    public void setFavourite(int count) { this.favouriteCount = count; }
+    public void setFavorite(int count) { this.favoriteCount = count; }
 }
