@@ -118,11 +118,7 @@ export default function BookCard(props) {
                 console.log("Moved to Reading successfully.");
                 props.updateFunc(!update);
             })
-    }
-        .then(res => {
-          console.log("Moved to Reading successfully.");
-          props.updateFunc(!update);
-        })
+
 
         // post event to timeline
         const eventParams = new URLSearchParams();
@@ -148,13 +144,6 @@ export default function BookCard(props) {
         moveBookParams.append("bookID", bookInfo.book.googleBookId);
 
         axios.put('/api/bookshelves/Favorite/books', moveBookParams)
-            .then(res => {
-                console.log("Moved to Favorite successfully.");
-                props.updateFunc(!update);
-            })
-        props.updateFunc(!update);
-    }
-    axios.put('/api/bookshelves/Favorite/books', moveBookParams)
         .then(res => {
           console.log("Moved to Favorite successfully.");
           props.updateFunc(!update);
@@ -217,7 +206,7 @@ export default function BookCard(props) {
                 })
 
         }
-    }
+
         // post event to timeline
         const eventParams = new URLSearchParams();
         eventParams.append("userid", sessionStorage.getItem("currentUserID"));
@@ -227,13 +216,12 @@ export default function BookCard(props) {
         eventParams.append("content", "I Updated my reading progress!");
         eventParams.append("googlebookid", bookInfo.book.googleBookId);
         eventParams.append("progress", event.target.value); // If your action is not progress, just input "null" here
-        axios.post(`/api/event`, eventParams
-        )
+        axios.post(`/api/event`, eventParams)
           .then(res => {
             console.log("post event success");
             sendEventToSocket("newPost");
-          });
-    }
+          })
+
   }
 
     return (
