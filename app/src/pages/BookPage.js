@@ -119,8 +119,6 @@ const handleClose = (value) => {
         <Grid container spacing={3} >
           <Grid item xs={3}>
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} width="180" height="270" />
-            <AddBookButtonGroup bookID = {id}/>
-            {/*<RecommendBook/>*/}
             <div>
               <br />
               <Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -128,6 +126,8 @@ const handleClose = (value) => {
               </Button>
               <RecommendBook selectedValue={selectedValue} open={open} onClose={handleClose} book={book}/>
             </div>
+            <AddBookButtonGroup bookID = {id}/>
+            
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>

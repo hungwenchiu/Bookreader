@@ -10,12 +10,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import {
     useLocation
 } from "react-router-dom";
-import Link from "@material-ui/core/Link";
-import {Card, CardActionArea, CardActions} from "@material-ui/core";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+
 import logo from "../assets/logo-small.png"
 
 const StyleSheet = makeStyles((theme) => ({

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   titleBar: {
     background:
       'linear-gradient(to top, rgba(93, 173, 226, 0.7) 0%, rgba(93, 173, 226, 0.3) 70%, rgba(93, 173, 226, 0) 100%)',
-  },
+    },
   papers: {
     backgroundColor: "#F0F3F4",
     padding: theme.spacing(1),

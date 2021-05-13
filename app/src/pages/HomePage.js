@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
   },
   titles: {
     marginTop: 20,
+  },
+  subtitles:{
     marginBottom: 20,
   }
 }))
@@ -33,17 +35,25 @@ export default function HomePage() {
   return (
     <Layout>
       <div className={classes.container}>
-        <Typography variant="h5" className={classes.titles}>Top Want to Read</Typography>
-        <RecommendList type="wantToRead" />
+        <Typography variant="h5" className={classes.titles}>Now Trending</Typography>
+        <Typography variant="subtitle1" color="textSecondary" className={classes.subtitles}>See what's trending now</Typography>
 
-        <Typography variant="h5" className={classes.titles}>Top Favorite</Typography>
-        <RecommendList type="favorite" />
-
-        <Typography variant="h5" className={classes.titles}>Top Reading</Typography>
         <RecommendList type="reading" />
 
-        <Typography variant="h5" className={classes.titles}>Top Read</Typography>
+        <Typography variant="h5" className={classes.titles}>Everyone's Favorite</Typography>
+        <Typography variant="subtitle1" color="textSecondary" className={classes.subtitles}>Explore from the favorite collection</Typography>
+
+        <RecommendList type="favorite" />
+
+        <Typography variant="h5" className={classes.titles}>Most Read</Typography>
+        <Typography variant="subtitle1" color="textSecondary" className={classes.subtitles}>See what others have read</Typography>
+
         <RecommendList type="read" />
+
+        <Typography variant="h5" className={classes.titles}>Explore More</Typography>
+        <Typography variant="subtitle1" color="textSecondary" className={classes.subtitles}>See what others want to read</Typography>
+
+        <RecommendList type="wantToRead" />
       </div>
 
     </Layout> 
