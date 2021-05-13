@@ -118,7 +118,7 @@ const handleClose = (value) => {
       <div className={classes.container}>
         <Grid container spacing={3} >
           <Grid item xs={3}>
-            <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
+            <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} width="180" height="270" />
             <AddBookButtonGroup bookID = {id}/>
             {/*<RecommendBook/>*/}
             <div>
