@@ -153,6 +153,9 @@ public class BookshelfController {
     @RequestMapping(value = "/bookshelves/{name}/remove", method = RequestMethod.PUT)
     public AbstractBookshelf deleteBook(@PathVariable("name") String bookshelfName,@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
         systemCountService.updateSystemCount(bookID, bookshelfName, -1);
+        if (bookshelfName.equals("Recommended")) {
+            return bookshelfService.removeRecommendedBook(userID, bookID);
+        }
         return bookshelfService.removeBook(userID, bookshelfName, bookID);
     }
 }

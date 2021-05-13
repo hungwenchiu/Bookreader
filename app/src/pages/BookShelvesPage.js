@@ -75,6 +75,7 @@ export default function BookShelvesPage() {
           // process all books -> get the progress
           // add progress to the book
           setBooks(res.data)
+          console.log(res.data);
         })
         .catch(error => {
           console.log(error);
@@ -178,7 +179,19 @@ export default function BookShelvesPage() {
             }
           </List>
           </TabPanel>
-
+           <TabPanel value={value} index={4}>
+             <List>
+               {
+                 books.map((book) => (
+                     <BookCard bookInfo={book}
+                               currentBookshelf={bookshelf.name}
+                               updateFunc={setUpdate}
+                               update={update}
+                     />
+                 ))
+               }
+             </List>
+           </TabPanel>
         </div>
       </Layout>
   )
