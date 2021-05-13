@@ -82,7 +82,7 @@ export default function BookCard(props) {
   const { book, currentBookshelf, updateFunc, update} = props;
 
   const [progressNum, setProgressNum] = useState(book.progress)
-  console.log(progressNum)
+  console.log(book.title)
 
 
   const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
@@ -144,7 +144,7 @@ export default function BookCard(props) {
         <Card className={classes.root}>
           <CardMedia
             className={classes.cover}
-            image={book.image}
+            image={book.thumbnail}
             alt={altSrc}
           />
           <div className={classes.details}>
@@ -155,7 +155,7 @@ export default function BookCard(props) {
                     {book.title}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    {book.author}
+                    {book.author ? book.author : "not available"}
                   </Typography>
 
                   <Box m={3} />
