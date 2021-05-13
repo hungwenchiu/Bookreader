@@ -247,7 +247,7 @@ export default function TimelineProgressCard(props) {
                         </Typography>
                         <LinearWithValueLabel value={props.progress}></LinearWithValueLabel>
                         <Typography variant="h3" color="primary" gutterBottom>
-                            {props.progress} %
+                            {(props.progress === "") ? "Start Reading" : `${props.progress} %`}
                         </Typography>
                     </div>
 
@@ -255,7 +255,7 @@ export default function TimelineProgressCard(props) {
             </div>
             <Divider className={classes.divider}/>
             <CardContent className={classes.cardContent}>
-                <Typography variant="h6" gutterBottom> {`${props.username} makes progress on the book!!`} </Typography>
+                <Typography variant="h6" gutterBottom> {`${props.username} has progress update`} </Typography>
                 <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
                     {props.comment}
                 </Typography>

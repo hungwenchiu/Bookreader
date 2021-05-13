@@ -130,10 +130,16 @@ export default function RecipeReviewCard(props) {
     let ratingComp = "";
 
     if(props.action === "Reading") {
-        statement = "starts reading the book.";
+        statement = "starts reading";
+        reviewComment = <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
+            {props.comment}
+        </Typography>;
     }
     else if(props.action === "Favorite") {
-        statement = "moves the book to my favorite bookshelf.";
+        statement = "moves a book";
+        reviewComment = <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
+            {props.comment}
+        </Typography>;
     }
     else if(props.action === "Review") {
         statement = "posts a review and rating:";
