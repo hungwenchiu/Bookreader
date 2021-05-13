@@ -25,6 +25,7 @@ import parse from 'html-react-parser';
 import Slider from "@material-ui/core/Slider";
 import Grid from "@material-ui/core/Grid";
 import {sendMessage, socket} from "./Socketio";
+import Divider from "@material-ui/core/Divider";
 
 const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
 
@@ -34,18 +35,19 @@ const useStyles = makeStyles((theme) => ({
         maxHeight:"20%",
         margin: "20px auto",
         boxShadow: "0px 10px 11px 2px #ccc",
+        borderRadius:"20px",
 
 
     },
     media: {
         display: "inline-block",
-        height: "30vh",
+        height: "100%",
         width: "30%",
         textAlign:"center",
 
     },
     bookContainer: {
-        height:"70%",
+        height:"50%",
     },
     bookImg: {
         display: "inline-block",
@@ -70,16 +72,20 @@ const useStyles = makeStyles((theme) => ({
     },
     bookInfo: {
         verticalAlign: "top",
-        marginLeft: "4vw",
+        marginLeft: "1px",
         marginTop: "0px",
         display: "inline-block",
-        width: '60%',
-        height: '250px',
+        width: '63%',
+        height: '170px',
         overflow:'auto',
-
+        // borderWidth: "1px",
+        // borderStyle:"solid",
+        // borderColor:"lightgray",
+        // backgroundColor:"aliceblue",
     },
     replyField: {
         width:"100%",
+        borderRadius:"20px",
     },
     replyTxt: {
         width:"80%",
@@ -94,11 +100,21 @@ const useStyles = makeStyles((theme) => ({
     },
     cardContent: {
         height: "60px",
+        padding: "0 0 0 2%",
     },
     reviewContent: {
         height: "100%",
         width:"100%",
         overflow:"auto",
+    },
+    divider: {
+        margin: "20px",
+        height: "2px",
+
+
+    },
+    startIcon: {
+        marginLeft:"10px",
     }
 }));
 
@@ -173,14 +189,6 @@ export default function RecipeReviewCard(props) {
         return date.toDateString() + "  " + date.getHours() + ":" + date.getMinutes() +  ":" +  date.getSeconds();
     }
 
-    const actionType = (action) => {  // TODO
-
-        if(action === "review")
-            return "User wrote a review";
-        else
-            return "User did an action";
-    }
-
     const getTxt = (event) => {
 
         const { value } = event.target;
@@ -215,24 +223,21 @@ export default function RecipeReviewCard(props) {
         setInputTxt("");
     } // user reply
 
+    // console.log(" props.id   ", props.id, "  props.bookname: ", props.bookname , userreply);
     return (
         <Card className={classes.root} variant="outlined">
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
-                        {currentUser.name.charAt(0).toUpperCase()}
+                        {props.username.charAt(0).toUpperCase()}
                     </Avatar>
                 }
                 title={props.username}
                 subheader={convertTime()}
             />
-            <div>
+            <div className={classes.bookContainer}>
                 <CardMedia className={classes.media} title={props.title}>
                     <img className={classes.bookImg} src={props.image}/>
-                    <LinearWithValueLabel value={props.progress}></LinearWithValueLabel>
-                    <Box component="fieldset" mb={3} borderColor="transparent">
-                        <Rating name="read-only" value={props.rate} precision={0.5} readOnly />
-                    </Box>
                 </CardMedia>
                 <div className={classes.bookInfo}>
                     <Typography variant="h6" gutterBottom>
@@ -247,11 +252,15 @@ export default function RecipeReviewCard(props) {
                     </Typography>
                 </div>
             </div>
+            <Divider className={classes.divider}/>
             <CardContent className={classes.cardContent}>
-                <Typography variant="h6" gutterBottom> Review </Typography>
+                <Typography variant="h6" gutterBottom> {`${props.username} posts a review and rating:`}
+                    <Rating className={classes.startIcon} name="read-only" value={props.rate} precision={0.5} readOnly />
+                </Typography>
                 <Typography className={classes.reviewContent} variant="body1" color={"textSecondary"} gutterBottom>
                     {props.comment}
                 </Typography>
+
             </CardContent>
             <CardActions disableSpacing>
                 {/*<IconButton aria-label="share">*/}
@@ -272,7 +281,7 @@ export default function RecipeReviewCard(props) {
                 <CardContent>
                     <Typography variant="h6" gutterBottom> Comment </Typography>
                     {userreply && userreply.map((r, idx) => {
-                        // console.log(r);
+
                         return (
                             <ReplyCard
                                 bookName={r.bookname}
@@ -286,7 +295,7 @@ export default function RecipeReviewCard(props) {
                         );
                     })}
                     <div className={classes.replyField}>
-                        <Input className={classes.replyTxt} placeholder="Write Comment..." inputProps={{ 'aria-label': 'description' }} value={input_txt} onChange={getTxt} onKeyDown={inputKeyDown}/>
+                        <Input className={classes.replyTxt} placeholder="Write Comment.." inputProps={{ 'aria-label': 'description' }} value={input_txt} onChange={getTxt} onKeyDown={inputKeyDown}/>
                         <Button className={[classes.button, classes.replyBtn]} variant="contained"  color="primary" onClick={sendReply}>
                             Reply
                             <SendIcon/>
