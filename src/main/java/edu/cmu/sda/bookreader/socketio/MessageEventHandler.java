@@ -82,4 +82,23 @@ public class MessageEventHandler {
                 userToSockList.get(uid).sendEvent("refreshReply", "true");
         }
     }
+
+    @OnEvent("refreshFriendPage")
+    public void refreshFriendPage(SocketIOClient client, AckRequest request, MessageInfo msg) {
+        String userids = msg.getMsgContent();
+
+        for(String uid: userids.split(",")) {
+            if(userToSockList.containsKey(uid))
+                userToSockList.get(uid).sendEvent("updateFriendPage", uid);
+        }
+    }
+
+    @OnEvent("newComer")
+    public void newComer(SocketIOClient client, AckRequest request, MessageInfo msg) {
+        String userid = msg.getMsgContent();
+
+        for(Map.Entry<String,SocketIOClient> entry : userToSockList.entrySet()) {
+            entry.getValue().sendEvent("userLogin", userid);
+        }
+    }
 }

@@ -18,6 +18,7 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import {makeStyles} from "@material-ui/core/styles";
 import {blue} from "@material-ui/core/colors";
+import {initiateSocket, sendMessage, socket} from "../components/Socketio";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,30 +32,52 @@ const FriendsPage = () => {
     const [incomingRequests, setIncomingRequests] = useState([])
     const [allFriends, setAllFriends] = useState([])
     const [notFriends, setNotFriends] = useState([])
-    const [update, setUpdate] = useState(false)
+    const [update, setUpdate] = useState(true)
     const currentUserId = sessionStorage.getItem('currentUserID');
     const currentUser = {id: sessionStorage.getItem('currentUserID'), name: sessionStorage.getItem('currentUser')}
 
     useEffect(() => {
-        axios.get(`/api/relationship/incoming/${currentUserId}`)
-            .then(res => {
-                setIncomingRequests(res.data);
-            });
-        axios.get(`/api/relationship/friends/${currentUserId}`)
-            .then(res => {
-                setAllFriends(res.data);
-            });
-        axios.get(`/api/relationship/none/${currentUserId}`)
-            .then(res => {
-                setNotFriends(res.data);
-            });
+        initiateSocket(currentUserId);
+
+        //Topic: to update the page
+        // if the user's friends post some new message
+        socket.on("updateFriendPage", (res) => {
+            setUpdate(true);
+        });
+
+        socket.on("userLogin", (res) => {
+            setUpdate(true);
+        });
+
+    }, []);
+
+    useEffect(() => {
+        if(update) {
+            axios.get(`/api/relationship/incoming/${currentUserId}`)
+                .then(res => {
+                    setIncomingRequests(res.data);
+                });
+            axios.get(`/api/relationship/friends/${currentUserId}`)
+                .then(res => {
+                    setAllFriends(res.data);
+                });
+            axios.get(`/api/relationship/none/${currentUserId}`)
+                .then(res => {
+                    setNotFriends(res.data);
+                });
+            setUpdate(false);
+        }
     }, [update]);
 
     function handleAddFriend(toUser) {
         const data = [currentUser, toUser]
+        let userids = "";
+            userids += data[0].id + "," + data[1].id;
         axios.post(`/api/relationship`, data)
             .then(res => {
-                setUpdate(!update)
+                // setUpdate(!update)
+                // socket io
+                sendMessage("refreshFriendPage", userids);
             });
         postEvent(currentUser.name, toUser.name, currentUser.id);
         postEvent(currentUser.name, toUser.name, toUser.id);
@@ -62,17 +85,25 @@ const FriendsPage = () => {
 
     function handleAcceptFriend(fromUser, toUser) {
         const data = [fromUser, toUser]
+        let userids = "";
+        userids += data[0].id + "," + data[1].id;
         axios.post(`/api/relationship/accept`, data)
             .then(res => {
-                setUpdate(!update)
+                // setUpdate(!update)
+                // socket io
+                sendMessage("refreshFriendPage", userids);
+
             });
     }
 
     function handleDeleteFriendRequest(fromUser, toUser) {
         const data = [fromUser, toUser]
+        let userids = "";
+        userids += data[0].id + "," + data[1].id;
         axios.delete(`/api/relationship`, {data: data})
             .then(res => {
-                setUpdate(!update)
+                // setUpdate(!update)
+                sendMessage("refreshFriendPage", userids);
             });
     }
 
