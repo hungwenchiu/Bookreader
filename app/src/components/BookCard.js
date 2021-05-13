@@ -111,6 +111,20 @@ export default function BookCard(props) {
         .then(res => {
           console.log("Moved to Favorite successfully.");
         })
+    props.updateFunc(!update);
+  }
+
+  const removeFromBookshelf = () => {
+    // move book to different bookshelf
+    const moveBookParams = new URLSearchParams();
+    moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
+    moveBookParams.append("bookID", bookInfo.book.googleBookId);
+
+    axios.delete('/api/bookshelves/' + currentBookshelf, {data: moveBookParams})
+        .then(res => {
+          console.log("remove book from bookshelf successfully.");
+        })
+    props.updateFunc(!update);
   }
 
   const handleChange = (event, newValue) => {
@@ -183,16 +197,16 @@ export default function BookCard(props) {
                 <Grid item xs={2} className={classes.buttons}>
 
                   {
-                    currentBookshelf != "Favorite" &&
+                    currentBookshelf != "Favorite" && !bookInfo.isFavorite &&
                     <Button variant="contained" color="primary" className={classes.button} onClick={addToFavorite}>Favorite</Button>
                   }
 
                   {
-                    currentBookshelf != "Reading" &&
+                    currentBookshelf != "Reading" && !bookInfo.isReading &&
                     <Button variant="contained" color="primary" className={classes.button} onClick={moveToRead}>Start Reading</Button>
                   }
 
-                  <Button variant="contained" className={classes.button}>
+                  <Button variant="contained" className={classes.button} onClick={removeFromBookshelf}>
                     Remove
                   </Button>
                   {

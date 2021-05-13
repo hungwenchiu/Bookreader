@@ -32,7 +32,7 @@ public class SystemCountController {
      */
     @PutMapping("/systemCount/{googleBookId}/{type}")
     public SystemCount updateSystemCount(@PathVariable String googleBookId, @PathVariable String type) {
-        return service.updateSystemCount(googleBookId, type);
+        return service.updateSystemCount(googleBookId, type, 1);
     }
 
     @GetMapping("/systemCount/{googleBookId}")
