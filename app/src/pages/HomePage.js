@@ -4,14 +4,22 @@ import {makeStyles} from '@material-ui/core/styles';
 import axios from 'axios';
 import Typography from '@material-ui/core/Typography';
 import RecommendList from '../components/RecommendList'
+import Divider from '@material-ui/core/Divider';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     marginLeft: '15%',
     marginRight: '15%',
-    marginTop: '1%',
   },
-})
+  divider: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  titles: {
+    marginTop: 20,
+    marginBottom: 20,
+  }
+}))
 
 export default function HomePage() {
   const classes = useStyles()
@@ -19,13 +27,16 @@ export default function HomePage() {
   return (
     <Layout>
       <div className={classes.container}>
-        <Typography variant="h4">Top Want to Read</Typography>
+        <Typography variant="h5" className={classes.titles}>Top Want to Read</Typography>
         <RecommendList type="wantToRead" />
-        <Typography variant="h4">Top Favorite</Typography>
+
+        <Typography variant="h5" className={classes.titles}>Top Favorite</Typography>
         <RecommendList type="favorite" />
-        <Typography variant="h4">Top Reading</Typography>
+
+        <Typography variant="h5" className={classes.titles}>Top Reading</Typography>
         <RecommendList type="reading" />
-        <Typography variant="h4">Top Read</Typography>
+
+        <Typography variant="h5" className={classes.titles}>Top Read</Typography>
         <RecommendList type="read" />
       </div>
 

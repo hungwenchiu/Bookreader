@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import Layout from '../components/Layout'
 import GridList from '@material-ui/core/GridList';
-import logo from '../assets/logo.png'
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import {
@@ -21,6 +20,10 @@ const StyleSheet = makeStyles((theme) => ({
   gridList: {
     
   },
+  titleBar: {
+    background:
+      'linear-gradient(to top, rgba(0,0,0, 0.7) 0%, rgba(0,0,0, 0.3) 70%, rgba(0,0,0, 0) 100%)',
+  },
 }))
 
 export default function SearchResult() {
@@ -29,7 +32,7 @@ export default function SearchResult() {
   let keyword = query.get("keyword")
   const [result, setResult] = useState([]);
   const apiKey = "AIzaSyAu1E-pEKMYEw14bjqcdQDsEybKHIaZfaY";
-  const maxResult = 10;
+  const maxResult = 20;
 
   useEffect(() => {
     axios.get("https://www.googleapis.com/books/v1/volumes?q="+keyword+"&key="+apiKey+"&maxResults="+maxResult)
@@ -73,14 +76,17 @@ export default function SearchResult() {
     <Layout>
       <div className={classes.root}>
 
-        <GridList cellHeight='auto' cols={7} spacing={20} className={classes.gridList}>
+        <GridList cellHeight='auto' cols={8} spacing={20} className={classes.gridList}>
         {result.map((book) => (
-          <GridListTile key={book.volumeInfo.imageLinks.thumbnail}>
+          <GridListTile key={book.id}>
               <a href={"/book/"+book.id}>
-                <img src={book.volumeInfo.imageLinks.thumbnail} alt={logo} />
+                <img src={book.volumeInfo.imageLinks === undefined? "" : `${book.volumeInfo.imageLinks.thumbnail}`} />
               </a>
             <GridListTileBar
               title={book.volumeInfo.title}
+              classes={{
+                root: classes.titleBar,
+              }}
               subtitle={<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
             />
           </GridListTile>
