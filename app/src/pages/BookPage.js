@@ -13,6 +13,7 @@ import Review from '../components/Review';
 import Rating from '@material-ui/lab/Rating';
 import ReviewPostDialog from '../components/ReviewPostDialog';
 import RecommendBook from '../components/RecommendBook'
+import Button from "@material-ui/core/Button";
 
 const StyleSheet = makeStyles({
   container: {
@@ -40,6 +41,11 @@ export default function BookPage() {
   const [rating, setRating] = useState(0)
   const {id}  = useParams()
 
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState({});
+  const [allFriends, setAllFriends ] = React.useState([]);
+  const currentUserId = sessionStorage.getItem('currentUserID');
+
   useEffect(() => {
     console.log("use effect")
 
@@ -64,6 +70,15 @@ export default function BookPage() {
     const avgRating = reviews.reduce((total, next) => total + next.rating, 0) / reviews.length
     return avgRating
   }
+
+  const handleClickOpen = () => {
+  setOpen(true);
+};
+
+const handleClose = (value) => {
+  setOpen(false);
+  setSelectedValue(value);
+};
 
   // insert book to database
   function handleAddBook(book) {
@@ -106,7 +121,14 @@ export default function BookPage() {
           <Grid item xs={3}>
             <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} height="300" />
             <AddBookButtonGroup bookID = {id}/>
-            <RecommendBook/>
+            {/*<RecommendBook/>*/}
+            <div>
+              <br />
+              <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                Recommend Book
+              </Button>
+              <RecommendBook selectedValue={selectedValue} open={open} onClose={handleClose} />
+            </div>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" gutterBottom>
@@ -145,3 +167,29 @@ export default function BookPage() {
     </Layout>
   )
 }
+
+
+//
+// const [open, setOpen] = React.useState(false);
+// const [selectedValue, setSelectedValue] = React.useState(friends[0]);
+// const [allFriends, setAllFriends ] = React.useState([]);
+// const currentUserId = sessionStorage.getItem('currentUserID');
+//
+// const handleClickOpen = () => {
+//   setOpen(true);
+// };
+//
+// const handleClose = (value) => {
+//   setOpen(false);
+//   setSelectedValue(value);
+// };
+//
+// return (
+//     <div>
+//       <br />
+//       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+//         Recommend Book
+//       </Button>
+//       <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
+//     </div>
+// );
