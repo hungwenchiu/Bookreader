@@ -27,9 +27,9 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Long
     @Query(value = "SELECT r from Relationship r where (r.userOne = :user or r.userTwo = :user) and r.status = 0 and r.actionUser = :user")
     List<Relationship> getAllPendingSentRequest(@Param("user") User user);
 
-    @Query(value = "SELECT * FROM USER WHERE id NOT IN ( " +
-            "SELECT DISTINCT user_one FROM USER u JOIN relationship r ON u.id=r.user_one OR u.id=r.user_two WHERE u.id=:user UNION ALL " +
-            "SELECT DISTINCT user_two FROM USER u JOIN relationship r ON u.id=r.user_one OR u.id=r.user_two WHERE u.id=:user)",
+    @Query(value = "SELECT * FROM user_info WHERE id NOT IN ( " +
+            "SELECT DISTINCT user_one FROM user_info u JOIN relationship r ON u.id=r.user_one OR u.id=r.user_two WHERE u.id=:user UNION ALL " +
+            "SELECT DISTINCT user_two FROM user_info u JOIN relationship r ON u.id=r.user_one OR u.id=r.user_two WHERE u.id=:user)",
             nativeQuery = true)
     List<List<Object>> getNoRelationship(@Param("user") User user);
 
