@@ -8,12 +8,13 @@ import Typography from '@material-ui/core/Typography';
 import parse from 'html-react-parser'
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import AddBookButtonGroup from '../components/AddBookButtonGroup';
 import Review from '../components/Review';
 import Rating from '@material-ui/lab/Rating';
 import ReviewPostDialog from '../components/ReviewPostDialog';
 import RecommendBook from '../components/RecommendBook'
 import Button from "@material-ui/core/Button";
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 const StyleSheet = makeStyles({
   container: {
@@ -26,6 +27,10 @@ const StyleSheet = makeStyles({
   divider: {
     marginTop: 20,
     marginBottom: 20,
+  },
+  button: {
+    marginTop: '15px',
+    width: "12.5em"
   },
 })
 
@@ -41,7 +46,9 @@ export default function BookPage() {
   const [rating, setRating] = useState(0)
   const {id}  = useParams()
 
+  const [wantToRead, setWantToRead] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [favorite, setFavorite] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
   const [allFriends, setAllFriends ] = React.useState([]);
   const currentUserId = sessionStorage.getItem('currentUserID');
@@ -113,6 +120,16 @@ const handleClose = (value) => {
         });
   }
 
+  function addToBookshelf(bookshelfName) {
+    axios.put(`/api/bookshelves/${bookshelfName}/books?bookID=${book.id}&userID=${currentUserId}`)
+    .then(res =>{
+        console.log('Inside add to bookshelf');
+    })
+    .catch( error => {
+        console.log(error);
+    });
+  }
+
   return(
     <Layout>
       <div className={classes.container}>
@@ -126,7 +143,21 @@ const handleClose = (value) => {
               </Button>
               <RecommendBook selectedValue={selectedValue} open={open} onClose={handleClose} book={book}/>
             </div>
-            <AddBookButtonGroup bookID = {id}/>
+            <Button className={classes.button}
+              variant="contained"
+              disabled={wantToRead}
+              onClick={() => {
+              addToBookshelf("WantToRead")
+              setWantToRead(true)
+            }}>Want to Read</Button>
+
+            <Button className={classes.button}
+              onClick={() => {
+                addToBookshelf("Favorite")
+                setFavorite(true)
+              }}>
+                {favorite ? <FavoriteIcon color="secondary" fontSize="large"/> : <FavoriteBorderIcon color="secondary" fontSize="large"/> }
+            </Button>
             
           </Grid>
           <Grid item xs={9}>
