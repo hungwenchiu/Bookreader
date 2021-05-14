@@ -19,7 +19,7 @@ export default function ReviewPostDialog(props) {
   const username = sessionStorage.getItem("currentUser");
   const userid = sessionStorage.getItem("currentUserID");
 
-  const { bookInfo } = props;
+  const { bookInfo, allReviews, setReviews } = props;
   const [open, setOpen] = React.useState(false);
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [inputtxt, setInputTxt] = React.useState("");
@@ -84,6 +84,8 @@ export default function ReviewPostDialog(props) {
         .then(res => {
           console.log("post review success");
           handleClose();
+          
+          setReviews(allReviews.concat(res.data))
         });
 
     }

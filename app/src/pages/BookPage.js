@@ -182,7 +182,7 @@ const handleClose = (value) => {
           </Grid>
           
           <Grid item xs={12} >
-            <ReviewPostDialog bookInfo={book}></ReviewPostDialog>
+            <ReviewPostDialog bookInfo={book} allReviews={reviews} setReviews={setReviews}></ReviewPostDialog>
 
             <List>
               {reviews.map((review) => (
