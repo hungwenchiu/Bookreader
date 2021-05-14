@@ -207,9 +207,9 @@ export default function BookCard(props) {
                         href={"/book/" + bookInfo.book.id}
                     />
                 </Link>
-                    <CardContent className={classes.content}>
-                        <Grid container justify="space-evenly">
-                            <Grid item xs={10}>
+                    <CardContent style={{width: '100%'}}>
+                        <Grid container justify="space-around">
+                            <Grid item xs={8}>
                                 <Typography component="h5" variant="h5">
                                     <Link href={"/book/" + bookInfo.book.googleBookId} color="inherit">
                                         {bookInfo.book.title}
@@ -243,29 +243,40 @@ export default function BookCard(props) {
                                 }
                             </Grid>
 
-                            <Grid item xs={2} className={classes.buttons}>
-
+                            <Grid item xs={4}>
+                                <Grid container direction="column" >
+                                <Grid item>
                                 {
                                     currentBookshelf != "Favorite" && !bookInfo.isFavorite &&
                                     <Button variant="contained" color="primary" className={classes.button}
                                             onClick={addToFavorite}>Favorite</Button>
                                 }
-
+                                </Grid>
+                                <Grid item>
                                 {
                                     currentBookshelf != "Reading" && !bookInfo.isReading &&
                                     <Button variant="contained" color="primary" className={classes.button}
                                             onClick={moveToRead}>Start Reading</Button>
                                 }
+                                </Grid>
 
+                                <Grid item>
                                 <Button variant="contained" className={classes.button} onClick={removeFromBookshelf}>
                                     Remove
                                 </Button>
+                                
+                                </Grid>
+                                <Grid item>
+
                                 {
                                     currentBookshelf == "Reading" &&
                                     <TextField id="outlined-basic" label="Pages Finished" variant="outlined"
                                                className={classes.button}
                                                style={{width: '11em'}} onKeyDown={handleChange}/>
                                 }
+                                </Grid>
+
+                                </Grid>
                             </Grid>
 
                         </Grid>
