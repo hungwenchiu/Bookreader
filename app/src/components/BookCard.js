@@ -44,7 +44,7 @@ const useStyles = makeStyles({
         paddingTop: "1em",
         paddingBottom: "1em",
         marginBottom: "1.5em",
-        justifyContent: "center",
+        // justifyContent: "center",
     },
     cover: {
         display: "inline-block",
@@ -72,7 +72,7 @@ const useStyles = makeStyles({
     description: {
         flexGrow: 1,
         textAlign: 'center'
-    }
+    },
 })
 
 function valuetext(value) {
@@ -207,9 +207,8 @@ export default function BookCard(props) {
                         href={"/book/" + bookInfo.book.id}
                     />
                 </Link>
-                <div className={classes.details}>
                     <CardContent className={classes.content}>
-                        <Grid container>
+                        <Grid container justify="space-evenly">
                             <Grid item xs={10}>
                                 <Typography component="h5" variant="h5">
                                     <Link href={"/book/" + bookInfo.book.googleBookId} color="inherit">
@@ -271,7 +270,6 @@ export default function BookCard(props) {
 
                         </Grid>
                     </CardContent>
-                </div>
             </Card>
         </div>
     )
