@@ -122,8 +122,8 @@ export default function BookShelvesPage() {
               centered
           >
             <Tab label="Want to Read" {...a11yProps(0)} />
-            <Tab label="Reading" {...a11yProps(1)} />
-            <Tab label="Read" {...a11yProps(2)} />
+            <Tab label="In Progress" {...a11yProps(1)} />
+            <Tab label="Complete" {...a11yProps(2)} />
             <Tab label="Favorite" {...a11yProps(3)} />
             <Tab label="Recommended" {...a11yProps(4)} />
           </Tabs>
