@@ -1,0 +1,12 @@
+truncate table SYSTEM_COUNT;
+truncate table abstract_bookshelf_books;
+truncate table book;
+truncate table book_progress;
+truncate table comment;
+truncate table event;
+truncate table friendship;
+truncate table recommended_bookshelf_recommenderids;
+truncate table relationship;
+truncate table review;
+delete from user_info;
+delete from abstractbookshelf;
