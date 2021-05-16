@@ -85,27 +85,41 @@ export default function BookCard(props) {
   const [progressNum, setProgressNum] = useState(bookInfo.progress)
   console.log(bookInfo)
 
+    const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
+      // for socket io connection and set subscriptions
+      useEffect(() => {
+          initiateSocket(sessionStorage.getItem("currentUserID"));
+      }, []);
 
-  const altSrc = "http://books.google.com/books/content?id=ka2VUBqHiWkC&printsec=frontcover&img=1&zoom=3&edge=curl&imgtk=AFLRE71XOCtVTXTJUp_t11pB2FYbAZEcqe3SuSAnacpG4MD_1_LNl36pkNMfYj8vLPquitV_ECZ7UmhIG90TL6hdGLKvVSQ1iCi9j0oHFIViNzfWFpkiln4Zazh5urR5NKG9clTCoGD6&source=gbs_api"
-  // for socket io connection and set subscriptions
-  useEffect(() => {
-    initiateSocket(sessionStorage.getItem("currentUserID"));
-  }, []);
+      const sendEventToSocket = (eventName) => {
+        const userid = sessionStorage.getItem("currentUserID")
+        axios.get(`/api/relationship/friends/${userid}`)
+            .then(res =>{
+                let userids = userid;
+                res.data.map((item) => {
+                    userids += "," + item.id;
+                });
+                sendMessage( eventName, userids);
+            })
+            .catch( error => {
+            });
+    }
 
-  const sendEventToSocket = (eventName) => {
-    const userid = sessionStorage.getItem("currentUserID")
-    axios.get(`/api/relationship/friends/${userid}`)
-      .then(res => {
-        let userids = userid;
-        res.data.map((item) => {
-          userids += "," + item.id;
-        });
-        sendMessage(eventName, userids);
-      })
-      .catch(error => {
-      });
-  }
-  const postEventOnTimeline = (action, progress) => {
+    const postEventOnTimeline = (action, progress) => {
+        const eventParams = new URLSearchParams();
+        eventParams.append("userid", sessionStorage.getItem("currentUserID"));
+        eventParams.append("name", sessionStorage.getItem("currentUser"));
+        eventParams.append("bookName", bookInfo.book.title);
+        eventParams.append("action", action);
+        eventParams.append("content", "");
+        eventParams.append("googlebookid", bookInfo.book.googleBookId);
+        eventParams.append("progress", progress);
+        axios.post(`/api/event`, eventParams)
+          .then(res => {
+            console.log("post event success");
+            sendEventToSocket("newPost");
+          })
+    }
 
       axios.post(`/api/event`, {
           userid: sessionStorage.getItem("currentUserID"),
@@ -122,12 +136,14 @@ export default function BookCard(props) {
         })
   }
 
-  const moveToRead = () => {
-    // move book to different bookshelf
-    const moveBookParams = new URLSearchParams();
-    moveBookParams.append("userID", sessionStorage.getItem("currentUserID"));
-    moveBookParams.append("bookID", bookInfo.book.googleBookId);
-    moveBookParams.append("newBookshelf", "Reading");
+        axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
+            .then(res => {
+                console.log("Moved to Reading successfully.");
+                props.updateFunc(!update);
+            })
+        // post event to timeline
+        postEventOnTimeline("Reading", null);
+    }
 
     axios.put('/api/bookshelves/' + currentBookshelf, moveBookParams)
       .then(res => {
