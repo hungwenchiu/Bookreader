@@ -55,6 +55,38 @@ public class BookControllerTest {
         restTemplate.postForEntity(getRootUrl() + "/api/book", book, Book.class);
         Book responseBook = this.restTemplate.getForObject(getRootUrl() + "/api/book/googleID", Book.class);
         assertEquals("me", responseBook.getAuthor());
+        Book result = restTemplate.postForObject(getRootUrl() + "/api/book", book, Book.class);
+        assertEquals(null, result);
+    }
+
+    @Test
+    public void testDeleteBook() {
+        Book book = new Book();
+        book.setAuthor("me");
+        book.setTitle("Book Title");
+        book.setGoogleBookId("googleID");
+        book.setDescription("im a book");
+        restTemplate.postForEntity(getRootUrl() + "/api/book", book, Book.class);
+        Book responseBook = this.restTemplate.getForObject(getRootUrl() + "/api/book/googleID", Book.class);
+        restTemplate.delete(getRootUrl() + "/api/book/" + responseBook.getId());
+        List<Book> allBooks = this.restTemplate.getForObject(getRootUrl() + "/api/books", List.class);
+        assertTrue(allBooks.isEmpty());
+    }
+
+    @Test
+    public void testPutBook() {
+        Book book = new Book();
+        book.setAuthor("me");
+        book.setTitle("Book Title");
+        book.setGoogleBookId("googleID");
+        book.setDescription("im a book");
+        restTemplate.postForEntity(getRootUrl() + "/api/book", book, Book.class);
+        Book responseBook = this.restTemplate.getForObject(getRootUrl() + "/api/book/googleID", Book.class);
+        responseBook.setAuthor("you");
+        restTemplate.put(getRootUrl() + "/api/book/", responseBook);
+        Book responseBook2 = this.restTemplate.getForObject(getRootUrl() + "/api/book/googleID", Book.class);
+        assertEquals("you", responseBook2.getAuthor());
+
     }
 
 }

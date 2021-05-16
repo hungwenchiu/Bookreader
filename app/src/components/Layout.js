@@ -41,7 +41,7 @@ export default function Layout (props) {
     <div>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <img src={logo} width="70" className={classes.logo}/>
+          <img src={logo} alt={""} width="70" className={classes.logo}/>
 
           <div className={classes.navs}>
             <Typography className={classes.root}>

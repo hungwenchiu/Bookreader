@@ -50,7 +50,6 @@ export default function BookPage() {
   const [open, setOpen] = React.useState(false);
   const [favorite, setFavorite] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState({});
-  const [allFriends, setAllFriends ] = React.useState([]);
   const currentUserId = sessionStorage.getItem('currentUserID');
 
   useEffect(() => {
@@ -77,14 +76,15 @@ export default function BookPage() {
     return avgRating
   }
 
+  // handle open/close of recommend dialog
   const handleClickOpen = () => {
-  setOpen(true);
-};
+    setOpen(true);
+  };
 
-const handleClose = (value) => {
-  setOpen(false);
-  setSelectedValue(value);
-};
+  const handleClose = (value) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
 
   // insert book to database
   function handleAddBook(book) {
@@ -135,7 +135,7 @@ const handleClose = (value) => {
       <div className={classes.container}>
         <Grid container spacing={3} >
           <Grid item xs={3}>
-            <img src={book.volumeInfo?.imageLinks.thumbnail} alt={altSrc} width="180" height="270" />
+            <img src={book.volumeInfo?.imageLinks?.thumbnail || altSrc} alt={""} width="180" height="270" />
             <div>
               <br />
               <Button variant="contained" color="primary" onClick={handleClickOpen}>

@@ -1,3 +1,4 @@
+// list of recommended book on recommendation page
 import React, {useState, useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import axios from 'axios';
@@ -64,7 +65,7 @@ export default function RecommendList(Props) {
           return (
             <GridListTile key={book.thumbnail}>
               <a href={"/book/"+book.googleBookId}>
-                <img src={book.thumbnail} />
+                <img src={book.thumbnail} alt={""}/>
               </a>
               <GridListTileBar
                 title={book.title}
