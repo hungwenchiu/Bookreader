@@ -22,7 +22,7 @@ public class EventController {
     private EventService service;
 
     @PostMapping("/event") // add timeline event
-    public Event addEvent(Event event) { return service.saveEvent(event); }
+    public Event addEvent(@RequestBody Event event) { return service.saveEvent(event); }
 }
 
 
