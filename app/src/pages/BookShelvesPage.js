@@ -73,7 +73,6 @@ export default function BookShelvesPage() {
     axios.get(`/api/bookshelves/${bookshelf.name}/books/info?userID=${sessionStorage.getItem("currentUserID")}`)
       .then(async res => {
         // process all books -> get the progress
-        // add progress to the book
         setBooks(res.data)
         console.log(res.data);
       })
@@ -100,6 +99,16 @@ export default function BookShelvesPage() {
       setBookshelfName({ name: "Recommended" });
     }
   };
+
+  async function getProgress(book) {
+    try {
+      const response = await axios.get(`/api/progress?userID=${sessionStorage.getItem("currentUserID")}&bookID=${book.googleBookId}`);
+      const data = await response.data;
+      return data;
+    } catch(error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Layout>

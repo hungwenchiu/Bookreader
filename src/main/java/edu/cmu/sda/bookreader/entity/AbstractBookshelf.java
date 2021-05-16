@@ -34,6 +34,7 @@ public class AbstractBookshelf {
     @Column
     @ElementCollection(targetClass=String.class)
     private List<String> books = new ArrayList<>();
+    private String type;
 
     public AbstractBookshelf() {}
 
@@ -61,6 +62,14 @@ public class AbstractBookshelf {
 
     public void setBooks(List<String> books) {
         this.books = books;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
