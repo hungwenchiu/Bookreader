@@ -36,5 +36,4 @@ src/main/java/edu/cmu/sda/bookreader/BookreaderApplication.java
 `npm start`
 
 ## API documentation:
- Checkout bookreader-openapi.yaml for a complete list of our API
-
+https://app.swaggerhub.com/apis/ZhuXuanyi/ReadingPal/1.0.0
