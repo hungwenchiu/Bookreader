@@ -171,31 +171,4 @@ public class BookshelfController {
         }
         return bookshelfService.removeBook(userID, bookshelfName, bookID);
     }
-
-    /*
-    These end points are not used in the project but are here for future use
-
-    // get a particular book from a particular bookshelf
-    @RequestMapping("/bookshelves/{name}/books/{bookid}")
-    public Book getBookFromBookshelf(@PathVariable("name") String name, @PathVariable("bookid") String bookid, @RequestBody Map<String, String> json) {
-        return bookshelfService.getBookByID(name, bookid, Long.parseLong(json.get("userID")));
-    }
-
-    // get all regular bookshelves
-    @RequestMapping(value="/bookshelves/regular", method = RequestMethod.GET)
-    public List<Bookshelf> getAllBookshelves() {
-        return bookshelfService.getAllRegularBookshelves();
-    }
-
-    // get all recommended bookshelves
-    @RequestMapping(value = "/bookshelves/recommended", method = RequestMethod.GET)
-    public List<RecommendedBookshelf> getAllRecommendBookshelves() {
-        return bookshelfService.getAllRecommendedBookshelves();
-    }
-
-    // get all bookshelves
-    @RequestMapping("/bookshelves/all")
-    public List<AbstractBookshelf> getAll() {
-        return bookshelfService.getAllAbstractBookshelf();
-    } */
 }

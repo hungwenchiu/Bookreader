@@ -73,7 +73,6 @@ export default function BookShelvesPage() {
     axios.get(`/api/bookshelves/${bookshelf.name}/books/info?userID=${sessionStorage.getItem("currentUserID")}`)
         .then(async res => {
           // process all books -> get the progress
-          // add progress to the book
           setBooks(res.data)
           console.log(res.data);
         })

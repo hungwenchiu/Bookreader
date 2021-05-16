@@ -46,4 +46,20 @@ public class SystemCount {
     public void setReading(int count) { this.readingCount = count; }
 
     public void setFavorite(int count) { this.favoriteCount = count; }
+
+    public void setReadingCount(int readingCount) {
+        this.readingCount = readingCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+
+    public void setReadCount(int readCount) {
+        this.readCount = readCount;
+    }
+
+    public void setWantToReadCount(int wantToReadCount) {
+        this.wantToReadCount = wantToReadCount;
+    }
 }
