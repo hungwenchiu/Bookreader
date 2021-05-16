@@ -96,19 +96,19 @@ public class AbstractBookshelfService {
     }
 
     // Get a bookshelf by ID
-    public AbstractBookshelf getBookshelf(long id, Long userID) {
-        Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(id));
-        Optional<RecommendedBookshelf> recommendedBookshelf = recommendedBookshelfRepository.findById(new Long(id));
+    public AbstractBookshelf getBookshelf(String name, Long userID) {
+        Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(name, userID);
+        RecommendedBookshelf recommendedBookshelf = recommendedBookshelfRepository.findByBookshelfUserID(userID);
 
-        if (bookshelf.isPresent()) {
-            if (userID == bookshelf.get().getBookshelfUserID()) {
+        if (bookshelf != null) {
+            if (userID == bookshelf.getBookshelfUserID()) {
                 // checking user authorization
-                return bookshelf.get();
+                return bookshelf;
             }
         }
-        else if (recommendedBookshelf.isPresent()) {
-            if (userID == recommendedBookshelf.get().getBookshelfUserID()) {
-                return recommendedBookshelf.get();
+        else if (recommendedBookshelf != null) {
+            if (userID == recommendedBookshelf.getBookshelfUserID()) {
+                return recommendedBookshelf;
             }
         }
         return null;
