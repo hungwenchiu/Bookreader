@@ -42,35 +42,6 @@ export default function SearchResult() {
     });
   }, [keyword])
 
-  // function handleAddBook(book, event) {
-  //     event.preventDefault();
-  //     console.log(book.volumeInfo.title);
-  //     let firstAuthor = "";
-  //     if (book.volumeInfo.authors) {
-  //         firstAuthor = book.volumeInfo.authors[0]
-  //     }
-
-  //     let thumbnailLink = "";
-  //     if (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
-  //         thumbnailLink = book.volumeInfo.imageLinks.thumbnail
-  //     }
-
-  //     const requestOptions = {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({ googleBookId: book.id, title: book.volumeInfo.title,
-  //         author: firstAuthor, totalPage: parseInt(book.volumeInfo.pageCount), kind: book.kind,
-  //             thumbnail:thumbnailLink, textSnippet: book.searchInfo.textSnippet})
-  //     };
-  //     fetch('/api/book', requestOptions)
-  //         .then(response => {
-  //             return response.json()
-  //         })
-  //         .then(data => {
-  //             console.log(data)
-  //         });
-  // }
-
   return (
     <Layout>
       <div className={classes.root}>
@@ -78,9 +49,9 @@ export default function SearchResult() {
         <GridList cellHeight='auto' cols={8} spacing={20} className={classes.gridList}>
         {result.map((book) => (
           <GridListTile key={book.id}>
-              <a href={"/book/"+book.id}>
-                <img src={book.volumeInfo.imageLinks === undefined? logo : `${book.volumeInfo.imageLinks.thumbnail}`} />
-              </a>
+            <a href={"/book/"+book.id}>
+              <img src={book.volumeInfo.imageLinks === undefined? logo : `${book.volumeInfo.imageLinks.thumbnail}`} alt={""} />
+            </a>
             <GridListTileBar
               title={book.volumeInfo.title}
               classes={{
@@ -89,37 +60,7 @@ export default function SearchResult() {
               subtitle={<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
             />
           </GridListTile>
-            // <Card style={{ maxWidth: 400, margin: 15 }}>
-            //     <CardActionArea>
-            //         <div
-            //             style={{
-            //                 display: "flex",
-            //                 alignItem: "center",
-            //                 justifyContent: "center"
-            //             }}
-            //         >
-            //             <Link href={"/book/" + book.id} color="inherit">
-            //                 <CardMedia
-            //                     style={{
-            //                         width: "auto",
-            //                         maxHeight: "200px"
-            //                     }}
-            //                     component="img"
-            //                     image={book.volumeInfo?.imageLinks?.thumbnail ? book.volumeInfo?.imageLinks?.thumbnail : logo}
-            //                     title={book.volumeInfo.title}
-            //                 />
-            //             </Link>
-            //         </div>
-            //         <CardContent>
-            //             <Typography gutterBottom variant="headline" component="h2">
-            //                 {book.volumeInfo.title}
-            //             </Typography>
-            //             <Typography component="p">
-            //                 {<span>author: {book.volumeInfo.authors ? book.volumeInfo.authors[0] : "not available"}</span>}
-            //             </Typography>
-            //         </CardContent>
-            //     </CardActionArea>
-            // </Card>
+             
         ))}
         </GridList>
       </div>

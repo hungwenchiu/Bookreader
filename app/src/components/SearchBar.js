@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Toolbar, AppBar, Typography, Link, InputBase} from '@material-ui/core';
+import {InputBase} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 
 const StyleSheet = makeStyles((theme) => ({
   root: {

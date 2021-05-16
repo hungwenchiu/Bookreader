@@ -44,12 +44,6 @@ public class SystemCountControllerTest {
     public void contextLoads() {
     }
 
-//    @Test
-//    public void testFindAllBooks() {
-//        List<Book> allBooks = this.restTemplate.getForObject(getRootUrl() + "/api/books", List.class);
-//        assertTrue(allBooks.isEmpty());
-//    }
-
     @Test
     public void testCountsBeforeIncrement() {
         repository.save(new SystemCount("bcd"));

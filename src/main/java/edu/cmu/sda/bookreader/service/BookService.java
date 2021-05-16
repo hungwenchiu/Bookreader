@@ -21,18 +21,12 @@ public class BookService {
 
     public Book saveBook(Book book) { return repository.save(book); }
 
-    public List<Book> saveBooks(List<Book> books) { return repository.saveAll(books); }
-
     public List<Book> getBooks() {
         return repository.findAll();
     }
 
     public Book getBookByGoogleBookId (String googleBookID) {
         return repository.findByGoogleBookId(googleBookID);
-    }
-
-    public List<Book> getBookByTitle(String name) {
-        return repository.findByTitle(name);
     }
 
     public String deleteBook(long id) {

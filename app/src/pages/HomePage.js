@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Layout from '../components/Layout'
-import {makeStyles} from '@material-ui/core/styles';
-import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import RecommendList from '../components/RecommendList'
-import {initiateSocket, sendMessage, socket} from "../components/Socketio";
+import { initiateSocket, sendMessage } from "../components/Socketio";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   titles: {
     marginTop: 20,
   },
-  subtitles:{
+  subtitles: {
     marginBottom: 20,
   }
 }))
@@ -56,7 +55,7 @@ export default function HomePage() {
         <RecommendList type="wantToRead" />
       </div>
 
-    </Layout> 
+    </Layout>
   )
 }
 
