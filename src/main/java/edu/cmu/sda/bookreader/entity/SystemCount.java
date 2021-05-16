@@ -37,13 +37,9 @@ public class SystemCount {
 
     public int getReadCount() { return this.readCount; }
 
+    public String getGoogleBookId() { return googleBookId; }
+
+    public long getId() { return id; }
+
     public int getWantToReadCount() { return this.wantToReadCount; }
-
-    public void setWantToRead(int count) { this.wantToReadCount = count; }
-
-    public void setRead(int count) { this.readCount = count; }
-
-    public void setReading(int count) { this.readingCount = count; }
-
-    public void setFavorite(int count) { this.favoriteCount = count; }
 }
