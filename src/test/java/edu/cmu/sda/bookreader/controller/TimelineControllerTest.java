@@ -105,7 +105,7 @@ public class TimelineControllerTest {
         restTemplate.postForEntity(getRootUrl() + "/api/reply", comment, Comment.class);
 
 
-        ResponseEntity<List> responseReply = this.restTemplate.getForEntity(getRootUrl() + "/api/reply?eventid=1", List.class);
+        ResponseEntity<List> responseReply = this.restTemplate.getForEntity(getRootUrl() + "/api/reply?eventid=" + myEvent.get("id").toString(), List.class);
         LinkedHashMap myReply = (LinkedHashMap)responseReply.getBody().get(0);
         assertEquals("Bob", myReply.get("sender"));
     }
