@@ -74,7 +74,7 @@ public class SystemCountController {
      * @param id
      * @return
      */
-    @DeleteMapping("/SystemCount/{id}")
+    @DeleteMapping("/systemCount/{id}")
     public String deleteSystemCount(@PathVariable long id) {
         return service.deleteSystemCount(id);
     }
