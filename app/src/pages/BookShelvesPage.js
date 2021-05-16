@@ -100,6 +100,16 @@ export default function BookShelvesPage() {
     }
   };
 
+  async function getProgress(book) {
+    try {
+      const response = await axios.get(`/api/progress?userID=${sessionStorage.getItem("currentUserID")}&bookID=${book.googleBookId}`);
+      const data = await response.data;
+      return data;
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Layout>
       <div className={classes.container}>

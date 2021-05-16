@@ -1,6 +1,5 @@
-// BookCard component in bookshelf
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useState, useEffect} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -244,22 +243,22 @@ export default function BookCard(props) {
               }
             </Grid>
 
-            <Grid item xs={4}>
-              <Grid container direction="column" >
-                <Grid item>
-                  {
-                    currentBookshelf != "Favorite" && !bookInfo.isFavorite &&
-                    <Button variant="contained" color="primary" className={classes.button}
-                      onClick={addToFavorite}>Favorite</Button>
-                  }
-                </Grid>
-                <Grid item>
-                  {
-                    currentBookshelf != "Reading" && !bookInfo.isReading &&
-                    <Button variant="contained" color="primary" className={classes.button}
-                      onClick={moveToRead}>Start Reading</Button>
-                  }
-                </Grid>
+                            <Grid item xs={4}>
+                                <Grid container direction="column" >
+                                <Grid item>
+                                {
+                                    currentBookshelf != "Favorite" && !bookInfo.isFavorite &&
+                                    <Button variant="contained" color="primary" className={classes.button}
+                                            onClick={addToFavorite}>Favorite</Button>
+                                }
+                                </Grid>
+                                <Grid item>
+                                {
+                                    currentBookshelf != "Reading" && !bookInfo.isReading &&
+                                    <Button variant="contained" color="primary" className={classes.button}
+                                            onClick={moveToRead}>Start Reading</Button>
+                                }
+                                </Grid>
 
                 <Grid item>
                   <Button variant="contained" className={classes.button} onClick={removeFromBookshelf}>
