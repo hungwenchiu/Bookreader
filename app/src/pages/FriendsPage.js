@@ -110,15 +110,14 @@ const FriendsPage = () => {
   // post friendship event!!
   const postEvent = (currentUsername, toUsername, userid) => {
 
-    const params = new URLSearchParams();
-    params.append("userid", userid);
-    params.append("name", currentUsername);
-    params.append("bookName", null);
-    params.append("action", "Friendship");
-    params.append("content", `${currentUsername} and ${toUsername} become friends.`);
-    params.append("googlebookid", null);
-
-    axios.post(`/api/event`, params
+    axios.post(`/api/event`, {
+          userid: userid,
+          name: currentUsername,
+          bookName: null,
+          action: "Friendship",
+          content: `${currentUsername} and ${toUsername} become friends.`,
+          googlebookid: null,
+        }
     )
       .then(res => {
         console.log("post event - friendship success");

@@ -106,19 +106,20 @@ export default function BookCard(props) {
       });
   }
   const postEventOnTimeline = (action, progress) => {
-    const eventParams = new URLSearchParams();
-    eventParams.append("userid", sessionStorage.getItem("currentUserID"));
-    eventParams.append("name", sessionStorage.getItem("currentUser"));
-    eventParams.append("bookName", bookInfo.book.title);
-    eventParams.append("action", action);
-    eventParams.append("content", "");
-    eventParams.append("googlebookid", bookInfo.book.googleBookId);
-    eventParams.append("progress", progress);
-    axios.post(`/api/event`, eventParams)
-      .then(res => {
-        console.log("post event success");
-        sendEventToSocket("newPost");
+
+      axios.post(`/api/event`, {
+          userid: sessionStorage.getItem("currentUserID"),
+          name: sessionStorage.getItem("currentUser"),
+          bookName: bookInfo.book.title,
+          action: action,
+          content: "",
+          googlebookid: bookInfo.book.googleBookId,
+          progress: progress,
       })
+        .then(res => {
+          console.log("post event success");
+          sendEventToSocket("newPost");
+        })
   }
 
   const moveToRead = () => {
