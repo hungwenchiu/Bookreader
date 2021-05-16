@@ -86,4 +86,7 @@ public class Book {
         this.description = description;
     }
 
+    public void setGoogleBookId(String googleBookId) {
+        this.googleBookId = googleBookId;
+    }
 }

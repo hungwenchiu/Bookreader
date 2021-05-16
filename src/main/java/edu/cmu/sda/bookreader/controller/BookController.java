@@ -62,7 +62,7 @@ public class BookController {
         Book book = service.getBookByGoogleBookId(googleBookId);
 
         if (null == book) {
-            log.error("Book with google book id " + googleBookId + " does not exist.");
+            // log.error("Book with google book id " + googleBookId + " does not exist.");
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(book);
