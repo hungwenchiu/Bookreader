@@ -59,12 +59,10 @@ export default function PublicTimeline() {
 
     axios.get(`/api/publicTimeline?userids=${relationshipid}`)
       .then(res => {
-        // console.log(res.data);
         setIsLoaded(true);
         setData(res.data);
         res.data.map((t, idx) => {
           if (t.googlebookid !== "null") {
-            // console.log("go to getBookInfoByGoogleID");
             getBookInfoByGoogleID(t.googlebookid);
           }
         });
