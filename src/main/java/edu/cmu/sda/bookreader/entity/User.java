@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue
     private long id;
     @NotNull
-    @Column(unique=true)
+    @Column(unique = true)
     private String name;
     @NotNull
     private String password;
@@ -50,8 +50,8 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-        name = "friendship",
-        joinColumns = @JoinColumn(name = "user_id")
+            name = "friendship",
+            joinColumns = @JoinColumn(name = "user_id")
     )
     Set<User> friends = new HashSet<>();
 

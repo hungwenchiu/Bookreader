@@ -12,23 +12,24 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(uniqueConstraints={
-    @UniqueConstraint(columnNames = {"user_one", "user_two"})
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_one", "user_two"})
 })
 public class Relationship {
     public enum Status {
         PENDING, ACCEPTED
     }
+
     @Id
     @GeneratedValue
     private long id;
     @NotNull
     @OneToOne
-    @JoinColumn(name="user_one")
+    @JoinColumn(name = "user_one")
     private User userOne;
     @NotNull
     @OneToOne
-    @JoinColumn(name="user_two")
+    @JoinColumn(name = "user_two")
     private User userTwo;
     @NotNull
     @Enumerated(EnumType.ORDINAL)

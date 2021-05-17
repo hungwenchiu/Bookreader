@@ -1,8 +1,6 @@
 package edu.cmu.sda.bookreader.service;
 
 import edu.cmu.sda.bookreader.entity.Event;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,11 @@ public class TimelineManagerService {
         this.timelineStrategy = timelineStrategy;
     }
 
-    // generate public or personal timeline event
+    /**
+     * generate public or personal timeline event
+     * @param userid
+     * @return
+     */
     public List<Event> getTimelineEvents(String userid) {
         return this.timelineStrategy.generateTimelineEvents(userid);
     }

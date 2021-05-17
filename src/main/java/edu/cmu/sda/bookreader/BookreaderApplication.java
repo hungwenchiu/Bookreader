@@ -14,41 +14,41 @@ import javax.annotation.Resource;
 @SpringBootApplication
 public class BookreaderApplication {
 
-	@Resource
-	private MessageEventHandler messageEventHandler;
+    @Resource
+    private MessageEventHandler messageEventHandler;
 
-	public static void main(String[] args) {
-		SpringApplication.run(BookreaderApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BookreaderApplication.class, args);
+    }
 
-	@Bean
-	public SocketIOServer socketIOServer() {
-		com.corundumstudio.socketio.Configuration config = new com.corundumstudio.socketio.Configuration();
-		SocketConfig socketConfig = new SocketConfig();
-		socketConfig.setReuseAddress(true);
-		socketConfig.setTcpNoDelay(true);
-		socketConfig.setSoLinger(0);
-		config.setSocketConfig(socketConfig);
-		config.setHostname("localhost");
-		config.setPort(9092);
-		config.setBossThreads(1);
-		config.setWorkerThreads(100);
-		config.setAllowCustomRequests(true);
+    @Bean
+    public SocketIOServer socketIOServer() {
+        com.corundumstudio.socketio.Configuration config = new com.corundumstudio.socketio.Configuration();
+        SocketConfig socketConfig = new SocketConfig();
+        socketConfig.setReuseAddress(true);
+        socketConfig.setTcpNoDelay(true);
+        socketConfig.setSoLinger(0);
+        config.setSocketConfig(socketConfig);
+        config.setHostname("localhost");
+        config.setPort(9092);
+        config.setBossThreads(1);
+        config.setWorkerThreads(100);
+        config.setAllowCustomRequests(true);
 
-		SocketService socketService = new SocketService();
+        SocketService socketService = new SocketService();
 
-		socketService.server = new SocketIOServer(config);
-		socketService.server.addListeners(messageEventHandler);
-		return socketService.server;
-	}
+        socketService.server = new SocketIOServer(config);
+        socketService.server.addListeners(messageEventHandler);
+        return socketService.server;
+    }
 
-	/**
-	 * @param socketServer
-	 * @return
-	 */
-	@Bean
-	public SpringAnnotationScanner springAnnotationScanner(SocketIOServer socketServer) {
-		return new SpringAnnotationScanner(socketServer);
-	}
+    /**
+     * @param socketServer
+     * @return
+     */
+    @Bean
+    public SpringAnnotationScanner springAnnotationScanner(SocketIOServer socketServer) {
+        return new SpringAnnotationScanner(socketServer);
+    }
 
 }

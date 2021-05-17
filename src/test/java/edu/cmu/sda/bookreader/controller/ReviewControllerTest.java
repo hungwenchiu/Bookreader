@@ -40,12 +40,6 @@ public class ReviewControllerTest {
     public void contextLoads() {
     }
 
-//    @Test
-//    public void testFindAllBooks() {
-//        List<Book> allBooks = this.restTemplate.getForObject(getRootUrl() + "/api/books", List.class);
-//        assertTrue(allBooks.isEmpty());
-//    }
-
     @Test
     public void addReviewThenGetReturnCorrectReview() {
         Review review = new Review();
@@ -123,7 +117,7 @@ public class ReviewControllerTest {
         ResponseEntity<List> existingReviews = this.restTemplate.getForEntity(getRootUrl() + "/api/review/book/abc",
                 List.class);
         LinkedHashMap myReview = (LinkedHashMap) existingReviews.getBody().get(0);
-        restTemplate.delete("/api/review/"+ myReview.get("id"));
+        restTemplate.delete("/api/review/" + myReview.get("id"));
         ResponseEntity<List> responseReviews = this.restTemplate.getForEntity(getRootUrl() + "/api/review/book/abc",
                 List.class);
         assertEquals(null, responseReviews.getBody());

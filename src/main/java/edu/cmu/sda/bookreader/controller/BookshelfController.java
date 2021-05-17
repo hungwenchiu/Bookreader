@@ -2,7 +2,6 @@ package edu.cmu.sda.bookreader.controller;
 
 import edu.cmu.sda.bookreader.entity.AbstractBookshelf;
 import edu.cmu.sda.bookreader.entity.Book;
-import edu.cmu.sda.bookreader.entity.Bookshelf;
 import edu.cmu.sda.bookreader.entity.RecommendedBookshelf;
 import edu.cmu.sda.bookreader.service.AbstractBookshelfService;
 import edu.cmu.sda.bookreader.service.BookProgressService;
@@ -65,7 +64,7 @@ public class BookshelfController {
      * @return AbstractBookshelf
      */
     @RequestMapping(value = "/bookshelves/{name}/books", method = RequestMethod.PUT)
-    public AbstractBookshelf addBook(@PathVariable("name") String name, @RequestParam(value="bookID") String bookID, @RequestParam(value="userID") long userID) {
+    public AbstractBookshelf addBook(@PathVariable("name") String name, @RequestParam(value = "bookID") String bookID, @RequestParam(value = "userID") long userID) {
         systemCountService.updateSystemCount(bookID, name, 1);
         return bookshelfService.addBook(name, bookID, userID);
     }
@@ -79,7 +78,7 @@ public class BookshelfController {
      * @return RecommendedBookshelf
      */
     @RequestMapping(value = "/bookshelves/recommended/books", method = RequestMethod.PUT)
-    public RecommendedBookshelf addRecommendedBook(@RequestParam(value="userID") long userID, @RequestParam(value="recommenderID") long recommenderID, @RequestParam(value="bookID") String bookID) {
+    public RecommendedBookshelf addRecommendedBook(@RequestParam(value = "userID") long userID, @RequestParam(value = "recommenderID") long recommenderID, @RequestParam(value = "bookID") String bookID) {
         return bookshelfService.addRecommendedBook(userID, recommenderID, bookID);
     }
 
@@ -90,7 +89,7 @@ public class BookshelfController {
      * @return List of Book
      */
     @RequestMapping("/bookshelves/{name}/books")
-    public List<Book> getBooksFromBookshelf(@PathVariable("name") String name, @RequestParam(value="userID") long userID) {
+    public List<Book> getBooksFromBookshelf(@PathVariable("name") String name, @RequestParam(value = "userID") long userID) {
         return bookshelfService.getAllBooksInBookshelf(name, userID);
     }
 
@@ -101,7 +100,7 @@ public class BookshelfController {
      * @return List of a Map of Book info
      */
     @RequestMapping("/bookshelves/{name}/books/info")
-    public List<Map<String, Object>> getBooksFromBookshelfWithInfo(@PathVariable("name") String name, @RequestParam(value="userID") long userID) {
+    public List<Map<String, Object>> getBooksFromBookshelfWithInfo(@PathVariable("name") String name, @RequestParam(value = "userID") long userID) {
         List<Book> books = bookshelfService.getAllBooksInBookshelf(name, userID);
 
         List<Map<String, Object>> result = new ArrayList<>();
@@ -126,7 +125,7 @@ public class BookshelfController {
      * @return AbstractBookshelf
      */
     @RequestMapping("/bookshelves/{name}")
-    public AbstractBookshelf getAnyBookshelf(@PathVariable("name") String name, @RequestParam(value="userID") long userID) {
+    public AbstractBookshelf getAnyBookshelf(@PathVariable("name") String name, @RequestParam(value = "userID") long userID) {
         return bookshelfService.getBookshelf(name, userID);
     }
 
@@ -139,7 +138,7 @@ public class BookshelfController {
      * @return String
      */
     @RequestMapping(value = "/bookshelves/{name}", method = RequestMethod.PUT)
-    public String moveBook(@PathVariable("name") String currentBookshelf,@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID, @RequestParam(value="newBookshelf") String newBookshelf) {
+    public String moveBook(@PathVariable("name") String currentBookshelf, @RequestParam(value = "userID") long userID, @RequestParam(value = "bookID") String bookID, @RequestParam(value = "newBookshelf") String newBookshelf) {
         systemCountService.updateSystemCount(bookID, newBookshelf, 1);
         systemCountService.updateSystemCount(bookID, currentBookshelf, -1);
         return bookshelfService.moveBook(currentBookshelf, newBookshelf, bookID, userID);
@@ -152,7 +151,7 @@ public class BookshelfController {
      * @return String
      */
     @RequestMapping(value = "/bookshelves", method = RequestMethod.PUT)
-    public String moveBook(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
+    public String moveBook(@RequestParam(value = "userID") long userID, @RequestParam(value = "bookID") String bookID) {
         systemCountService.updateSystemCount(bookID, "Read", 1);
         return bookshelfService.checkBookProgressToMoveBetweenBookshelves(userID, bookID);
     }
@@ -164,7 +163,7 @@ public class BookshelfController {
      * @return AbstractBookshelf
      */
     @RequestMapping(value = "/bookshelves/{name}/remove", method = RequestMethod.PUT)
-    public AbstractBookshelf deleteBook(@PathVariable("name") String bookshelfName,@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
+    public AbstractBookshelf deleteBook(@PathVariable("name") String bookshelfName, @RequestParam(value = "userID") long userID, @RequestParam(value = "bookID") String bookID) {
         systemCountService.updateSystemCount(bookID, bookshelfName, -1);
         if (bookshelfName.equals("Recommended")) {
             return bookshelfService.removeRecommendedBook(userID, bookID);

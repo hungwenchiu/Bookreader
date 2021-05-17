@@ -6,26 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Component(value = "personalTimelineStrategy")
-public class PersonalTimelineStrategy implements TimelineStrategy{
+public class PersonalTimelineStrategy implements TimelineStrategy {
 
     @Autowired
     private EventRepository repository;
 
     @Override
     public List<Event> generateTimelineEvents(String userid) {
-//        List<Event> events =
         return repository.findByUserid(userid);
-//        List<Event> res = new ArrayList<>();
-//        for(int i = idx; i < idx + 3 && i < events.size(); i++)
-//        {
-//            res.add(events.get(i));
-//        }
-//
-//        return res;
     }
 }

@@ -27,23 +27,37 @@ public class SystemCount {
     @Column(columnDefinition = "integer default 0")
     private int wantToReadCount;
 
-    public SystemCount (String gID) {
+    public SystemCount(String gID) {
         this.googleBookId = gID;
     }
 
-    public int getReadingCount() { return this.readingCount; }
+    public int getReadingCount() {
+        return this.readingCount;
+    }
 
-    public int getFavoriteCount() { return this.favoriteCount; }
+    public int getFavoriteCount() {
+        return this.favoriteCount;
+    }
 
-    public int getReadCount() { return this.readCount; }
+    public int getReadCount() {
+        return this.readCount;
+    }
 
-    public String getGoogleBookId() { return googleBookId; }
+    public String getGoogleBookId() {
+        return googleBookId;
+    }
 
-    public long getId() { return id; }
+    public long getId() {
+        return id;
+    }
 
-    public void setReading(int count) { this.readingCount = count; }
+    public void setReading(int count) {
+        this.readingCount = count;
+    }
 
-    public void setFavorite(int count) { this.favoriteCount = count; }
+    public void setFavorite(int count) {
+        this.favoriteCount = count;
+    }
 
     public void setReadingCount(int readingCount) {
         this.readingCount = readingCount;

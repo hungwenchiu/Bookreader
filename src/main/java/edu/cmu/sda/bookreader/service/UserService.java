@@ -3,6 +3,7 @@ package edu.cmu.sda.bookreader.service;
 import edu.cmu.sda.bookreader.entity.User;
 import edu.cmu.sda.bookreader.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Qualifier("abstractBookshelfService")
     @Autowired
     private AbstractBookshelfService bookshelfService;
 
@@ -82,7 +84,4 @@ public class UserService {
             return null;
         }
     }
-
-
-
 }
