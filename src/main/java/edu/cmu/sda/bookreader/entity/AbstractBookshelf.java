@@ -6,9 +6,7 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -32,10 +30,12 @@ public class AbstractBookshelf {
     @NonNull
     private long bookshelfUserID;
     @Column
-    @ElementCollection(targetClass=String.class)
+    @ElementCollection(targetClass = String.class)
     private List<String> books = new ArrayList<>();
+    private String type;
 
-    public AbstractBookshelf() {}
+    public AbstractBookshelf() {
+    }
 
     public Long getId() {
         return id;
@@ -49,11 +49,17 @@ public class AbstractBookshelf {
         return name;
     }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public long getBookshelfUserID() { return bookshelfUserID; }
+    public long getBookshelfUserID() {
+        return bookshelfUserID;
+    }
 
-    public void setBookshelfUser(long bookshelfUserID) { this.bookshelfUserID = bookshelfUserID; }
+    public void setBookshelfUser(long bookshelfUserID) {
+        this.bookshelfUserID = bookshelfUserID;
+    }
 
     public List<String> getBooks() {
         return books;
@@ -61,6 +67,14 @@ public class AbstractBookshelf {
 
     public void setBooks(List<String> books) {
         this.books = books;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

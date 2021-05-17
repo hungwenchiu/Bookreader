@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api")
@@ -35,6 +34,11 @@ public class SystemCountController {
         return service.updateSystemCount(googleBookId, type, 1);
     }
 
+    /**
+     * Get the systemCount for a specific book
+     * @param googleBookId: the google book Id of the book to get the systemCount
+     * @return the SystemCount object of the book
+     */
     @GetMapping("/systemCount/{googleBookId}")
     public ResponseEntity<SystemCount> findSystemCountsByGoogleBookID(@PathVariable String googleBookId) {
         SystemCount systemCount = service.getSystemCountsByGoogleBookId(googleBookId);
@@ -46,6 +50,11 @@ public class SystemCountController {
         return ResponseEntity.ok(systemCount);
     }
 
+    /**
+     * Get the top 10 systemCount of a specific type
+     * @param type: the type of count to get: reading, read, favorite or wantToRead
+     * @return A list of SystemCount objects
+     */
     @GetMapping("/systemCount/top10/{type}")
     private ResponseEntity<List<SystemCount>> findTopSystemCountByType(@PathVariable String type) {
         List<SystemCount> res;
@@ -71,8 +80,8 @@ public class SystemCountController {
 
     /**
      * delete SystemCount by id
-     * @param id
-     * @return
+     * @param id: id of the SystemCount to be deleted
+     * @return A string indicating SystemCount is deleted
      */
     @DeleteMapping("/systemCount/{id}")
     public String deleteSystemCount(@PathVariable long id) {

@@ -18,10 +18,6 @@ public class SystemCountService {
     @Autowired
     private SystemCountRepository repository;
 
-    public SystemCount saveSystemCount(SystemCount systemCount) {
-        return repository.save(systemCount);
-    }
-
     public SystemCount updateSystemCount(String googleBookId, String type, int amount) {
         SystemCount existing = repository.findByGoogleBookId(googleBookId);
         if (existing == null) {
@@ -44,13 +40,7 @@ public class SystemCountService {
         return repository.save(existing);
     }
 
-    public List<SystemCount> getSystemCounts() {
-        return repository.findAll();
-    }
-
-    public SystemCount getSystemCountById (long Id) { return repository.findById(Id); }
-
-    public SystemCount getSystemCountsByGoogleBookId (String googleBookId) {
+    public SystemCount getSystemCountsByGoogleBookId(String googleBookId) {
         return repository.findByGoogleBookId(googleBookId);
     }
 

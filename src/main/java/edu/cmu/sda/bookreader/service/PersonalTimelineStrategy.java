@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Component(value = "personalTimelineStrategy")
-public class PersonalTimelineStrategy implements TimelineStrategy{
+public class PersonalTimelineStrategy implements TimelineStrategy {
 
     @Autowired
     private EventRepository repository;

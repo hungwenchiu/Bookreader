@@ -2,7 +2,6 @@ package edu.cmu.sda.bookreader.controller;
 
 import edu.cmu.sda.bookreader.entity.Event;
 import edu.cmu.sda.bookreader.service.EventService;
-import edu.cmu.sda.bookreader.service.SocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

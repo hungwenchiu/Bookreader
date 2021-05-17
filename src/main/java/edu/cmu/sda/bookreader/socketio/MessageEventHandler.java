@@ -5,10 +5,6 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
-import edu.cmu.sda.bookreader.entity.User;
-import edu.cmu.sda.bookreader.repository.RelationshipRepository;
-import edu.cmu.sda.bookreader.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -39,16 +35,17 @@ public class MessageEventHandler {
     @OnConnect
     public void onConnect(SocketIOClient client) {
         String userid = client.getHandshakeData().getSingleUrlParam("userId");
-                System.out.println("socketio connection - userid:  " + userid);
+        System.out.println("socketio connection - userid:  " + userid);
 
         userToSockList.put(userid, client);
         sockToUserList.put(client, userid);
 
         userToSockList.forEach((k, v) -> {
-            System.out.println("User ID: " + k  + "   Socket Id: " + v);
+            System.out.println("User ID: " + k + "   Socket Id: " + v);
         });
 
     }
+
     /**
      * socket io onDisconnect topic
      * @param client
@@ -57,8 +54,7 @@ public class MessageEventHandler {
     public void onDisconnect(SocketIOClient client) {
 
         // remove the connection of the client
-        if(sockToUserList.containsKey(client))
-        {
+        if (sockToUserList.containsKey(client)) {
             System.out.println("socketio disconnection - userid:  " + sockToUserList.get(client));
             userToSockList.remove(sockToUserList.get(client));
             sockToUserList.remove(client);
@@ -75,8 +71,8 @@ public class MessageEventHandler {
     public void newPost(SocketIOClient client, AckRequest request, MessageInfo msg) {
         String userids = msg.getMsgContent();
 
-        for(String uid: userids.split(",")) {
-            if(userToSockList.containsKey(uid))
+        for (String uid : userids.split(",")) {
+            if (userToSockList.containsKey(uid))
                 userToSockList.get(uid).sendEvent("updateTimelinePage", "true");
         }
     }
@@ -91,8 +87,8 @@ public class MessageEventHandler {
     public void newReply(SocketIOClient client, AckRequest request, MessageInfo msg) {
         String userids = msg.getMsgContent();
 
-        for(String uid: userids.split(",")) {
-            if(userToSockList.containsKey(uid))
+        for (String uid : userids.split(",")) {
+            if (userToSockList.containsKey(uid))
                 userToSockList.get(uid).sendEvent("refreshReply", "true");
         }
     }
@@ -107,8 +103,8 @@ public class MessageEventHandler {
     public void refreshFriendPage(SocketIOClient client, AckRequest request, MessageInfo msg) {
         String userids = msg.getMsgContent();
 
-        for(String uid: userids.split(",")) {
-            if(userToSockList.containsKey(uid))
+        for (String uid : userids.split(",")) {
+            if (userToSockList.containsKey(uid))
                 userToSockList.get(uid).sendEvent("updateFriendPage", uid);
         }
     }
@@ -123,7 +119,7 @@ public class MessageEventHandler {
     public void newComer(SocketIOClient client, AckRequest request, MessageInfo msg) {
         String userid = msg.getMsgContent();
 
-        for(Map.Entry<String,SocketIOClient> entry : userToSockList.entrySet()) {
+        for (Map.Entry<String, SocketIOClient> entry : userToSockList.entrySet()) {
             entry.getValue().sendEvent("userLogin", userid);
         }
     }

@@ -56,7 +56,7 @@ public class TimelineControllerTest {
         restTemplate.postForEntity(getRootUrl() + "/api/event", event, Event.class);
 
         ResponseEntity<List> responseEntity = this.restTemplate.getForEntity(getRootUrl() + "/api/personalTimeline?userid=1", List.class);
-        LinkedHashMap myEvent = (LinkedHashMap)responseEntity.getBody().get(0);
+        LinkedHashMap myEvent = (LinkedHashMap) responseEntity.getBody().get(0);
         assertEquals("Bob", myEvent.get("name"));
     }
 
@@ -76,7 +76,7 @@ public class TimelineControllerTest {
         restTemplate.postForEntity(getRootUrl() + "/api/event", event, Event.class);
 
         ResponseEntity<List> responseEntity = this.restTemplate.getForEntity(getRootUrl() + "/api/publicTimeline?userids=1", List.class);
-        LinkedHashMap myEvent = (LinkedHashMap)responseEntity.getBody().get(0);
+        LinkedHashMap myEvent = (LinkedHashMap) responseEntity.getBody().get(0);
         assertEquals("Bob", myEvent.get("name"));
     }
 
@@ -94,7 +94,7 @@ public class TimelineControllerTest {
         restTemplate.postForEntity(getRootUrl() + "/api/event", event, Event.class);
 
         ResponseEntity<List> responseEvent = this.restTemplate.getForEntity(getRootUrl() + "/api/publicTimeline?userids=1", List.class);
-        LinkedHashMap myEvent = (LinkedHashMap)responseEvent.getBody().get(0);
+        LinkedHashMap myEvent = (LinkedHashMap) responseEvent.getBody().get(0);
 
         Comment comment = new Comment();
         comment.setEventid(myEvent.get("id").toString());
@@ -106,7 +106,7 @@ public class TimelineControllerTest {
 
 
         ResponseEntity<List> responseReply = this.restTemplate.getForEntity(getRootUrl() + "/api/reply?eventid=" + myEvent.get("id").toString(), List.class);
-        LinkedHashMap myReply = (LinkedHashMap)responseReply.getBody().get(0);
+        LinkedHashMap myReply = (LinkedHashMap) responseReply.getBody().get(0);
         assertEquals("Bob", myReply.get("sender"));
     }
 

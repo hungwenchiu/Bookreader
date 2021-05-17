@@ -1,0 +1,538 @@
+openapi: "3.0.3"
+info:
+  title: "bookreader API"
+  description: "bookreader API"
+  version: "1.0.0"
+servers:
+  - url: "https://bookreader"
+paths:
+  /api/book:
+    put:
+      summary: "PUT api/book"
+      operationId: "updateBook"
+      responses:
+        "200":
+          description: "OK"
+    post:
+      summary: "POST api/book"
+      operationId: "addBook"
+      responses:
+        "200":
+          description: "OK"
+  /api/book/{googleBookId}:
+    get:
+      summary: "GET api/book/{googleBookId}"
+      operationId: "findBookByGoogleBookID"
+      parameters:
+        - name: "googleBookId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/book/{id}:
+    delete:
+      summary: "DELETE api/book/{id}"
+      operationId: "deleteBook"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/books:
+    get:
+      summary: "GET api/books"
+      operationId: "findAllBooks"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookshelves:
+    put:
+      summary: "PUT api/bookshelves"
+      operationId: "moveBook"
+      parameters:
+        - name: "userID"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+        - name: "bookID"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+    post:
+      summary: "POST api/bookshelves"
+      operationId: "addBookshelf"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookshelves/all:
+    post:
+      summary: "POST api/bookshelves/all"
+      operationId: "initializeBookshelves"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookshelves/all/{userID}: { }
+  /api/bookshelves/recommended:
+    get:
+      summary: "GET api/bookshelves/recommended"
+      operationId: "getAllRecommendBookshelves"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookshelves/recommended/books:
+    put:
+      summary: "PUT api/bookshelves/recommended/books"
+      operationId: "addRecommendedBook"
+      parameters:
+        - name: "userID"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+        - name: "recommenderID"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+        - name: "bookID"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookshelves/regular:
+    get:
+      summary: "GET api/bookshelves/regular"
+      operationId: "getAllBookshelves"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookshelves/{id}: { }
+  /api/bookshelves/{name}:
+    put:
+      summary: "PUT api/bookshelves/{name}"
+      operationId: "moveBook"
+      parameters:
+        - name: "name"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "userID"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+        - name: "bookID"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "newBookshelf"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookshelves/{name}/books:
+    put:
+      summary: "PUT api/bookshelves/{name}/books"
+      operationId: "addBook"
+      parameters:
+        - name: "name"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "bookID"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "userID"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookshelves/{name}/books/info: { }
+  /api/bookshelves/{name}/books/{bookid}: { }
+  /api/bookshelves/{name}/remove:
+    put:
+      summary: "PUT api/bookshelves/{name}/remove"
+      operationId: "deleteBook"
+      parameters:
+        - name: "name"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "userID"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+        - name: "bookID"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/event:
+    post:
+      summary: "POST api/event"
+      operationId: "addEvent"
+      responses:
+        "200":
+          description: "OK"
+  /api/finishedPages:
+    get:
+      summary: "GET api/finishedPages"
+      operationId: "getFinishedPages"
+      responses:
+        "200":
+          description: "OK"
+  /api/login:
+    post:
+      summary: "POST api/login"
+      operationId: "authenticateUser"
+      responses:
+        "200":
+          description: "OK"
+  /api/personalTimeline:
+    get:
+      summary: "GET api/personalTimeline"
+      operationId: "getPersonalTimeline"
+      parameters:
+        - name: "userid"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/progress:
+    get:
+      summary: "GET api/progress"
+      operationId: "getProgress"
+      parameters:
+        - name: "userID"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+        - name: "bookID"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT api/progress"
+      operationId: "updateProgress"
+      parameters:
+        - name: "userID"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+        - name: "bookID"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "pagesFinished"
+          in: "query"
+          required: true
+          schema:
+            type: "number"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+    post:
+      summary: "POST api/progress"
+      operationId: "initializeProgress"
+      responses:
+        "200":
+          description: "OK"
+  /api/publicTimeline:
+    get:
+      summary: "GET api/publicTimeline"
+      operationId: "getPublicTimeline"
+      parameters:
+        - name: "userids"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/relationship:
+    post:
+      summary: "POST api/relationship"
+      operationId: "addFriend"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/relationship"
+      operationId: "rejectFriend"
+      responses:
+        "200":
+          description: "OK"
+  /api/relationship/accept:
+    post:
+      summary: "POST api/relationship/accept"
+      operationId: "acceptFriend"
+      responses:
+        "200":
+          description: "OK"
+  /api/relationship/friends/{userId}:
+    get:
+      summary: "GET api/relationship/friends/{userId}"
+      operationId: "getAllFriends"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/relationship/incoming/{userId}:
+    get:
+      summary: "GET api/relationship/incoming/{userId}"
+      operationId: "getAllIncomingRequest"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/relationship/none/{userId}:
+    get:
+      summary: "GET api/relationship/none/{userId}"
+      operationId: "getAllNotFriends"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/relationship/outgoing/{userId}:
+    get:
+      summary: "GET api/relationship/outgoing/{userId}"
+      operationId: "getAllOutgoingRequest"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/reply:
+    get:
+      summary: "GET api/reply"
+      operationId: "userReplyComment"
+      parameters:
+        - name: "eventid"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+    post:
+      summary: "POST api/reply"
+      operationId: "userReplyComment"
+      responses:
+        "200":
+          description: "OK"
+  /api/review:
+    post:
+      summary: "POST api/review"
+      operationId: "addReview"
+      responses:
+        "200":
+          description: "OK"
+  /api/review/book/{googleBookId}:
+    get:
+      summary: "GET api/review/book/{googleBookId}"
+      operationId: "findReviewsByGoogleBookID"
+      parameters:
+        - name: "googleBookId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/review/user/{userId}:
+    get:
+      summary: "GET api/review/user/{userId}"
+      operationId: "findReviewsByUserID"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/review/{id}:
+    delete:
+      summary: "DELETE api/review/{id}"
+      operationId: "deleteReview"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/systemCount/top10/{type}:
+    get:
+      summary: "GET api/systemCount/top10/{type}"
+      operationId: "findTopSystemCountByType"
+      parameters:
+        - name: "type"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/systemCount/{googleBookId}:
+    get:
+      summary: "GET api/systemCount/{googleBookId}"
+      operationId: "findSystemCountsByGoogleBookID"
+      parameters:
+        - name: "googleBookId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/systemCount/{googleBookId}/{type}:
+    put:
+      summary: "PUT api/systemCount/{googleBookId}/{type}"
+      operationId: "updateSystemCount"
+      parameters:
+        - name: "googleBookId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+        - name: "type"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/systemCount/{id}:
+    delete:
+      summary: "DELETE api/systemCount/{id}"
+      operationId: "deleteSystemCount"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/user:
+    post:
+      summary: "POST api/user"
+      operationId: "addUser"
+      responses:
+        "200":
+          description: "OK"
+  /api/user/name/{name}:
+    get:
+      summary: "GET api/user/name/{name}"
+      operationId: "findUserByName"
+      parameters:
+        - name: "name"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /api/user/{id}:
+    get:
+      summary: "GET api/user/{id}"
+      operationId: "findUserById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"

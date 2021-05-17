@@ -3,50 +3,52 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import { makeStyles } from "@material-ui/core";
+import {makeStyles} from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  paper: {
-    marginRight: theme.spacing(2),
-    marginTop: '50px'
-  },
+    root: {
+        display: 'flex',
+    },
+    paper: {
+        marginRight: theme.spacing(2),
+        marginTop: '50px'
+    },
 }));
 
 export default function TimelineMenu() {
 
-  const classes = useStyles();
+    const classes = useStyles();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
 
-  return (
-    <div className={classes.root}>
-      <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-        <AccountBoxIcon fontSize={"large"} />
-      </Button>
-      <Menu
-        className={classes.paper}
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}><Link href="/personalTimeline" color="inherit" underline="none">Personal Timeline</Link></MenuItem>
-        <MenuItem onClick={handleClose}><Link href="/publicTimeline" color="inherit" underline="none">Public Timeline</Link></MenuItem>
-      </Menu>
-    </div>
-  );
+    return (
+        <div className={classes.root}>
+            <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                <AccountBoxIcon fontSize={"large"}/>
+            </Button>
+            <Menu
+                className={classes.paper}
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={handleClose}><Link href="/personalTimeline" color="inherit" underline="none">Personal
+                    Timeline</Link></MenuItem>
+                <MenuItem onClick={handleClose}><Link href="/publicTimeline" color="inherit" underline="none">Public
+                    Timeline</Link></MenuItem>
+            </Menu>
+        </div>
+    );
 }

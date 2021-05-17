@@ -8,15 +8,9 @@ public class SocketService {
     public SocketIOServer server;
 
     public static SocketService getInstance() {
-
-        if(socketService == null)
+        if (socketService == null)
             socketService = new SocketService();
 
         return socketService;
     }
-
-
-
-
-
 }

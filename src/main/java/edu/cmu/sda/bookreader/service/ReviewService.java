@@ -20,10 +20,6 @@ public class ReviewService {
         return repository.save(review);
     }
 
-    public List<Review> getReviews() {
-        return repository.findAll();
-    }
-
     public Review getReviewById (long Id) { return repository.findById(Id); }
 
     public List<Review> getReviewsByGoogleBookId (String googleBookID) {
@@ -38,5 +34,4 @@ public class ReviewService {
         repository.deleteById(id);
         return "review removed - " + id;
     }
-
 }

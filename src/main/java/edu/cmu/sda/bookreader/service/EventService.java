@@ -13,7 +13,13 @@ public class EventService {
     @Autowired
     private EventRepository repository;
 
-    // add new Event object and call this function
-    public Event saveEvent(Event event) {return repository.save(event);}
+    /**
+     * add new Event object and call this function
+     * @param event
+     * @return
+     */
+    public Event saveEvent(Event event) {
+        return repository.save(event);
+    }
 
 }

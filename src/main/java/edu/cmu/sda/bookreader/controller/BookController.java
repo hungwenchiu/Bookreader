@@ -2,7 +2,6 @@ package edu.cmu.sda.bookreader.controller;
 
 import edu.cmu.sda.bookreader.entity.Book;
 import edu.cmu.sda.bookreader.service.BookService;
-import jdk.nashorn.internal.objects.NativeJSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,17 +23,22 @@ public class BookController {
     @Autowired
     private BookService service;
 
+    /**
+     * create a book
+     * @param book
+     * @return
+     */
     @PostMapping("/book")
     public Book addBook(@RequestBody Book book) {
 
         Book exist_book = service.getBookByGoogleBookId(String.valueOf(book.getGoogleBookId()));
 
         // insert if there are not duplicated records
-        if(exist_book == null) {
+        if (exist_book == null) {
             // trim the length of the description if it excesses the limitation of the table
-            if(book.getDescription().length() > 2000)
+            if (book.getDescription().length() > 2000) {
                 book.setDescription(book.getDescription().substring(0, 1987) + "...Read more");
-
+            }
             return service.saveBook(book);
         } else {
             System.out.println("exist_book: " + exist_book.getDescription().length());
@@ -43,17 +47,26 @@ public class BookController {
 
     }
 
+    /**
+     * retrive all books in the system
+     * @return list of books
+     */
     @GetMapping("/books")
     public List<Book> findAllBooks() {
         return service.getBooks();
     }
 
+    /**
+     * get books by google book id
+     * @param googleBookId
+     * @return
+     */
     @GetMapping("/book/{googleBookId}")
     public ResponseEntity<Book> findBookByGoogleBookID(@PathVariable String googleBookId) {
         Book book = service.getBookByGoogleBookId(googleBookId);
 
         if (null == book) {
-            log.error("Book with google book id " + googleBookId + " does not exist.");
+            // log.error("Book with google book id " + googleBookId + " does not exist.");
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(book);

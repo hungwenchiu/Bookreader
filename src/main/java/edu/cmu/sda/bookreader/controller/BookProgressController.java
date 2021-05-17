@@ -21,27 +21,36 @@ public class BookProgressController {
     @Autowired
     private BookProgressService bookProgressService;
 
-    // initialize book progress
+    /**
+     * initialize book progress
+     * @param json
+     * @return BookProgress
+     */
     @RequestMapping(value = "/progress", method = RequestMethod.POST)
     public BookProgress initializeProgress(@RequestBody Map<String, String> json) {
         return bookProgressService.initializeBookProgressForUser(Long.parseLong(json.get("userID")), json.get("bookID"));
     }
 
-    // update book progress
+    /**
+     * update book progress
+     * @param userID
+     * @param bookID
+     * @param pagesFinished
+     * @return int
+     */
     @RequestMapping(value = "/progress", method = RequestMethod.PUT)
-    public int updateProgress(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID, @RequestParam(value="pagesFinished") int pagesFinished) {
+    public int updateProgress(@RequestParam(value = "userID") long userID, @RequestParam(value = "bookID") String bookID, @RequestParam(value = "pagesFinished") int pagesFinished) {
         return bookProgressService.updateBookProgressForUser(userID, bookID, pagesFinished);
     }
 
-    // get book progress
-    @RequestMapping(value = "/finishedPages", method = RequestMethod.GET)
-    public int getFinishedPages(@RequestBody Map<String, String> json) {
-        return bookProgressService.getPagesFinished(Long.parseLong(json.get("userID")), json.get("bookID"));
-    }
-
-    // calculate book progress
+    /**
+     * calculate book progress
+     * @param userID
+     * @param bookID
+     * @return int
+     */
     @RequestMapping(value = "/progress", method = RequestMethod.GET)
-    public int getProgress(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
+    public int getProgress(@RequestParam(value = "userID") long userID, @RequestParam(value = "bookID") String bookID) {
         return bookProgressService.calculateProgress(userID, bookID);
     }
 }

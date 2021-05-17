@@ -5,14 +5,13 @@ import edu.cmu.sda.bookreader.repository.BookRepository;
 import edu.cmu.sda.bookreader.repository.BookshelfRepository;
 import edu.cmu.sda.bookreader.repository.RecommendedBookshelfRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Scope(value = "session")
@@ -27,22 +26,28 @@ public class AbstractBookshelfService {
     @Autowired
     private BookRepository bookRepository;
 
+    @Qualifier("bookService")
     @Autowired
     private BookService bookService;
 
+    @Qualifier("bookProgressService")
     @Autowired
     private BookProgressService progressService;
 
-    // create all bookshelves for a user
+    /**
+     * create all bookshelves for a user
+     * @param userID
+     * @return
+     */
     public List<AbstractBookshelf> initializeBookshelves(Long userID) {
-        String[] bookshelfNames = new String[] {"WantToRead", "Reading", "Read", "Favorite", "Recommended"};
+        String[] bookshelfNames = new String[]{"WantToRead", "Reading", "Read", "Favorite", "Recommended"};
 
         List<AbstractBookshelf> bookshelves = new ArrayList<>();
-        for (String bookshelfName: bookshelfNames) {
+        for (String bookshelfName : bookshelfNames) {
             if (!bookshelfName.equals("Recommended")) {
                 Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(bookshelfName, userID);
                 if (bookshelf == null) {
-                    System.out.println("Initializing "+bookshelfName+" bookshelf...");
+                    System.out.println("Initializing " + bookshelfName + " bookshelf...");
                     bookshelf = new Bookshelf();
                     bookshelf.setName(bookshelfName);
                     bookshelf.setBookshelfUser(userID);
@@ -65,17 +70,23 @@ public class AbstractBookshelfService {
         return bookshelves;
     }
 
-    // Get all regular bookshelves (Read, WantToRead, Reading, Favorite)
+    /**
+     * Get all regular bookshelves (Read, WantToRead, Reading, Favorite)
+     * @return
+     */
     public List<Bookshelf> getAllRegularBookshelves() {
         List<Bookshelf> bookshelves = new ArrayList<>();
-        for (Object bookshelf: bookshelfRepository.findAll()) {
+        for (Object bookshelf : bookshelfRepository.findAll()) {
             bookshelves.add((Bookshelf) bookshelf);
         }
 
         return bookshelves;
     }
 
-    // Get all recommended bookshelves
+    /**
+     * Get all recommended bookshelves
+     * @return
+     */
     public List<RecommendedBookshelf> getAllRecommendedBookshelves() {
         List<RecommendedBookshelf> recommendedBookshelves = new ArrayList<>();
         recommendedBookshelfRepository.findAll().forEach(recommendedBookshelves::add);
@@ -83,11 +94,14 @@ public class AbstractBookshelfService {
         return recommendedBookshelves;
     }
 
-    // Get all bookshelves
+    /**
+     * Get all bookshelves
+     * @return
+     */
     public List<AbstractBookshelf> getAllAbstractBookshelf() {
         List<AbstractBookshelf> all = new ArrayList<>();
 
-        for (Object bookshelf: bookshelfRepository.findAll()) {
+        for (Object bookshelf : bookshelfRepository.findAll()) {
             all.add((AbstractBookshelf) bookshelf);
         }
         recommendedBookshelfRepository.findAll().forEach(all::add);
@@ -95,26 +109,34 @@ public class AbstractBookshelfService {
         return all;
     }
 
-    // Get a bookshelf by ID
-    public AbstractBookshelf getBookshelf(long id, Long userID) {
-        Optional<Bookshelf> bookshelf = bookshelfRepository.findById(new Long(id));
-        Optional<RecommendedBookshelf> recommendedBookshelf = recommendedBookshelfRepository.findById(new Long(id));
+    /**
+     * Get a bookshelf by ID
+     * @param name
+     * @param userID
+     * @return
+     */
+    public AbstractBookshelf getBookshelf(String name, Long userID) {
+        Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(name, userID);
+        RecommendedBookshelf recommendedBookshelf = recommendedBookshelfRepository.findByBookshelfUserID(userID);
 
-        if (bookshelf.isPresent()) {
-            if (userID == bookshelf.get().getBookshelfUserID()) {
+        if (bookshelf != null) {
+            if (userID == bookshelf.getBookshelfUserID()) {
                 // checking user authorization
-                return bookshelf.get();
+                return bookshelf;
             }
-        }
-        else if (recommendedBookshelf.isPresent()) {
-            if (userID == recommendedBookshelf.get().getBookshelfUserID()) {
-                return recommendedBookshelf.get();
+        } else if (recommendedBookshelf != null) {
+            if (userID == recommendedBookshelf.getBookshelfUserID()) {
+                return recommendedBookshelf;
             }
         }
         return null;
     }
 
-    // It is working as our factory method
+    /**
+     * It is working as our factory method
+     * @param abstractBookshelf
+     * @return
+     */
     public AbstractBookshelf addBookshelf(AbstractBookshelf abstractBookshelf) {
         Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(abstractBookshelf.getName(), abstractBookshelf.getBookshelfUserID());
         RecommendedBookshelf recommendedBookshelf = recommendedBookshelfRepository.findByBookshelfUserID(abstractBookshelf.getBookshelfUserID());
@@ -135,11 +157,15 @@ public class AbstractBookshelfService {
         bookshelfRepository.save(bookshelf);
     }
 
-    // Get all bookshelves for a user
+    /**
+     * Get all bookshelves for a user
+     * @param userID
+     * @return
+     */
     public List<AbstractBookshelf> getAllAbstractBookshelfForUser(Long userID) {
         List<AbstractBookshelf> all = new ArrayList<>();
 
-        for (Object bookshelf: bookshelfRepository.findByBookshelfUserID(userID)) {
+        for (Object bookshelf : bookshelfRepository.findByBookshelfUserID(userID)) {
             all.add((AbstractBookshelf) bookshelf);
         }
         all.add(recommendedBookshelfRepository.findByBookshelfUserID(userID));
@@ -168,14 +194,19 @@ public class AbstractBookshelfService {
         return null;
     }
 
-    // Get all books from a bookshelf
+    /**
+     * Get all books from a bookshelf
+     * @param name
+     * @param userID
+     * @return
+     */
     public List<Book> getAllBooksInBookshelf(String name, Long userID) {
         Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(name, userID);
         RecommendedBookshelf recommendedBookshelf = recommendedBookshelfRepository.findByBookshelfUserID(userID);
         if (bookshelf != null) {
             List<String> bookIDs = bookshelf.getBooks();
             List<Book> books = new ArrayList<>();
-            for (String bookID: bookIDs) {
+            for (String bookID : bookIDs) {
                 Book book = bookRepository.findByGoogleBookId(bookID);
                 if (book != null) {
                     books.add(book);
@@ -184,20 +215,26 @@ public class AbstractBookshelfService {
             return books;
         }
         if (recommendedBookshelf != null) {
-                List<String> bookIDs = recommendedBookshelf.getBooks();
-                List<Book> books = new ArrayList<>();
-                for (String bookID: bookIDs) {
-                    Book book = bookRepository.findByGoogleBookId(bookID);
-                    if (book != null) {
-                        books.add(book);
-                    }
+            List<String> bookIDs = recommendedBookshelf.getBooks();
+            List<Book> books = new ArrayList<>();
+            for (String bookID : bookIDs) {
+                Book book = bookRepository.findByGoogleBookId(bookID);
+                if (book != null) {
+                    books.add(book);
                 }
-                return books;
+            }
+            return books;
         }
         return null;
     }
 
-    // add a book to a regular bookshelf
+    /**
+     * add a book to a regular bookshelf
+     * @param name
+     * @param newBookID
+     * @param userID
+     * @return
+     */
     public Bookshelf addBook(String name, String newBookID, Long userID) {
         Bookshelf bookshelf = bookshelfRepository.findBookshelfByNameForUser(name, userID);
         if (bookshelf != null) {
@@ -213,7 +250,13 @@ public class AbstractBookshelfService {
         return bookshelf;
     }
 
-    // add a book to recommended bookshelf
+    /**
+     * add a book to recommended bookshelf
+     * @param userID
+     * @param recommenderID
+     * @param bookID
+     * @return
+     */
     public RecommendedBookshelf addRecommendedBook(Long userID, Long recommenderID, String bookID) {
         RecommendedBookshelf bookshelf = recommendedBookshelfRepository.findByBookshelfUserID(userID);
         if (bookshelf != null) {
@@ -264,7 +307,7 @@ public class AbstractBookshelfService {
         // get book progress
         int pagesFinished = progressService.getPagesFinished(userID, bookID);
         int totalPages = bookService.getTotalPage(bookID);
-        
+
         // if finishedPages = totalPages, then add book to Read
         if (pagesFinished >= totalPages) {
             if (bookshelfNames == null || bookshelfNames.size() == 0) {
@@ -290,7 +333,14 @@ public class AbstractBookshelfService {
         return "Could not move the book successfully.";
     }
 
-    // move book to another regular bookshelf
+    /**
+     * move book to another regular bookshelf
+     * @param bookshelf_current
+     * @param bookshelf_new
+     * @param bookID
+     * @param userID
+     * @return
+     */
     public String moveBook(String bookshelf_current, String bookshelf_new, String bookID, Long userID) {
         Bookshelf currentBookshelf = bookshelfRepository.findBookshelfByNameForUser(bookshelf_current, userID);
 
@@ -319,11 +369,16 @@ public class AbstractBookshelfService {
         return "Could not move book to another bookshelf";
     }
 
-    // get the bookshelf name in which a particular book exists, given a user
+    /**
+     * get the bookshelf name in which a particular book exists, given a user
+     * @param userID
+     * @param bookID
+     * @return
+     */
     public List<String> getBookshelfName(long userID, String bookID) {
         List<Bookshelf> bookshelves = bookshelfRepository.findByBookshelfUserID(userID);
         List<String> bookshelfNames = new ArrayList<>();
-        for (Bookshelf bookshelf: bookshelves) {
+        for (Bookshelf bookshelf : bookshelves) {
             if (bookshelf.getBooks().contains(bookID)) {
                 bookshelfNames.add(bookshelf.getName());
             }
