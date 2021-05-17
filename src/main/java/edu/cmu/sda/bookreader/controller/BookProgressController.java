@@ -39,10 +39,9 @@ public class BookProgressController {
      * @return int
      */
     @RequestMapping(value = "/progress", method = RequestMethod.PUT)
-    public int updateProgress(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID, @RequestParam(value="pagesFinished") int pagesFinished) {
+    public int updateProgress(@RequestParam(value = "userID") long userID, @RequestParam(value = "bookID") String bookID, @RequestParam(value = "pagesFinished") int pagesFinished) {
         return bookProgressService.updateBookProgressForUser(userID, bookID, pagesFinished);
     }
-
 
     /**
      * calculate book progress
@@ -51,7 +50,7 @@ public class BookProgressController {
      * @return int
      */
     @RequestMapping(value = "/progress", method = RequestMethod.GET)
-    public int getProgress(@RequestParam(value="userID") long userID, @RequestParam(value="bookID") String bookID) {
+    public int getProgress(@RequestParam(value = "userID") long userID, @RequestParam(value = "bookID") String bookID) {
         return bookProgressService.calculateProgress(userID, bookID);
     }
 }

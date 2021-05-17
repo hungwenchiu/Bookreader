@@ -24,10 +24,10 @@ public class Book {
     @NonNull
     private int totalPage;
     private String kind;
-    @Column(columnDefinition="varchar(500)")
+    @Column(columnDefinition = "varchar(500)")
     private String thumbnail;
 
-    @Column(columnDefinition="varchar(2000)")
+    @Column(columnDefinition = "varchar(2000)")
     private String description;
 
     public String getGoogleBookId() {

@@ -159,7 +159,7 @@ public class BookshelfControllerTest {
         recommendedBookshelfRepository.save(bookshelf);
 
         // test data
-        this.restTemplate.put(getRootUrl() + "/api/bookshelves/recommended/books?userID=1&bookID=123ndawkl12d3&recommenderID=2","");
+        this.restTemplate.put(getRootUrl() + "/api/bookshelves/recommended/books?userID=1&bookID=123ndawkl12d3&recommenderID=2", "");
         ResponseEntity<AbstractBookshelf> response = restTemplate.getForEntity(getRootUrl() + "/api/bookshelves/Recommended?userID=1", AbstractBookshelf.class);
         assertEquals(true, response.getBody().getBooks().contains(googleBookID));
     }
@@ -186,7 +186,7 @@ public class BookshelfControllerTest {
 
         // test data
         ResponseEntity<List> responseBooks = this.restTemplate.getForEntity(getRootUrl() + "/api/bookshelves/Reading/books?userID=1", List.class);
-        LinkedHashMap books = (LinkedHashMap)responseBooks.getBody().get(0);
+        LinkedHashMap books = (LinkedHashMap) responseBooks.getBody().get(0);
         assertEquals(1, responseBooks.getBody().size());
         assertEquals("Book Title", books.get("title"));
     }

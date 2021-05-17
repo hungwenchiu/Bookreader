@@ -11,12 +11,11 @@ import org.springframework.stereotype.Component;
  * start socket.io when the application starts
  */
 @Component
-@Order(value=1)
+@Order(value = 1)
 @Slf4j
 public class ServerRunner implements CommandLineRunner {
 
     private final SocketIOServer server;
-
 
     @Autowired
     public ServerRunner(SocketIOServer server) {
@@ -28,5 +27,4 @@ public class ServerRunner implements CommandLineRunner {
         server.start();
         System.out.println("Socket io start!!");
     }
-
 }

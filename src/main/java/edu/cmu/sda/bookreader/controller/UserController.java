@@ -1,7 +1,6 @@
 package edu.cmu.sda.bookreader.controller;
 
 import edu.cmu.sda.bookreader.entity.User;
-import edu.cmu.sda.bookreader.service.AbstractBookshelfService;
 import edu.cmu.sda.bookreader.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,11 @@ public class UserController {
         return service.saveUser(user);
     }
 
+    /**
+     * authenticate user
+     * @param user
+     * @return
+     */
     @PostMapping("/login")
     public Map<String, String> authenticateUser(@RequestBody User user) {
         Map<String, String> map = new HashMap<>();
@@ -38,6 +42,11 @@ public class UserController {
         return map;
     }
 
+    /**
+     * find user by name
+     * @param name
+     * @return
+     */
     @GetMapping("/user/name/{name}")
     public ResponseEntity<User> findUserByName(@PathVariable String name) {
         User user = service.getUserByName(name);
@@ -47,6 +56,11 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * find user by id
+     * @param id
+     * @return
+     */
     @GetMapping("/user/{id}")
     public ResponseEntity<User> findUserById(@PathVariable long id) {
         User user = service.getUser(id);
@@ -55,6 +69,4 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
-
-
 }

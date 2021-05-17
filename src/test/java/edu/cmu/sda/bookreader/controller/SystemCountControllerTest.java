@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -37,7 +35,6 @@ public class SystemCountControllerTest {
     private String getRootUrl() {
         return "http://localhost:" + port;
     }
-
 
     // a simple sanity check test that will fail if the application context cannot start
     @Test
@@ -135,7 +132,7 @@ public class SystemCountControllerTest {
         repository.save(new SystemCount("bcd"));
         SystemCount mySysCount = this.restTemplate.getForObject(getRootUrl() + "/api/systemCount/bcd", SystemCount.class);
         this.restTemplate.delete("/api/systemCount/" + mySysCount.getId());
-        SystemCount nonExist= this.restTemplate.getForObject(getRootUrl() + "/api/systemCount/bcd", SystemCount.class);
+        SystemCount nonExist = this.restTemplate.getForObject(getRootUrl() + "/api/systemCount/bcd", SystemCount.class);
         assertEquals(null, nonExist);
     }
 }

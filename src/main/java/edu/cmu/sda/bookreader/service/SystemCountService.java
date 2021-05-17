@@ -40,7 +40,7 @@ public class SystemCountService {
         return repository.save(existing);
     }
 
-    public SystemCount getSystemCountsByGoogleBookId (String googleBookId) {
+    public SystemCount getSystemCountsByGoogleBookId(String googleBookId) {
         return repository.findByGoogleBookId(googleBookId);
     }
 

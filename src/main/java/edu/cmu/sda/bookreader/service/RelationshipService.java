@@ -112,7 +112,7 @@ public class RelationshipService {
         List<User> result = new ArrayList<>();
         dbResult.stream().forEach((r) -> {
             long userId = ((BigInteger) r.get(0)).longValue();
-            if(user.getId() == userId) {
+            if (user.getId() == userId) {
                 return;
             }
             User u = new User();
@@ -122,20 +122,4 @@ public class RelationshipService {
         });
         return result;
     }
-
-//    /**
-//     * Get all users that has no relationship with the given user
-//     * @param user user
-//     * @return a list of users who has no relationship with
-//     */
-//    public List<User> getAllUserWithNoRelationship(User user) {
-//        List<Relationship> noRelationship = repository.getAllPendingSentRequest(user);
-//        List<User> pendingList = new ArrayList<>();
-//        for (Relationship relationship : pendingRelationships) {
-//            User userOne = relationship.getUserOne();
-//            User userTwo = relationship.getUserTwo();
-//            pendingList.add(userOne.equals(user) ? userTwo : userOne);
-//        }
-//        return pendingList;
-//    }
 }

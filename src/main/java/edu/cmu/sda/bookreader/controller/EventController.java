@@ -2,7 +2,6 @@ package edu.cmu.sda.bookreader.controller;
 
 import edu.cmu.sda.bookreader.entity.Event;
 import edu.cmu.sda.bookreader.service.EventService;
-import edu.cmu.sda.bookreader.service.SocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,8 +20,15 @@ public class EventController {
     @Autowired
     private EventService service;
 
-    @PostMapping("/event") // add timeline event
-    public Event addEvent(@RequestBody Event event) { return service.saveEvent(event); }
+    /**
+     * create a timeline event
+     * @param event
+     * @return
+     */
+    @PostMapping("/event")
+    public Event addEvent(@RequestBody Event event) {
+        return service.saveEvent(event);
+    }
 }
 
 
