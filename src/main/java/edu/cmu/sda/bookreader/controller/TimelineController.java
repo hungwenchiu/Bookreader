@@ -39,6 +39,11 @@ public class TimelineController {
     @Autowired
     CommentReplyService commentReplyService;
 
+    /**
+     * Get PersonalTime line
+     * @param userid
+     * @return
+     */
     @GetMapping("/personalTimeline")
     public List<Event> getPersonalTimeline(@RequestParam(value="userid") String userid){
 
@@ -46,17 +51,31 @@ public class TimelineController {
         return timelineManagerService.getTimelineEvents(userid); // generate personal timeline
     }
 
+    /**
+     * Get PublicTime Line
+     * @param userids
+     * @return
+     */
     @GetMapping("/publicTimeline")
     public List<Event> getPublicTimeline(@RequestParam(value="userids") String userids){
         timelineManagerService.setTimelineStrategy(publicTimeline); // set personal timeline behavior
         return timelineManagerService.getTimelineEvents(userids); // generate personal timeline
     }
 
+    /**
+     * Post User Reply
+     * @param comment
+     */
     @PostMapping("/reply")
     public void userReplyComment(@RequestBody Comment comment) {
         commentReplyService.saveReply(comment);
     }
 
+    /**
+     * Get User's Reply
+     * @param eventid
+     * @return
+     */
     @GetMapping("/reply")
     public List<Comment> userReplyComment(@RequestParam(value="eventid") String eventid) {
         return commentReplyService.getAllReplyById(eventid);

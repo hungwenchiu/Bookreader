@@ -211,7 +211,6 @@ export default function TimelineProgressCard(props) {
       }
     }).then(() => {
       sendEventToSocket("newReply");
-      // ftechReply(props.id);
     });
     setInputTxt("");
   } // user reply
@@ -248,14 +247,8 @@ export default function TimelineProgressCard(props) {
       <Divider className={classes.divider} />
       <CardContent className={classes.cardContent}>
         <Typography variant="h6" color="textSecondary" gutterBottom> {`${props.username} has progress update`} </Typography>
-        {/*<Typography className={classes.reviewContent} variant="body1" gutterBottom>*/}
-        {/*    {props.comment}*/}
-        {/*</Typography>*/}
       </CardContent>
       <CardActions disableSpacing>
-        {/*<IconButton aria-label="share">*/}
-        {/*    <ShareIcon/>*/}
-        {/*</IconButton>*/}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -271,7 +264,6 @@ export default function TimelineProgressCard(props) {
         <CardContent>
           <Typography variant="h6" gutterBottom> Comment </Typography>
           {userreply && userreply.map((r, idx) => {
-            // console.log(r);
             return (
               <ReplyCard
                 bookName={r.bookname}
@@ -288,7 +280,7 @@ export default function TimelineProgressCard(props) {
             <Input className={classes.replyTxt} placeholder="Write Comment..." inputProps={{ 'aria-label': 'description' }} value={input_txt} onChange={getTxt} onKeyDown={inputKeyDown} />
             <Button className={[classes.button, classes.replyBtn]} variant="contained" color="secondary" onClick={sendReply}>
               Reply
-                            <SendIcon />
+              <SendIcon />
             </Button>
           </div>
         </CardContent>

@@ -16,16 +16,13 @@ public class PersonalTimelineStrategy implements TimelineStrategy{
     @Autowired
     private EventRepository repository;
 
+    /**
+     * Generate personal timeline
+     * @param userid
+     * @return
+     */
     @Override
     public List<Event> generateTimelineEvents(String userid) {
-//        List<Event> events =
         return repository.findByUserid(userid);
-//        List<Event> res = new ArrayList<>();
-//        for(int i = idx; i < idx + 3 && i < events.size(); i++)
-//        {
-//            res.add(events.get(i));
-//        }
-//
-//        return res;
     }
 }

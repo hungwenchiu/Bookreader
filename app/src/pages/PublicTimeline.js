@@ -43,8 +43,6 @@ export default function PublicTimeline() {
 
   function getBookInfoByGoogleID(googlebookid) {
 
-    // console.log("googlebookid  ", googlebookid);
-
     if (bookinfo.has(googlebookid)) // googlebookid == null means other actions
       return;
 
@@ -101,7 +99,6 @@ export default function PublicTimeline() {
   useEffect(() => {
 
     getRelationshipId();
-    // console.log(relationshipid);
     if (relationshipid) {
       fetchEvent();
     }
@@ -123,13 +120,10 @@ export default function PublicTimeline() {
     return (
       <Layout>
         <div>
-          {/*<InfiniteScroll next={} hasMore={} loader={} dataLength={}*/}
           {event_data && event_data.map((timeline_event, idx) => {
-
             return (
               TimelineAction(timeline_event, bookinfo)
             );
-
           })}
         </div>
       </Layout>

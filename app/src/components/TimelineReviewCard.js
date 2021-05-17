@@ -233,7 +233,6 @@ export default function RecipeReviewCard(props) {
       }
     }).then(() => {
       sendEventToSocket("newReply");
-      // ftechReply(props.id);
     });
     setInputTxt("");
   } // user reply

@@ -20,7 +20,11 @@ public class TimelineManagerService {
         this.timelineStrategy = timelineStrategy;
     }
 
-    // generate public or personal timeline event
+    /**
+     * Generate public or personal timeline event
+     * @param userid
+     * @return
+     */
     public List<Event> getTimelineEvents(String userid) {
         return this.timelineStrategy.generateTimelineEvents(userid);
     }

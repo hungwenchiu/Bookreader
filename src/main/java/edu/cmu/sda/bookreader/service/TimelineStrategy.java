@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Interface of timeline strategy
+ */
 public interface TimelineStrategy {
     List<Event> generateTimelineEvents(String userid);
 }

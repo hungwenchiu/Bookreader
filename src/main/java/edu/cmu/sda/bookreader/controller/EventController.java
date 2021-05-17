@@ -21,6 +21,11 @@ public class EventController {
     @Autowired
     private EventService service;
 
+    /**
+     * add Post Event into DataBase
+     * @param event
+     * @return
+     */
     @PostMapping("/event") // add timeline event
     public Event addEvent(@RequestBody Event event) { return service.saveEvent(event); }
 }

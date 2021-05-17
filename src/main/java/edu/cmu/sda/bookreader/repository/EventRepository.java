@@ -20,7 +20,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query(value = "SELECT e FROM Event e WHERE e.userid IN (:useridlist) ORDER BY e.time DESC")
     List<Event> findByMultipleUsers(@Param("useridlist") List<String> useridlist);
-
-//    @Query(value = "SELECT r from Relationship r where (r.userOne = :user or r.userTwo = :user) and r.status = 1")
-//    List<Relationship> getAllFriendRelationship(@Param("user") User user);
+    
 }

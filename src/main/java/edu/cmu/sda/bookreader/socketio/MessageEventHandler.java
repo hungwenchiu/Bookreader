@@ -19,15 +19,23 @@ import java.util.*;
 @Component
 public class MessageEventHandler {
 
-    // store subsribers socket information
-    // key: user id, value: socket id
+    /**
+     * store subsribers socket information
+     * key: user id, value: socket id
+     */
     Map<String, SocketIOClient> userToSockList = new HashMap<>();
 
-    // I also create a map to store sockid and user list
-    // (cuz if a user uses the same browser, they will have the same socket io)
+    /**
+     * I also create a map to store sockid and user list
+     * (cuz if a user uses the same browser, they will have the same socket io)
+     */
     Map<SocketIOClient, String> sockToUserList = new HashMap<>();
 
 
+    /**
+     * socket io connection topic
+     * @param client
+     */
     @OnConnect
     public void onConnect(SocketIOClient client) {
         String userid = client.getHandshakeData().getSingleUrlParam("userId");
@@ -42,6 +50,7 @@ public class MessageEventHandler {
 
     }
     /**
+     * socket io onDisconnect topic
      * @param client
      */
     @OnDisconnect
@@ -56,13 +65,12 @@ public class MessageEventHandler {
         }
     }
 
-    @OnEvent("messageevent")
-    public void onEvent(SocketIOClient client, AckRequest request, MessageInfo msg) {
-        System.out.println("Got it" + msg.getMsgContent());
-        client.sendEvent("Broadcast", "4554444564546454564545646");
-
-    }
-
+    /**
+     * socket io topic for timeline new post
+     * @param client
+     * @param request
+     * @param msg
+     */
     @OnEvent("newPost")
     public void newPost(SocketIOClient client, AckRequest request, MessageInfo msg) {
         String userids = msg.getMsgContent();
@@ -73,6 +81,12 @@ public class MessageEventHandler {
         }
     }
 
+    /**
+     * socket io topic for newReply
+     * @param client
+     * @param request
+     * @param msg
+     */
     @OnEvent("newReply")
     public void newReply(SocketIOClient client, AckRequest request, MessageInfo msg) {
         String userids = msg.getMsgContent();
@@ -83,6 +97,12 @@ public class MessageEventHandler {
         }
     }
 
+    /**
+     * socket io topic for refreshFriendPage
+     * @param client
+     * @param request
+     * @param msg
+     */
     @OnEvent("refreshFriendPage")
     public void refreshFriendPage(SocketIOClient client, AckRequest request, MessageInfo msg) {
         String userids = msg.getMsgContent();
@@ -93,6 +113,12 @@ public class MessageEventHandler {
         }
     }
 
+    /**
+     * socekt io topic for user login
+     * @param client
+     * @param request
+     * @param msg
+     */
     @OnEvent("newComer")
     public void newComer(SocketIOClient client, AckRequest request, MessageInfo msg) {
         String userid = msg.getMsgContent();

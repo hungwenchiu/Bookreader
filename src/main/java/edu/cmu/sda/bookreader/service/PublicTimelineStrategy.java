@@ -16,6 +16,11 @@ public class PublicTimelineStrategy implements TimelineStrategy{
     @Autowired
     private EventRepository repository;
 
+    /**
+     * Generate public timeline
+     * @param userids
+     * @return
+     */
     @Override
     public List<Event> generateTimelineEvents(String userids) {
         List<String> useridlist = new ArrayList<>();
