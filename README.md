@@ -15,6 +15,15 @@ on linux:
 
 `sudo apt install mysql-server`
 
+start mysql on the local
+`sudo /usr/local/mysql/support-files/mysql.server start`
+
+stop mysql
+`sudo /usr/local/mysql/support-files/mysql.server stop`
+
+start intellij IDE and start the backend
+
+
 create bookreader database
 
 `CREATE database ‘bookreader’`
